@@ -1,6 +1,6 @@
 // import component
 import React, { Component } from 'react'
-
+// test rozak
 class CartPage extends Component {
     render() {
         return (
