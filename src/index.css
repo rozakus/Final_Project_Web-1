@@ -1,0 +1,10 @@
+* {
+    margin: 0px; padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    height: auto;
+    width: 100%;
+    background-color: rgb(203,226,214);
+}
