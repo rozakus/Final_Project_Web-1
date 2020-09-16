@@ -8,7 +8,7 @@ class Product extends Component {
     constructor(props){
         super(props)
         this.state = {
-            product : []
+            product: []
         }
     }
 
@@ -17,12 +17,11 @@ class Product extends Component {
             <div>
                 <Typography variant='h5'>Products</Typography>
                 <div style={styles.productContainer}>
-                
+
                 </div>
             </div>
         )
     }
-
 }
 
 
