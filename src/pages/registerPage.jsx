@@ -13,7 +13,13 @@ class RegisterPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            redirect: false
+            redirect: false,
+            errorUsername: false,
+            errorUsernameMessage: '',
+            errorEmail: false,
+            errorEmailMessage: '',
+            errorPassword: false,
+            errorPasswordMessage: '',
         }
     }
 
@@ -28,8 +34,85 @@ class RegisterPage extends React.Component {
         console.log({ inputUsername }, { inputEmail }, { inputPassword }, { inputPasswordConfirm })
     }
 
+    handleInputUsername = (e) => {
+        // store onchange event input
+        let inputUsername = e.target.value
+
+        // test validation
+        let testLength = inputUsername.length >= 6
+        // if valid
+        if (testLength) return (
+            this.setState({ errorUsername: false }),
+            this.setState({ errorUsernameMessage: '' })
+        )
+        // if not valid
+        if (!testLength) return (
+            this.setState({ errorUsername: true }),
+            this.setState({ errorUsernameMessage: 'minimum 6 character.' })
+        )
+    }
+
+    handleInputEmail = (e) => {
+        // store onchange event input
+        let inputEmail = e.target.value
+
+        // regex
+        let email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+
+        // test validation
+        let testEmail = email.test(inputEmail)
+
+        // if valid
+        if (testEmail) return (
+            this.setState({ errorEmail: false }),
+            this.setState({ errorEmailMessage: '' })
+        )
+
+        // if not valid
+        if (!testEmail) return (
+            this.setState({ errorEmail: true }),
+            this.setState({ errorEmailMessage: 'email is invalid.' })
+        )
+    }
+
+    handleInputPassword = (e) => {
+        // store onchange event
+        let inputPassword = e.target.value
+
+        // regex
+        let number = /[0-9]/
+        let specialChar = /[!@#$%^&*;]/
+
+        // test validation
+        let testNumber = number.test(inputPassword)
+        let testSpecialChar = specialChar.test(inputPassword)
+        let testLength = inputPassword.length >= 6
+
+        // number
+        if (!testNumber) return (
+            this.setState({ errorPassword: true }),
+            this.setState({ errorPasswordMessage: 'should includes number.' })
+        )
+
+        // special char
+        if (!testSpecialChar) return (
+            this.setState({ errorPassword: true }),
+            this.setState({ errorPasswordMessage: 'should includes special character.' })
+        )
+
+        // length
+        if (testLength) return (
+            this.setState({ errorPassword: false }),
+            this.setState({ errorPasswordMessage: '' })
+        )
+        if (!testLength) return (
+            this.setState({ errorPassword: true }),
+            this.setState({ errorPasswordMessage: 'minimum 6 character.' })
+        )
+    }
+
     render() {
-        const { redirect } = this.state
+        const { redirect, errorUsername, errorUsernameMessage, errorEmail, errorEmailMessage, errorPassword, errorPasswordMessage } = this.state
         if (redirect) return <Redirect to='/login' />
 
         return (
@@ -42,6 +125,9 @@ class RegisterPage extends React.Component {
                             label='username'
                             variant='outlined'
                             inputRef={(inputUsername) => this.inputUsername = inputUsername}
+                            onChange={(e) => this.handleInputUsername(e)}
+                            helperText={errorUsername ? errorUsernameMessage : errorUsernameMessage}
+                            error={errorUsername}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -55,6 +141,9 @@ class RegisterPage extends React.Component {
                             label='email'
                             variant='outlined'
                             inputRef={(inputEmail) => this.inputEmail = inputEmail}
+                            onChange={(e) => this.handleInputEmail(e)}
+                            helperText={errorEmail ? errorEmailMessage : errorEmailMessage}
+                            error={errorEmail}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -68,6 +157,9 @@ class RegisterPage extends React.Component {
                             label='password'
                             variant='outlined'
                             inputRef={(inputPassword) => this.inputPassword = inputPassword}
+                            onChange={(e) => this.handleInputPassword(e)}
+                            helperText={errorPassword ? errorPasswordMessage : errorPasswordMessage}
+                            error={errorPassword}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
