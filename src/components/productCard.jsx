@@ -7,10 +7,10 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-class ProductCard extends Component {
+class ProductCard extends React.Component {
   render() {
     return (
-      <Card className={classes.root}>
+     <Card>
         <CardActionArea>
           <CardMedia />
           <CardContent>
@@ -32,8 +32,7 @@ class ProductCard extends Component {
           </Button>
         </CardActions>
       </Card>
-    );
+    )
   }
-}
-
+  
 export default ProductCard;

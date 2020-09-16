@@ -33,7 +33,7 @@ const styles = {
         padding: 10,
         display: 'flex',
         justifyContent: 'center',
-        backgroundColor: 'ghostwhite'
+        // backgroundColor: 'ghostwhite'
     },
     toolbar: {
         display: 'flex',
@@ -47,7 +47,7 @@ const styles = {
     },
     link: {
         textDecoration: 'none',
-        color: 'black'
+        color: 'white'
     }
 }
 
