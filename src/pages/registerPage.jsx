@@ -71,7 +71,7 @@ class RegisterPage extends React.Component {
         // if not valid
         if (!testEmail) return (
             this.setState({ errorEmail: true }),
-            this.setState({ errorEmailMessage: 'email is invalid.' })
+            this.setState({ errorEmailMessage: 'example@gmail.com' })
         )
     }
 
