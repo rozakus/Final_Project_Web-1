@@ -37,6 +37,11 @@ class NavigationBar extends Component {
             </Link>
           </div>
           <div style={styles.rightContent}>
+          <Link to="/profile" style={styles.link}>
+              <Typography variant="h6" style={{ marginRight: 10 }}>
+                Profile
+              </Typography>
+            </Link>
             <Link to="/cart" style={styles.link}>
               <Typography variant="h6" style={{ marginRight: 10 }}>
                 Cart

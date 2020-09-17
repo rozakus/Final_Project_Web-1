@@ -10,7 +10,7 @@ import NavigationBar from './components/navigationBar'
 import HomePage from './pages/homePage'
 import LoginPage from './pages/loginPage'
 import RegisterPage from './pages/registerPage'
-import ProfilePage from './components/profilePage'
+import ProfilePage from './pages/profilePage'
 import CartPage from './pages/cartPage'
 
 class App extends Component {
