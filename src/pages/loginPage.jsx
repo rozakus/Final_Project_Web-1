@@ -42,6 +42,7 @@ class LoginPage extends React.Component {
   render() {
     if (this.props.username) {return <Redirect to='/'/> }
 
+    if (this.state.redirect) {return <Redirect to='/register'/> }
     return (
       <div style={styles.root}>
         <Paper style={styles.loginContainer} elevation={3}>
