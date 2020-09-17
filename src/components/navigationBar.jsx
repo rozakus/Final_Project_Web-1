@@ -1,7 +1,22 @@
 // import component
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { AppBar, Toolbar, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom';
+import {
+    AppBar,
+    Toolbar,
+    IconButton,
+    Badge,
+    Button,
+    Typography,
+    Popover,
+    Paper,
+    Menu,
+    Divider,
+    MenuItem,
+    Avatar
+  } from "@material-ui/core";
+
+  import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 class NavigationBar extends Component {
     render() {
