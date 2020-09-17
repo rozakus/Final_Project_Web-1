@@ -34,5 +34,5 @@ class ProductCard extends React.Component {
       </Card>
     )
   }
-  
+} 
 export default ProductCard;
