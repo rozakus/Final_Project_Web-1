@@ -1,4 +1,4 @@
-export const URL = 'http://localhost:2222/';
+export const URL = 'http://localhost:2000';
 export const URL_IMG = 'http://localhost:2000/'
 
 // user
@@ -8,3 +8,7 @@ export const SIGN_UP = 'SIGN_UP'
 
 // profile
 export const GET_PROFILE = 'GET_PROFILE'
+export const SIGN_UP = 'SIGN_UP'
+
+// product
+export const GET_PRODUCT = 'GET_PRODUCT'
