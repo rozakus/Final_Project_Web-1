@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { URL, LOGIN, LOG_OUT, SIGN_UP } from "../actions";
+import { URL, LOGIN, LOG_OUT, REGISTER } from "../actions";
 
 export const SignIn = (body) => {
   return async (dispatch) => {
@@ -51,7 +51,7 @@ export const KeepLogin = () => {
         const res = await Axios.post(URL + "/register", body); //alamatnya samakan di userRouter
         console.log(res.data);
   
-        dispatch({ type : SIGN_UP })
+        dispatch({ type : REGISTER, payload : res.data })
       } catch (err) {
         console.log(err ? "Error signUp: " + err.response.data : err);
       }
