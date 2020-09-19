@@ -23,16 +23,17 @@ export const KeepLogin = () => {
       try {
         // get token from local storage
         const token = localStorage.getItem("token");
-  
+        console.log(`token : `, token)
+        
         // get user data using url keep login
-        const res = await Axios.post(URL + "/users/keeplogin", { token });
+        const res = await Axios.post(URL + "/keeplogin", { token });
         console.log(res.data);
   
         dispatch({ type: LOGIN, payload: res.data }); //typenya harus sama dengan yg di helpers
       } catch (err) {
         localStorage.removeItem('id')
         localStorage.removeItem('token')
-        dispatch({ type : LOG_OUT })
+        dispatch({ type : "LOG_OUT" })
         console.log(err ? "Error KeepLogin: " + err.response.data : err);
       }
     };
@@ -40,7 +41,7 @@ export const KeepLogin = () => {
 
   export const LogOut = () => {
     return {
-      type: LOG_OUT,
+      type: 'LOG_OUT',
     };
   };
   
