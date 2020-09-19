@@ -8,7 +8,10 @@ export const SIGN_UP = 'SIGN_UP'
 
 // profile
 export const GET_PROFILE = 'GET_PROFILE'
-export const SIGN_UP = 'SIGN_UP'
 
 // product
-export const GET_PRODUCT = 'GET_PRODUCT'
+export const GET_ALLPRODUCT = 'GET_ALLPRODUCT'
+export const GET_ALLPRODUCT_BYCATEGORY = 'GET_ALLPRODUCT_BYCATEGORY'
+
+// product package
+export const GET_ALLPRODUCTPACKAGE = 'GET_ALLPRODUCTPACKAGE'
