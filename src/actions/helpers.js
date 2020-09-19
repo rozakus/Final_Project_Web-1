@@ -10,4 +10,8 @@ export const REGISTER = 'REGISTER'
 export const GET_PROFILE = 'GET_PROFILE'
 
 // product
-export const GET_PRODUCT = 'GET_PRODUCT'
+export const GET_ALLPRODUCT = 'GET_ALLPRODUCT'
+export const GET_ALLPRODUCT_BYCATEGORY = 'GET_ALLPRODUCT_BYCATEGORY'
+
+// product package
+export const GET_ALLPRODUCTPACKAGE = 'GET_ALLPRODUCTPACKAGE'
