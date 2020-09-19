@@ -4,21 +4,29 @@ const INITIAL_STATE = { //harus sama yg di postman
     username : '',
     email : '',
     role : '',
-    register_status: false
+    register_status: false,
+    address : '',
+    picture : ''
 }
 
 export const userReducer = (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case 'LOGIN' :
             return { //harus sama yg di postman
+                ...state,
                 id : action.payload.id_users,
                 username : action.payload.username,
                 email : action.payload.email,
-                role : action.payload.role
+                role : action.payload.role,
+                address : action.payload.address,
+                picture : action.payload.picture
             }
-        case 'UPDATE_CART' :
-            return {
-                ...state, cart: action.payload
+        case 'REGISTER' :
+            return {...state,
+                id : action.payload.id,
+                username : action.payload.username,
+                email : action.payload.email,
+                role : action.payload.role
             }
         case 'LOG_OUT' :
         return INITIAL_STATE
