@@ -1,5 +1,6 @@
 // import component
 import React, { Component } from "react";
+import Axios from "axios";
 import { connect } from "react-redux";
 import {
   IconButton,
@@ -10,7 +11,24 @@ import {
   Button,
   Grid,
   TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormHelperText,
+  CardContent,
+  Typography,
+  TableRow,
+  TableCell,
+  FormControl,
+  OutlinedInput,
 } from "@material-ui/core";
+import ClearIcon from "@material-ui/icons/Clear";
+import CheckIcon from "@material-ui/icons/Check";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+
 import { Link } from "react-router-dom";
 
 import { getProfile, editProfile, URL_IMG } from "../actions";
@@ -22,12 +40,27 @@ class ProfilePage extends Component {
     super(props);
     this.state = {
       edit: false,
+      editUserOpen: false,
+      passwordUsed: false,
+      userError: false,
+      passwordError: false,
+      errorCurrentPass: false,
+      showPassword: false,
+      indexPassword: false,
+      errorPass: false,
+      errorConfPass: false,
+      setOpen: false,
+      errorTextCurrentPass: "Input your current password.",
+      errorTextPass:
+        "Password must be at least 6 characters combination of letters, numbers, and symbol.",
+      errorTextConfPass: "Confirm password must be matched with password.",
+      open: false,
     };
   }
 
-  // componentDidMount() {
-  //   this.props.getProfile();
-  // }
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
 
   handleSave = () => {
     const body = {
@@ -40,16 +73,34 @@ class ProfilePage extends Component {
     this.setState({ edit: false });
   };
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   render() {
-    const { image, username, email, address, password } = this.props;
+    const {
+      image,
+      errorCurrentPass,
+      errorTextCurrentPass,
+      errorPass,
+      errorTextPass,
+      errorConfPass,
+      errorTextConfPass,
+      showPassword,
+      setOpen,
+      editEmailOpen,
+      emailError,
+      emailUsed,
+      passwordError,
+      indexPassword,
+    } = this.props;
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
     const { edit } = this.state;
     return (
       <div style={styles.root}>
-        {/* <h1>Profile</h1> */}
-        <Paper style={styles.profilebox} elevation={3}>
+      <Paper style={styles.profilebox} elevation={3}>
           <div style={styles.avatar}>
             <img
               src={image ? URL_IMG + image : avatar}
@@ -75,60 +126,66 @@ class ProfilePage extends Component {
               disabled
               id="outlined-disabled"
               label="Email"
-              defaultValue="email user"
+              defaultValue={this.props.email}
               variant="outlined"
             />
-            <Grid container spacing={1} alignItems="flex-end">
-              <Grid item>
-                <p>Address</p>
-              </Grid>
-              <Grid item>
-                <TextField
-                  id="input-with-icon-grid3"
-                  value={address ? address : ""}
-                  variant="outlined"
-                  disabled={!edit}
-                  inputRef={(address) => (this.address = address)}
-                />
-              </Grid>
-            </Grid>
-            <div style={styles.buttoncontainer}>
-              {!edit ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => this.setState({ edit: true })}
-                >
-                  Edit
-                </Button>
-              ) : null}
-              {edit ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSave}
-                >
-                  Save
-                </Button>
-              ) : null}
-              {edit ? (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginLeft: "5px" }}
-                  onClick={() => this.setState({ edit: false })}
-                >
-                  Cancel
-                </Button>
-              ) : null}
-            </div>
-            <TextField
-              id="outlined-password-input"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              variant="outlined"
-            />
+            
+          </div>
+          <div>
+            <TableCell colSpan={2}>Password</TableCell>
+            <TableCell>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={this.handleClickOpen}
+              >
+                Edit Password
+              </Button>
+              <Dialog
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">Change the password</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please enter your password.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Password"
+                    type="password"
+                    fullWidth
+                  />
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="New-password"
+                    type="password"
+                    fullWidth
+                  />
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Confirm New-password"
+                    type="password"
+                    fullWidth
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={this.handleClose} color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </TableCell>
           </div>
         </Paper>
       </div>
@@ -187,4 +244,12 @@ const styles = {
   // },
 };
 
-export default ProfilePage;
+const mapStateToProps = (state) => {
+  console.log(`state profile page: `, state.userReducer)
+  return {
+    username : state.userReducer.username,
+    email : state.userReducer.email
+  }
+}
+
+export default connect(mapStateToProps)(ProfilePage);

@@ -30,12 +30,12 @@ class LoginPage extends React.Component {
 
   handleLogin = () => {
       const body = {
-        username : this.username.value, // username or password
+        identity : this.inputIdentity.value, // username or password
         password : this.password.value
       }
       console.log(body)
       this.props.SignIn(body)
-      this.username.value = ''
+      this.inputIdentity.value = ''
       this.password.value = ''
   };
 
@@ -54,7 +54,7 @@ class LoginPage extends React.Component {
               style={{ marginBottom: 10 }}
               label="Username or Email"
               variant="outlined"
-              inputRef={(username) => (this.username = username)}
+              inputRef={(inputIdentity) => (this.inputIdentity = inputIdentity)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
