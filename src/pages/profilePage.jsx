@@ -100,8 +100,7 @@ class ProfilePage extends Component {
     const { edit } = this.state;
     return (
       <div style={styles.root}>
-        {/* <h1>Profile</h1> */}
-        <Paper style={styles.profilebox} elevation={3}>
+      <Paper style={styles.profilebox} elevation={3}>
           <div style={styles.avatar}>
             <img
               src={image ? URL_IMG + image : avatar}
@@ -127,7 +126,7 @@ class ProfilePage extends Component {
               disabled
               id="outlined-disabled"
               label="Email"
-              defaultValue="email user"
+              defaultValue={this.props.email}
               variant="outlined"
             />
             
@@ -245,4 +244,12 @@ const styles = {
   // },
 };
 
-export default ProfilePage;
+const mapStateToProps = (state) => {
+  console.log(`state profile page: `, state.userReducer)
+  return {
+    username : state.userReducer.username,
+    email : state.userReducer.email
+  }
+}
+
+export default connect(mapStateToProps)(ProfilePage);
