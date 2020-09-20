@@ -14,12 +14,11 @@ import LoginPage from './pages/loginPage'
 import RegisterPage from './pages/registerPage'
 import ProfilePage from './pages/profilePage'
 import CartPage from './pages/cartPage'
-<<<<<<< HEAD
+
 import ProductDetails from './pages/productDetails'
-=======
 import HistoryUser from './pages/historyUser'
 import HistoryTransaction from './pages/historyTransaction'
->>>>>>> 32f48cc5d6dd53c68f9a002362d752d13d75481b
+
 
 class App extends Component {
 
@@ -28,29 +27,23 @@ class App extends Component {
     }
 
     render() {
-        if(this.props.role === 'admin') {
+        if (this.props.role === 'admin') {
             return (
                 <div>
                     <NavigationBar />
                     <Switch>
-                    <Route path='/' component={HomePage} exact />
-                    <Route path='/login' component={LoginPage} />
-                    <Route path='/register' component={RegisterPage} />
-<<<<<<< HEAD
-                    <Route path='/profile' component={ProfilePage} />
-                    <Route path='/cart' component={CartPage} />
-                    <Route path='/productDetails' component={ProductDetails} />
-                </Switch>
-                <Footer />
-            </div>
-        )
-=======
-                    <Route path="/historytransaction" component={HistoryTransaction} />
+                        <Route path='/' component={HomePage} exact />
+                        <Route path='/login' component={LoginPage} />
+                        <Route path='/register' component={RegisterPage} />
+                        <Route path='/profile' component={ProfilePage} />
+                        <Route path='/cart' component={CartPage} />
+                        <Route path='/productDetails' component={ProductDetails} />
+                        <Route path="/historytransaction" component={HistoryTransaction} />
                     </Switch>
+                    <Footer />
                 </div>
             )
         } else {
-
             return (
                 <div>
                     <NavigationBar />
@@ -60,8 +53,10 @@ class App extends Component {
                         <Route path='/register' component={RegisterPage} />
                         <Route path='/profile' component={ProfilePage} />
                         <Route path="/historyUser" component={HistoryUser} />
+                        <Route path='/productDetails' component={ProductDetails} />
                         <Route path='/cart' component={CartPage} />
                     </Switch>
+                    <Footer />
                 </div>
             )
         }
@@ -71,8 +66,7 @@ class App extends Component {
 const mapStateToProps = (state) => {
     return {
         role: state.userReducer.role
->>>>>>> 32f48cc5d6dd53c68f9a002362d752d13d75481b
     }
 }
 
-export default connect (mapStateToProps, { KeepLogin })(App)
+export default connect(mapStateToProps, { KeepLogin })(App)
