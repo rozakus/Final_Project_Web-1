@@ -16,7 +16,7 @@ class AvatarProfile extends React.Component {
   };
 
   handleLogout = () => {
-    localStorage.removeItem("id");
+    localStorage.removeItem("token");
     this.props.LogOut();
   };
 
@@ -32,10 +32,6 @@ class AvatarProfile extends React.Component {
           aria-haspopup="true"
           onClick={(event) => this.handleClick(event)}
         >
-          {/* <Avatar
-            alt="Travis Howard"
-            src={`https://api.adorable.io/avatars/285/${this.props.nama}.png`}
-          /> */}
           {this.props.username ? (
             <Avatar style={{ backgroundColor: "#14D690 " }}>
               {this.props.username.charAt(0).toUpperCase()}
@@ -62,13 +58,13 @@ class AvatarProfile extends React.Component {
         >
           {this.props.role === "user" ? (
             <>
-              <Link to="/profileuser">
+              <Link to="/profile">
                 <MenuItem>Profile</MenuItem>
               </Link>
               <Link to="/cart">
                 <MenuItem>Cart</MenuItem>
               </Link>
-              <Link to="/historyuser">
+              <Link to="/historyUser">
                 <MenuItem>History</MenuItem>
               </Link>
               <Link to="/">
@@ -92,10 +88,10 @@ class AvatarProfile extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return {
-        username: state.userReducer.username,
-        role: state.userReducer.role
-    }
-}
+  return {
+    username: state.userReducer.username,
+    role: state.userReducer.role,
+  };
+};
 
 export default connect(mapStateToProps, { LogOut })(AvatarProfile);
