@@ -1,7 +1,7 @@
 // import react
 import React from 'react'
 
-// import library
+// import redux
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -10,25 +10,26 @@ import {
     Card,
     CardActionArea,
     CardMedia,
-    Typography,
     CardActions,
     CardContent,
+    Typography,
     Button,
-    Fab
+    Fab,
+    Paper
 } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 // import action
-import { getProducts } from '../actions'
+import { getAllProducts, getAllProducts_byCategory } from '../actions'
 
 // class component
 class Products extends React.Component {
     componentDidMount() {
-        this.props.getProducts()
+        this.props.getAllProducts()
     }
 
     renderCard = () => {
-        return this.props.products.map((item, index) => {
+        return this.props.products.map((item) => {
             return (
                 <Card style={styles.card} key={item.id_product}>
                     <CardActionArea style={styles.contentArea}>
@@ -43,10 +44,12 @@ class Products extends React.Component {
                         </CardContent>
                     </CardActionArea>
                     <CardActions style={styles.contentActions}>
-                        <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
-                            <ShoppingCartIcon style={{ marginRight: 20 }} />
+                        <Link to={`/productDetails?${item.id_product}`}>
+                            <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
+                                <ShoppingCartIcon style={{ marginRight: 20 }} />
                             Buy
-                        </Fab>
+                            </Fab>
+                        </Link>
                     </CardActions>
                 </Card>
             )
@@ -59,6 +62,50 @@ class Products extends React.Component {
                 <div style={styles.header}>
                     <Typography style={styles.title}>Products</Typography>
                 </div>
+                <Paper style={styles.filter}>
+                    <Button
+                        onClick={() => this.props.getAllProducts()}
+                    >All Products</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(5)}
+                    >Soft Drink</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(6)}
+                    >Milk</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(7)}
+                    >Syrup</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(8)}
+                    >Juice</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(9)}
+                    >Coffee</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(10)}
+                    >Tea</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(11)}
+                    >Chocolate</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(12)}
+                    >Candy</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(13)}
+                    >Jelly & Chewing Gum</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(14)}
+                    >Biscuit</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(15)}
+                    >Cookies & Cream </Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(16)}
+                    >Wafer</Button>
+                    <Button
+                        onClick={() => this.props.getAllProducts_byCategory(17)}
+                    >Chips</Button>
+                </Paper>
                 <div style={styles.cardContainer}>
                     {this.renderCard()}
                 </div>
@@ -81,6 +128,10 @@ const styles = {
     title: {
         fontSize: 50,
         fontWight: 600,
+    },
+    filter: {
+        borderRadius: 20,
+        padding: 5
     },
     cardContainer: {
         width: '100%',
@@ -127,4 +178,4 @@ const mapStateToProps = (state) => {
 }
 
 // exported component
-export default connect(mapStateToProps, { getProducts })(Products)
+export default connect(mapStateToProps, { getAllProducts, getAllProducts_byCategory })(Products)
