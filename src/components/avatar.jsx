@@ -70,6 +70,9 @@ class AvatarProfile extends React.Component {
               <Link to="/">
                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
               </Link>
+              <Link to="/userinfo">
+                <MenuItem>Users Info</MenuItem>
+              </Link>
             </>
           ) : (
             <>

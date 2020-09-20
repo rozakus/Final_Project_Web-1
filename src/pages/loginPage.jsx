@@ -1,6 +1,6 @@
 // import component
 import React from "react";
-import Axios from "axios";
+// import Axios from "axios";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import LockIcon from "@material-ui/icons/Lock";
 // import Visibility from "@material-ui/icons/Visibility";
 // import VisibilityOff from "@material-ui/icons/VisibilityOff";
