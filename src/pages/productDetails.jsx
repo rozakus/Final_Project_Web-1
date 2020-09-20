@@ -32,13 +32,17 @@ class ProductDetails extends React.Component {
     }
 
     render() {
-        // console.log('props location : ', this.props.location)
         const { selectedProduct } = this.state
+        console.log('props location : ', this.props.location)
+        console.log('selectedProduct', selectedProduct)
+        
         return (
             <div style={styles.root}>
-                <Typography>product details</Typography>
-                <Typography>{selectedProduct.product_name}</Typography>
-                <Typography>{selectedProduct.price_sell}</Typography>
+                <Paper>
+                    <Typography>product details</Typography>
+                    <Typography>{selectedProduct.product_name}</Typography>
+                    <Typography>{selectedProduct.price_sell}</Typography>
+                </Paper>
             </div>
         )
     }
@@ -48,7 +52,7 @@ const styles = {
     root: {
         height: '100vh',
         width: '100vw',
-        backgroundColor: 'yellow',
+        backgroundColor: 'whitesmoke',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

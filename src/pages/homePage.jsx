@@ -7,7 +7,7 @@ import ProductPackage from '../components/productPackage'
 
 class HomePage extends Component {
     render() {
-        // console.log('props location : ', this.props.location)
+        console.log('props location : ', this.props.location)
 
         return (
             <div style={styles.root}>
