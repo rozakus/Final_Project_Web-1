@@ -23,7 +23,7 @@ class HomePage extends Component {
 
 const styles = {
     root: {
-        paddingTop: 50,
+        paddingTop: 80,
         backgroundColor: '#cbe2d6',
         // backgroundImage: `url(${Background})`,
         height: 'auto'

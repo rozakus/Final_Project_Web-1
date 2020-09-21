@@ -65,7 +65,7 @@ class NavigationBar extends Component {
 const styles = {
   root: {
     height: 50,
-    padding: 10,
+    padding: '50px 10px',
     display: "flex",
     justifyContent: "center",
     backgroundColor: 'transparent',
@@ -75,7 +75,9 @@ const styles = {
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
-    padding: 0,
+    padding: '0px 20px',
+    backgroundColor: 'rgba(19,15,0, .5)',
+    borderRadius: 20
   },
   leftContent: {
     height: "100%",
