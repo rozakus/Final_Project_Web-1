@@ -15,3 +15,6 @@ export const GET_ALLPRODUCT_BYCATEGORY = 'GET_ALLPRODUCT_BYCATEGORY'
 
 // product package
 export const GET_ALLPRODUCTPACKAGE = 'GET_ALLPRODUCTPACKAGE'
+
+// cart
+export const GET_CART_USER = 'GET_CART_USER'

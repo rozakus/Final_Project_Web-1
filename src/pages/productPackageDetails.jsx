@@ -10,7 +10,9 @@ import {
     Button,
     Typography,
     CardMedia,
-    Fab
+    Fab,
+    Checkbox,
+    FormControlLabel
 } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
@@ -23,69 +25,22 @@ class ProductPackageDetails extends React.Component {
         super(props)
         this.state = {
             selectedProductPackage: [],
-            productCategory01: [],
-            productCategory02: [],
-            productCategory03: [],
         }
     }
 
     componentDidMount() {
-        Axios.get(URL + '/getProductPackageDetails/' + this.props.location.search.slice(1))
+        Axios.get(URL + '/getPackage/' + this.props.location.search.slice(1))
             .then(res => {
                 this.setState({ selectedProductPackage: res.data })
                 // console.log('selectedProductPackage : ', this.state.selectedProductPackage)
-
-                Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[0].category_id)
-                    .then(res => {
-                        this.setState({ productCategory01: res.data })
-                        // console.log('productCategory01 : ', this.state.productCategory01)
-
-                        Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[1].category_id)
-                            .then(res => {
-                                this.setState({ productCategory02: res.data })
-                                // console.log('productCategory02 : ', this.state.productCategory02)
-
-                                Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[2].category_id)
-                                    .then(res => {
-                                        this.setState({ productCategory03: res.data })
-                                        // console.log('productCategory03 : ', this.state.productCategory03)
-                                    })
-                                    .catch(err => console.log(err))
-                            })
-                            .catch(err => console.log(err))
-                    })
-                    .catch(err => console.log(err))
             })
             .catch(err => console.log(err))
     }
 
-    // async componentDidMount() {
-    //     try {
-    //         const package = await Axios.get(URL + '/getProductPackageDetails/' + this.props.location.search.slice(1))
-    //         this.setState({ selectedProductPackage: package.data })
-
-    //         const productCategory01 = await Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[0].category_id)
-    //         this.setState({ productCategory01e: productCategory01.data })
-
-    //         const productCategory02 = await Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[1].category_id)
-    //         this.setState({ productCategory01e: productCategory02.data })
-
-    //         const productCategory03 = await Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[2].category_id)
-    //         this.setState({ productCategory01e: productCategory03.data })
-
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
-
     render() {
-        const { selectedProductPackage, productCategory01, productCategory02, productCategory03 } = this.state
+        const { selectedProductPackage } = this.state
         // console.log('props location : ', this.props.location)
         console.log('selectedProductPackage :', selectedProductPackage)
-        console.log('productCategory01 : ', productCategory01)
-        console.log('productCategory02 : ', productCategory02)
-        console.log('productCategory03 : ', productCategory03)
-        // console.log('productCategory03 category : ', productCategory03[0])
 
         return (
             <div style={styles.root}>
@@ -101,30 +56,29 @@ class ProductPackageDetails extends React.Component {
                                     <Typography variant='h6'>{selectedProductPackage[0].package_name}</Typography>
                                 </Fab>
                                 <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                                    <Typography>Package Price : IDR {`${selectedProductPackage[0].package_price.toLocaleString()}`}.00</Typography>
-                                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                                        {/* <Typography>{productCategory01[0].category}</Typography> */}
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Milk : </Typography>
-                                        <Button variant='contained' size="small" style={{ marginRight: 10, backgroundColor: 'blue', color: 'white', borderRadius: 20 }}>Fisian Flag</Button>
-                                        <Typography>Quantity : 5</Typography>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                                        {/* <Typography>{productCategory01[0].category}</Typography> */}
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Milk : </Typography>
-                                        <Button variant='contained' size="small" style={{ marginRight: 10, backgroundColor: 'blue', color: 'white', borderRadius: 20 }}>Fisian Flag</Button>
-                                        <Typography>Quantity : 5</Typography>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                                        {/* <Typography>{productCategory01[0].category}</Typography> */}
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Milk : </Typography>
-                                        <Button variant='contained' size="small" style={{ marginRight: 10, backgroundColor: 'blue', color: 'white', borderRadius: 20 }}>Fisian Flag</Button>
-                                        <Typography>Quantity : 5</Typography>
+                                    <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px' }}>
+                                        <Typography style={{ marginRight: 10 }}>Select Product from Category {selectedProductPackage[0].category_id} : </Typography>
+                                        <div style={{ display: 'flex' }}>
+                                            <FormControlLabel
+                                                control={<Checkbox checked={true} name="gilad" />}
+                                                label={selectedProductPackage[0].product_name[0]}
+                                            />
+                                        </div>
+                                        <div style={{ display: 'flex' }}>
+                                            <FormControlLabel
+                                                control={<Checkbox checked={true} name="gilad" />}
+                                                label={selectedProductPackage[0].product_name[1]}
+                                            />
+                                        </div>
+                                        <div style={{ display: 'flex' }}>
+                                            <FormControlLabel
+                                                control={<Checkbox checked={true} name="gilad" />}
+                                                label={selectedProductPackage[0].product_name[2]}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Button variant='contained' style={{ backgroundColor: 'blue', color: 'white', borderRadius: 20 }} onClick={this.handleMinus}>-</Button>
-                                    <Button>0</Button>
-                                    <Button variant='contained' style={{ backgroundColor: 'blue', color: 'white', borderRadius: 20, marginRight: 20 }} onClick={this.handlePlus}>+</Button>
                                     <Button
                                         variant='contained'
                                         style={{ backgroundColor: 'yellow', borderRadius: 20 }}
@@ -143,14 +97,15 @@ class ProductPackageDetails extends React.Component {
 
 const styles = {
     root: {
-        height: '100vh',
+        minHeight: '100vh',
+        height: 'auto',
         width: '100vw',
-        backgroundColor: 'whitesmoke',
+        backgroundColor: '#cbe2d6',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10
+        paddingTop: 100
     },
     rootContainer: {
         width: '80%',
@@ -158,6 +113,8 @@ const styles = {
         padding: 10,
         borderRadius: 20,
         display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         // backgroundColor: 'yellow',
     },
     leftContent: {
