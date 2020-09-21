@@ -118,8 +118,8 @@ const styles = {
     root: {
         height: 'auto',
         width: '100%',
-        backgroundColor: 'whitesmoke',
-        padding: '10px'
+        // backgroundColor: 'whitesmoke',
+        padding: '10px',
     },
     header: {
         display: 'flex',

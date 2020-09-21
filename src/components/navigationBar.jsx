@@ -68,6 +68,8 @@ const styles = {
     padding: 10,
     display: "flex",
     justifyContent: "center",
+    // backgroundColor: 'transparent',
+    // backgroundColor: '#0000ff',
     backgroundColor: '#cbe2d6'
   },
   toolbar: {
