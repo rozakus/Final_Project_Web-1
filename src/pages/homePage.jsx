@@ -6,7 +6,7 @@ import Products from '../components/products'
 import ProductPackage from '../components/productPackage'
 
 // import
-import Background from '../assets/images/background.png'
+// import Background from '../assets/images/background.png'
 
 class HomePage extends Component {
     render() {

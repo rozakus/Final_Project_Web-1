@@ -73,7 +73,7 @@ class ProfilePage extends Component {
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
-    const { edit } = this.state;
+    
     return (
       <div style={styles.root}>
         <Paper style={styles.profilebox} elevation={3}>
