@@ -14,7 +14,7 @@ import LoginPage from './pages/loginPage'
 import RegisterPage from './pages/registerPage'
 import ProfilePage from './pages/profilePage'
 import CartPage from './pages/cartPage'
-
+import ProductPackageDetails from './pages/productPackageDetails'
 import ProductDetails from './pages/productDetails'
 import HistoryUser from './pages/historyUser'
 import HistoryTransaction from './pages/historyTransaction'
@@ -54,6 +54,7 @@ class App extends Component {
                         <Route path='/profile' component={ProfilePage} />
                         <Route path="/historyUser" component={HistoryUser} />
                         <Route path='/productDetails' component={ProductDetails} />
+                        <Route path='/productPackageDetails' component={ProductPackageDetails} />
                         <Route path='/cart' component={CartPage} />
                     </Switch>
                     <Footer />

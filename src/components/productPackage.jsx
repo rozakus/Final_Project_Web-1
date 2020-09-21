@@ -3,6 +3,7 @@ import React from 'react'
 
 // import library
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 // improt UI
 import {
@@ -10,7 +11,6 @@ import {
     CardActions,
     Fab,
     Typography,
-    Paper,
     CardMedia,
     CardActionArea
 } from '@material-ui/core'
@@ -35,10 +35,12 @@ class ProductPackage extends React.Component {
                         <CardMedia image={item.img} component="img" style={styles.contentImage} />
                     </CardActionArea>
                     <CardActions>
-                        <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
-                            <ShoppingCartIcon style={{ marginRight: 20 }} />
-                            <Typography variant="caption"> Buy Package </Typography>
-                        </Fab>
+                        <Link to={`/productPackageDetails?${item.id_product_package}`}>
+                            <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
+                                <ShoppingCartIcon style={{ marginRight: 20 }} />
+                                <Typography variant="caption"> Buy Package </Typography>
+                            </Fab>
+                        </Link>
                     </CardActions>
                 </Card>
             )
@@ -47,14 +49,14 @@ class ProductPackage extends React.Component {
 
     render() {
         return (
-            <Paper style={styles.root}>
+            <div style={styles.root}>
                 <div style={styles.header}>
                     <Typography style={styles.title}>Product Package</Typography>
                 </div>
                 <div style={styles.cardContainer}>
                     {this.renderProductPackage()}
                 </div>
-            </Paper>
+            </div>
         )
     }
 }
@@ -63,7 +65,7 @@ const styles = {
     root: {
         height: 'auto',
         width: '100%',
-        backgroundColor: 'whitesmoke',
+        // backgroundColor: 'whitesmoke',
         padding: '10px'
     },
     header: {

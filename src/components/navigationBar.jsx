@@ -68,7 +68,8 @@ const styles = {
     padding: 10,
     display: "flex",
     justifyContent: "center",
-    // backgroundColor: 'ghostwhite'
+    // backgroundColor: 'transparent',
+    // backgroundColor: '#0000ff',
   },
   toolbar: {
     display: "flex",

@@ -20,7 +20,7 @@ const styles = {
     root: {
         height: 300,
         width: '100vw',
-        backgroundColor: 'whitesmoke',
+        backgroundColor: 'white',
         padding: 10,
         display: 'flex',
         flexDirection: 'column',
