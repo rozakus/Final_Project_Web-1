@@ -1,37 +1,26 @@
 // import component
 import React, { Component } from "react";
-import Axios from "axios";
+// import Axios from "axios";
 import { connect } from "react-redux";
 import {
-  IconButton,
-  Avatar,
-  Menu,
-  MenuItem,
   Paper,
   Button,
-  Grid,
   TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormHelperText,
-  CardContent,
-  Typography,
-  TableRow,
-  TableCell,
-  FormControl,
-  OutlinedInput,
+  TableCell
 } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
-import CheckIcon from "@material-ui/icons/Check";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+// import ClearIcon from "@material-ui/icons/Clear";
+// import CheckIcon from "@material-ui/icons/Check";
+// import Visibility from "@material-ui/icons/Visibility";
+// import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
-import { getProfile, editProfile, URL_IMG } from "../actions";
+import { URL_IMG } from "../actions";
 
 import avatar from "../assets/no-profile.jpg";
 
@@ -79,20 +68,7 @@ class ProfilePage extends Component {
 
   render() {
     const {
-      image,
-      errorCurrentPass,
-      errorTextCurrentPass,
-      errorPass,
-      errorTextPass,
-      errorConfPass,
-      errorTextConfPass,
-      showPassword,
-      setOpen,
-      editEmailOpen,
-      emailError,
-      emailUsed,
-      passwordError,
-      indexPassword,
+      image
     } = this.props;
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);

@@ -28,7 +28,7 @@ class ProductPackage extends React.Component {
         return this.props.productPackage.map((item) => {
             return (
                 <Card style={styles.card} key={item.id_product_package}>
-                    <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: 'yellow', color: 'black', marginBottom: 10 }}>
+                    <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black', marginBottom: 10 }}>
                         <Typography variant="caption">{item.package_name}</Typography>
                     </Fab>
                     <CardActionArea style={styles.contentArea}>

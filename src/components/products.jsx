@@ -45,7 +45,7 @@ class Products extends React.Component {
                     </CardActionArea>
                     <CardActions style={styles.contentActions}>
                         <Link to={`/productDetails?${item.id_product}`}>
-                            <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
+                            <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black'}}>
                                 <ShoppingCartIcon style={{ marginRight: 20 }} />
                             Buy
                             </Fab>

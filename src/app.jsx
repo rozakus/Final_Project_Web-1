@@ -18,7 +18,7 @@ import ProductPackageDetails from './pages/productPackageDetails'
 import ProductDetails from './pages/productDetails'
 import HistoryUser from './pages/historyUser'
 import HistoryTransaction from './pages/historyTransaction'
-
+import UserInfo from './pages/userInfo'
 
 class App extends Component {
 
@@ -56,6 +56,7 @@ class App extends Component {
                         <Route path='/productDetails' component={ProductDetails} />
                         <Route path='/productPackageDetails' component={ProductPackageDetails} />
                         <Route path='/cart' component={CartPage} />
+                        <Route path='/userinfo' component={UserInfo} />
                     </Switch>
                     <Footer />
                 </div>
