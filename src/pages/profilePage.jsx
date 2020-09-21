@@ -76,7 +76,7 @@ class ProfilePage extends Component {
     const { edit } = this.state;
     return (
       <div style={styles.root}>
-      <Paper style={styles.profilebox} elevation={3}>
+        <Paper style={styles.profilebox} elevation={3}>
           <div style={styles.avatar}>
             <img
               src={image ? URL_IMG + image : avatar}
@@ -105,7 +105,7 @@ class ProfilePage extends Component {
               defaultValue={this.props.email}
               variant="outlined"
             />
-            
+
           </div>
           <div>
             <TableCell colSpan={2}>Password</TableCell>
@@ -223,8 +223,8 @@ const styles = {
 const mapStateToProps = (state) => {
   console.log(`state profile page: `, state.userReducer)
   return {
-    username : state.userReducer.username,
-    email : state.userReducer.email
+    username: state.userReducer.username,
+    email: state.userReducer.email
   }
 }
 
