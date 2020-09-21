@@ -23,9 +23,9 @@ class HomePage extends Component {
 
 const styles = {
     root: {
-        marginTop: 50,
-        // backgroundColor: 'red',
-        backgroundImage: `url(${Background})`,
+        paddingTop: 80,
+        backgroundColor: '#cbe2d6',
+        // backgroundImage: `url(${Background})`,
         height: 'auto'
     }
 }
