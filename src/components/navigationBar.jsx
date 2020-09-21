@@ -32,11 +32,11 @@ class NavigationBar extends Component {
   };
   render() {
     return (
-      <AppBar position="fixed" style={styles.root} elevation={3}>
+      <AppBar position="fixed" style={styles.root} elevation={0}>
         <Toolbar style={styles.toolbar}>
           <div style={styles.leftContent}>
             <Link to="/" style={styles.link}>
-            src={require('../assets/images/Logo.png')}
+              <Avatar src={require('../assets/images/Logo.png')} />
             </Link>
           </div>
           <div style={styles.rightContent}>
@@ -53,8 +53,8 @@ class NavigationBar extends Component {
             {this.props.username === '' ? (
               <Profile />
             ) : (
-              <AvatarProfile nama={this.props.username} />
-            )}
+                <AvatarProfile nama={this.props.username} />
+              )}
           </div>
         </Toolbar>
       </AppBar>
@@ -68,16 +68,15 @@ const styles = {
     padding: 10,
     display: "flex",
     justifyContent: "center",
-    // backgroundColor: 'transparent',
+    backgroundColor: 'transparent',
     // backgroundColor: '#0000ff',
-    backgroundColor: '#cbe2d6'
+    // backgroundColor: 'white'
   },
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
     padding: 0,
   },
-
   leftContent: {
     height: "100%",
     flexBasis: "50%",
