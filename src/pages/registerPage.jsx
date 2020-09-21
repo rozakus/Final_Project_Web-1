@@ -15,6 +15,8 @@ import { signUp } from "../actions";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
 import EmailIcon from "@material-ui/icons/Email";
+import Wallpaper from '../assets/images/Wallpaper.jpg'
+import wallpaper2 from '../assets/images/wallpaper2.jpg'
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -262,8 +264,9 @@ class RegisterPage extends React.Component {
 
 const styles = {
   root: {
-    marginTop: 50,
-    backgroundColor: "ghostwhite",
+    height: "auto",
+    minHeight: "100vh",
+    backgroundImage: `url(${Wallpaper})`,
     height: "100vh",
     padding: 20,
     display: "flex",
@@ -278,6 +281,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     padding: 10,
+    backgroundImage: `url(${wallpaper2})`
   },
   header: {
     marginBottom: 20,

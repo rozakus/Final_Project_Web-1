@@ -8,7 +8,7 @@ class HistoryTransaction extends React.Component {
     render() { 
         return (
             <div>
-                <h1>history transaction page</h1>
+                <h1>history users transaction page</h1>
             </div>
           );
     }

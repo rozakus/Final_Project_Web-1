@@ -6,7 +6,7 @@ import Products from '../components/products'
 import ProductPackage from '../components/productPackage'
 
 // import
-import Background from '../assets/images/background.png'
+import Wallpaper from '../assets/images/Wallpaper.jpg'
 
 class HomePage extends Component {
     render() {
@@ -24,8 +24,7 @@ class HomePage extends Component {
 const styles = {
     root: {
         paddingTop: 80,
-        backgroundColor: '#cbe2d6',
-        // backgroundImage: `url(${Background})`,
+        backgroundImage: `url(${Wallpaper})`,
         height: 'auto'
     }
 }

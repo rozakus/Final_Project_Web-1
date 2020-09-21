@@ -18,6 +18,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
 // import Visibility from "@material-ui/icons/Visibility";
 // import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Wallpaper from '../assets/images/Wallpaper.jpg'
+import wallpaper2 from '../assets/images/wallpaper2.jpg'
 
 import { SignIn } from "../actions";
 
@@ -104,9 +106,9 @@ class LoginPage extends React.Component {
 
 const styles = {
   root: {
-    marginTop: 50,
-    backgroundColor: "ghostwhite",
-    height: "100vh",
+    height: "auto",
+    minHeight: "100vh",
+    backgroundImage: `url(${Wallpaper})`,
     padding: 20,
     display: "flex",
     alignItems: "center",
@@ -120,6 +122,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     padding: 10,
+    backgroundImage: `url(${wallpaper2})`
   },
   header: {
     marginBottom: 20,

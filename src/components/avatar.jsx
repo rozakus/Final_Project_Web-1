@@ -73,6 +73,13 @@ class AvatarProfile extends React.Component {
               <Link to="/userinfo">
                 <MenuItem>Users Info</MenuItem>
               </Link>
+              <Link to="/product">
+                <MenuItem>Products Info</MenuItem>
+              </Link>
+              <Link to="/package">
+                <MenuItem>Packages Info</MenuItem>
+              </Link>
+              
             </>
           ) : (
             <>
