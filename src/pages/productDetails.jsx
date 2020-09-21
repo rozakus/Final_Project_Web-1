@@ -115,8 +115,8 @@ const styles = {
         padding: 10
     },
     rootContainer: {
-        width: '60%',
-        height: '60%',
+        width: '80%',
+        height: '80%',
         padding: 10,
         borderRadius: 20,
         display: 'flex',
