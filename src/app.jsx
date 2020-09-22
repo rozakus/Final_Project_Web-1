@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom'
 import { KeepLogin } from './actions'
 
 // import component
+import Drawer from './components/drawer'
 import NavigationBar from './components/navigationBar'
 import Footer from './components/footer'
 
@@ -21,6 +22,8 @@ import HistoryTransaction from './pages/historyTransaction'
 import UserInfo from './pages/userInfo'
 import ProductPage from './pages/productPage'
 import PackagePage from './pages/packagePage';
+import DashboardPage from './pages/dashboard'
+import SalesReport from './pages/SalesReport'
 
 class App extends Component {
 
@@ -32,17 +35,15 @@ class App extends Component {
         if (this.props.role === 'admin') {
             return (
                 <div>
-                    <NavigationBar />
+                    <Drawer/>
                     <Switch>
-                        <Route path='/' component={HomePage} exact />
-                        <Route path='/login' component={LoginPage} />
-                        <Route path='/register' component={RegisterPage} />
-                        <Route path='/profile' component={ProfilePage} />
-                        <Route path='/cart' component={CartPage} />
-                        <Route path='/productDetails' component={ProductDetails} />
-                        <Route path="/historytransaction" component={HistoryTransaction} />
+                        <Route path='/dashboard' component={DashboardPage} exact/>
+                        <Route path='/salesReport' component={SalesReport}/>
+                        <Route path='/userInfo' component={UserInfo}/>
+                        <Route path='/productPage' component={ProductPage}/>
+                        <Route path='/packagePage' component={PackagePage}/>
+                        <Route path='/historyTrans' component={HistoryTransaction}/>
                     </Switch>
-                    <Footer />
                 </div>
             )
         } else {
@@ -58,9 +59,6 @@ class App extends Component {
                         <Route path='/productDetails' component={ProductDetails} />
                         <Route path='/productPackageDetails' component={ProductPackageDetails} />
                         <Route path='/cart' component={CartPage} />
-                        <Route path='/userinfo' component={UserInfo} />
-                        <Route path='/product' component={ProductPage} />
-                        <Route path='/package' component={PackagePage} />
                     </Switch>
                     <Footer />
                 </div>
