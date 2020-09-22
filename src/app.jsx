@@ -21,6 +21,7 @@ import HistoryTransaction from './pages/historyTransaction'
 import UserInfo from './pages/userInfo'
 import ProductPage from './pages/productPage'
 import PackagePage from './pages/packagePage';
+import AdminPage from './pages/adminPage'
 
 class App extends Component {
 
@@ -61,6 +62,7 @@ class App extends Component {
                         <Route path='/userinfo' component={UserInfo} />
                         <Route path='/product' component={ProductPage} />
                         <Route path='/package' component={PackagePage} />
+                        <Route path='/admin' component={AdminPage} />
                     </Switch>
                     <Footer />
                 </div>
