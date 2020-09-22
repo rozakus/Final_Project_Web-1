@@ -18,6 +18,13 @@ import {
 import { getCartUser } from '../actions'
 
 class CartPage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            selectedIndex: null
+        }
+    }
+
     componentDidMount() {
         this.props.getCartUser(3)
     }
@@ -48,10 +55,11 @@ class CartPage extends React.Component {
                     <TableCell align="right">{`IDR ${item.total_sell.toLocaleString()},00`}</TableCell>
                     <TableCell align="center">
                         <Button
+                            onClick={() => this.setState({ selectedIndex: index })}
                             variant="contained"
                             color="primary"
                             size='small'
-                            style={{marginRight: 10}}
+                            style={{ marginRight: 10 }}
                         >Edit</Button>
                         <Button
                             variant="outlined"
