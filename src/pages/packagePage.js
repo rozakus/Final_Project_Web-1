@@ -1,18 +1,16 @@
 import React from "react";
 import Axios from "axios";
-import { connect } from "react-redux";
 import {
   Table,
   TableHead,
   TableBody,
   TableCell,
   TableRow,
-  TableContainer,
   Paper,
   CardMedia,
 } from "@material-ui/core";
 import Wallpaper from '../assets/images/Wallpaper.jpg'
-import wallpaper2 from '../assets/images/wallpaper2.jpg'
+// import wallpaper2 from '../assets/images/wallpaper2.jpg'
 
 class PackagePage extends React.Component {
   constructor(props) {

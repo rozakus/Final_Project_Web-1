@@ -35,7 +35,7 @@ class ProductPackage extends React.Component {
                         <CardMedia image={item.img} component="img" style={styles.contentImage} />
                     </CardActionArea>
                     <CardActions>
-                        <Link to={`/productPackageDetails?${item.id_product_package}`}>
+                        <Link to={`/productPackageDetails?${item.id_product_package}`} style={styles.link}>
                             <Fab variant="extended" size="small" style={{ padding: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black' }}>
                                 <ShoppingCartIcon style={{ marginRight: 20 }} />
                                 <Typography variant="caption"> Buy Package </Typography>
@@ -105,6 +105,9 @@ const styles = {
         padding: '5%',
         // backgroundColor: 'red'
     },
+    link: {
+        textDecoration: 'none'
+    }
 }
 
 // get global state
