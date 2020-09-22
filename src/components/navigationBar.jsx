@@ -4,11 +4,7 @@ import { Link } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
-  Typography,
   Avatar,
-  IconButton,
-  Menu,
-  MenuItem,
 } from "@material-ui/core";
 import Profile from "./profile";
 import AvatarProfile from "./avatar";

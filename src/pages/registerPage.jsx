@@ -95,7 +95,7 @@ class RegisterPage extends React.Component {
     let inputEmail = e.target.value;
 
     // regex
-    let email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    let email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
     // test validation
     let testEmail = email.test(inputEmail);
