@@ -1,19 +1,22 @@
 import Axios from "axios";
-import { URL, LOGIN, LOG_OUT, REGISTER } from "../actions";
+import { URL, LOGIN, LOG_OUT, REGISTER, LOGIN_ERROR } from "./helpers";
 
 export const SignIn = (body) => {
   return async (dispatch) => {
     try {
       const res = await Axios.post(URL + "/login", body);
-
+      console.log(res)
+      
       // save token into local storage
       console.log(`data token : `, res.data.token)
       localStorage.setItem("id", res.data.id_users); //id_users sesuai database
       localStorage.setItem("token", res.data.token);
-
+      
       dispatch({ type: LOGIN, payload: res.data });
     } catch (err) {
-      console.log(err ? "Error SignIn: " + err.response.data : err);
+      // console.log(err)
+      console.log(err.response ? err.response.data : err);
+      dispatch({ type: LOGIN_ERROR, payload: err.response.data})
     }
   };
 };
