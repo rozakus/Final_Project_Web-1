@@ -1,4 +1,4 @@
-
+import { LOGIN, LOGIN_ERROR, REGISTER, LOG_OUT } from '../actions'
 const INITIAL_STATE = { //harus sama yg di postman
     id : null,
     username : '',
@@ -6,12 +6,13 @@ const INITIAL_STATE = { //harus sama yg di postman
     role : '',
     register_status: false,
     address : '',
-    picture : ''
+    picture : '',
+    errorMsg: ''
 }
 
 export const userReducer = (state = INITIAL_STATE, action) => {
     switch(action.type) {
-        case 'LOGIN' :
+        case LOGIN :
             return { //harus sama yg di postman
                 ...state,
                 id : action.payload.id_users,
@@ -21,14 +22,20 @@ export const userReducer = (state = INITIAL_STATE, action) => {
                 address : action.payload.address,
                 picture : action.payload.picture
             }
-        case 'REGISTER' :
+        case REGISTER :
             return {...state,
                 id : action.payload.id,
                 username : action.payload.username,
                 email : action.payload.email,
                 role : action.payload.role
             }
-        case 'LOG_OUT' :
+        case LOGIN_ERROR :
+            return {
+                ...state,
+                errorMsg : action.payload
+
+            }
+        case LOG_OUT :
         return INITIAL_STATE
         default : 
         return state
