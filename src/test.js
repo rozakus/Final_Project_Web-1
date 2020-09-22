@@ -1,3 +1,2 @@
-var a = Date.now()
-
-console.log(a)
+const checked = [false, true, true]
+console.log(checked.indexOf(false))
