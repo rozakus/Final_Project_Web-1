@@ -1,14 +1,11 @@
 import React from "react";
 import Axios from "axios";
-// import Paper from "@material-ui/core/Paper";
-import { connect } from "react-redux";
 import {
   Table,
   TableHead,
   TableBody,
   TableCell,
   TableRow,
-  TableContainer,
   Paper,
   CardMedia,
 } from "@material-ui/core";
