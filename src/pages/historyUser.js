@@ -8,6 +8,7 @@ import {
     TableCell,
     TableRow
 } from '@material-ui/core'
+import Wallpaper from '../assets/images/Wallpaper.jpg'
 
 class HistoryUser extends React.Component {
     constructor(props) {
@@ -84,8 +85,9 @@ class HistoryUser extends React.Component {
 const styles = {
     root : {
         // marginTop: 100
-        height: 'calc(100vh-70px)',
-        backgroundColor : '#f2f2f2',
+        height: "auto",
+    minHeight: "100vh",
+    backgroundImage: `url(${Wallpaper})`,
         padding : '90px 10% 3% 10%',
         display: 'flex',
         flexDirection: 'column',

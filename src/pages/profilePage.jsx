@@ -13,6 +13,7 @@ import {
   DialogTitle,
   TableCell
 } from "@material-ui/core";
+import Wallpaper from '../assets/images/Wallpaper.jpg'
 // import ClearIcon from "@material-ui/icons/Clear";
 // import CheckIcon from "@material-ui/icons/Check";
 // import Visibility from "@material-ui/icons/Visibility";
@@ -177,6 +178,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     paddingTop: "50px",
+    backgroundImage: `url(${Wallpaper})`
   },
   profilebox: {
     width: "30vw",
