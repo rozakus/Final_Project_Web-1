@@ -7,7 +7,10 @@ import {
     Paper,
     Table,
     TableBody,
-    TableHead, TableRow, TableCell
+    TableHead,
+    TableRow,
+    TableCell,
+    Button
 } from '@material-ui/core'
 
 // import action
@@ -21,13 +24,13 @@ class CartPage extends React.Component {
     renderTableHead = () => {
         return (
             <TableRow>
-                <TableCell>No</TableCell>
-                <TableCell >Package</TableCell>
-                <TableCell >Product</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Quantity</TableCell>
-                <TableCell>Total</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell align="center">No</TableCell>
+                <TableCell align="center">Package</TableCell>
+                <TableCell align="center">Product</TableCell>
+                <TableCell align="center">Price</TableCell>
+                <TableCell align="center">Quantity</TableCell>
+                <TableCell align="center">Total</TableCell>
+                <TableCell align="center">Action</TableCell>
             </TableRow>
         )
     }
@@ -39,10 +42,22 @@ class CartPage extends React.Component {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{item.package_name}</TableCell>
                     <TableCell style={{ display: 'flex', alignItems: 'center' }}><img src={item.image} width="50px" alt="product-img" />{item.product_name}</TableCell>
-                    <TableCell>{`IDR ${item.price_sell.toLocaleString()},00`}</TableCell>
-                    <TableCell>{item.product_qty}</TableCell>
-                    <TableCell>{`IDR ${item.total_sell.toLocaleString()},00`}</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell align="right">{`IDR ${item.price_sell.toLocaleString()},00`}</TableCell>
+                    <TableCell align="center">{item.product_qty}</TableCell>
+                    <TableCell align="right">{`IDR ${item.total_sell.toLocaleString()},00`}</TableCell>
+                    <TableCell align="center">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size='small'
+                            style={{marginRight: 10}}
+                        >Edit</Button>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            size='small'
+                        >Delete</Button>
+                    </TableCell>
                 </TableRow>
             )
         })
