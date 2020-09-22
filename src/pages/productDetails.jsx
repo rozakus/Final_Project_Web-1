@@ -112,7 +112,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10
+        paddingTop: 50
     },
     rootContainer: {
         width: '80%',
