@@ -5,6 +5,7 @@ export const URL_IMG = 'http://localhost:2000/'
 export const LOGIN = 'LOGIN'
 export const LOG_OUT = 'LOG_OUT'
 export const REGISTER = 'REGISTER'
+export const LOGIN_ERROR = 'LOGIN_ERROR'
 
 // profile
 export const GET_PROFILE = 'GET_PROFILE'

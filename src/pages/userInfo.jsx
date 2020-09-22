@@ -9,6 +9,7 @@ import {
   TableCell,
   TableRow,
 } from "@material-ui/core";
+import Wallpaper from '../assets/images/Wallpaper.jpg'
 
 class UserInfo extends React.Component {
   constructor(props) {
@@ -71,9 +72,9 @@ class UserInfo extends React.Component {
 
 const styles = {
   root: {
-    marginTop: 50,
-    backgroundColor: "ghostwhite",
-    height: "100vh",
+    height: "auto",
+    minHeight: "100vh",
+    backgroundImage: `url(${Wallpaper})`,
     padding: 20,
     display: "flex",
     alignItems: "center",
