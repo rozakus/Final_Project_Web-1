@@ -50,8 +50,7 @@ class ProductPackageDetails extends React.Component {
     }
 
     handleAddToCart = () => {
-        const indexCheck = this.state.check.indexOf(false)
-        console.log('index check', indexCheck)
+        console.log('add to cart')
     }
 
     handleQuantityPlus = (indexPackage, indexQuantity) => {
@@ -72,18 +71,24 @@ class ProductPackageDetails extends React.Component {
     }
 
     renderSelectProductPackage = () => {
+        const { selectedProductPackage, check, quantity } = this.state
         return (
-            <div>
-                {
-                    this.state.selectedProductPackage[0] ?
-                        this.state.selectedProductPackage.map((item, index) => {
-                            return (
-                                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px' }}>
-                                    <Typography style={{ marginRight: 10 }}>Select Product from Category {item[index].category_id} : </Typography>
-                                </div>
-                            )
-                        }) : null
-                }
+            <div style={{ display: 'flex', width: '100%' }}>
+                <FormControlLabel
+                    control={<Checkbox checked={check[0]} name={'0'} onChange={(e) => this.handleCheck(e)} />}
+                    label={selectedProductPackage[0].product_name[0]}
+                />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Button
+                            onClick={() => this.handleQuantityPlus(0, 0)}
+                            variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
+                        <Typography>{quantity[0]}</Typography>
+                        <Button
+                            onClick={() => this.handleQuantityMinus(0, 0)}
+                            variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -110,55 +115,21 @@ class ProductPackageDetails extends React.Component {
                                 <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
                                     <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px' }}>
                                         <Typography style={{ marginRight: 10 }}>Select Product from Category {selectedProductPackage[0].category_id} : </Typography>
-                                        <div style={{ display: 'flex', width: '100%' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={check[0]} name={'0'} onChange={(e) => this.handleCheck(e)} />}
-                                                label={selectedProductPackage[0].product_name[0]}
-                                            />
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityPlus(0, 0)}
-                                                        variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                                                    <Typography>{quantity[0]}</Typography>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityMinus(0, 0)}
-                                                        variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div style={{ display: 'flex', width: '100%' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={check[1]} name={'1'} onChange={(e) => this.handleCheck(e)} />}
-                                                label={selectedProductPackage[0].product_name[1]}
-                                            />
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityPlus(0, 1)}
-                                                        variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                                                    <Typography>{quantity[1]}</Typography>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityMinus(0, 1)}
-                                                        variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div style={{ display: 'flex', width: '100%' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={check[2]} name={'2'} onChange={(e) => this.handleCheck(e)} />}
-                                                label={selectedProductPackage[0].product_name[2]}
-                                            />
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityPlus(0, 2)}
-                                                        variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                                                    <Typography>{quantity[2]}</Typography>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityMinus(0, 2)}
-                                                        variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                                                </div>
+                                    </div>
+                                    <div style={{ display: 'flex', width: '100%' }}>
+                                        <FormControlLabel
+                                            control={<Checkbox checked={check[0]} name={'0'} onChange={(e) => this.handleCheck(e)} />}
+                                            label={selectedProductPackage[0].product[0].product_name}
+                                        />
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <Button
+                                                    onClick={() => this.handleQuantityPlus(0, 0)}
+                                                    variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
+                                                <Typography>{quantity[0]}</Typography>
+                                                <Button
+                                                    onClick={() => this.handleQuantityMinus(0, 0)}
+                                                    variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
                                             </div>
                                         </div>
                                     </div>
