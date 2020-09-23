@@ -1,6 +1,5 @@
 // import component
 import React from "react";
-// import Axios from "axios";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
@@ -10,14 +9,15 @@ import {
   TextField,
   Button,
   Typography,
-  InputAdornment,
+  InputAdornment, IconButton, 
 } from "@material-ui/core";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
-// import { Link } from "react-router-dom";
 import LockIcon from "@material-ui/icons/Lock";
-// import Visibility from "@material-ui/icons/Visibility";
-// import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Wallpaper from "../assets/images/Wallpaper.jpg";
+import wallpaper2 from "../assets/images/wallpaper2.jpg";
 
 import { SignIn } from "../actions";
 
@@ -25,24 +25,43 @@ class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      redirect: false,
+      errorPassword: false,
+      errorPasswordMessage: "",
+      showPassword: false,
+      errorMsg: "",
     };
   }
 
   handleLogin = () => {
-      const body = {
-        identity : this.inputIdentity.value, // username or password
-        password : this.password.value
-      }
-      console.log(body)
-      this.props.SignIn(body)
-      this.inputIdentity.value = ''
-      this.password.value = ''
+    const body = {
+      identity: this.inputIdentity.value, // username or password
+      password: this.password.value,
+    };
+
+    if (!this.inputIdentity || !this.password)
+      return console.log("Empty Input");
+
+    console.log(body);
+    this.props.SignIn(body);
+    this.inputIdentity.value = "";
+    this.password.value = "";
+  };
+
+  handleClick = () => {
+    this.setState({ showPassword: !this.state.showPassword });
   };
 
   render() {
-    if (this.props.username) {return <Redirect to='/'/> }
+    
+    if (this.props.username) {
+      return <Redirect to="/" />;
+    }
 
-    if (this.state.redirect) {return <Redirect to='/register'/> }
+    if (this.state.redirect) {
+      return <Redirect to="/register" />;
+    }
+
     return (
       <div style={styles.root}>
         <Paper style={styles.loginContainer} elevation={3}>
@@ -55,6 +74,7 @@ class LoginPage extends React.Component {
               label="Username or Email"
               variant="outlined"
               inputRef={(inputIdentity) => (this.inputIdentity = inputIdentity)}
+              // helperText={this.props.errorMsg}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -68,14 +88,27 @@ class LoginPage extends React.Component {
               label="Password"
               variant="outlined"
               inputRef={(password) => (this.password = password)}
+              helperText={this.props.errorMsg}
+              type={this.state.showPassword ? "text" : "password"}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <LockIcon />
                   </InputAdornment>
-                ),
+                ), endAdornment: (<InputAdornment position="end">
+                      <IconButton onClick={() => this.handleClick()}>
+                        {this.state.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>)
               }}
             />
+          </div>
+          <div>
+            <Typography>{this.state.errorMsg}</Typography>
           </div>
           <Button
             onClick={this.handleLogin}
@@ -104,9 +137,9 @@ class LoginPage extends React.Component {
 
 const styles = {
   root: {
-    marginTop: 50,
-    backgroundColor: "ghostwhite",
-    height: "100vh",
+    height: "auto",
+    minHeight: "100vh",
+    backgroundImage: `url(${Wallpaper})`,
     padding: 20,
     display: "flex",
     alignItems: "center",
@@ -120,6 +153,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     padding: 10,
+    backgroundImage: `url(${wallpaper2})`,
   },
   header: {
     marginBottom: 20,
@@ -133,6 +167,7 @@ const styles = {
 const mapStateToProps = (state) => {
   return {
     username: state.userReducer.username,
+    errorMsg: state.userReducer.errorMsg
   };
 };
 

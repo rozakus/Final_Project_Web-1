@@ -9,8 +9,13 @@ import {
     Paper,
     Button,
     Typography,
-    CardMedia,
-    Fab
+    // CardMedia,
+    Fab,
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
 } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
@@ -23,117 +28,90 @@ class ProductPackageDetails extends React.Component {
         super(props)
         this.state = {
             selectedProductPackage: [],
-            productCategory01: [],
-            productCategory02: [],
-            productCategory03: [],
         }
     }
 
     componentDidMount() {
-        Axios.get(URL + '/getProductPackageDetails/' + this.props.location.search.slice(1))
+        Axios.get(URL + '/getPackage/' + this.props.location.search.slice(1))
             .then(res => {
                 this.setState({ selectedProductPackage: res.data })
                 // console.log('selectedProductPackage : ', this.state.selectedProductPackage)
-
-                Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[0].category_id)
-                    .then(res => {
-                        this.setState({ productCategory01: res.data })
-                        // console.log('productCategory01 : ', this.state.productCategory01)
-
-                        Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[1].category_id)
-                            .then(res => {
-                                this.setState({ productCategory02: res.data })
-                                // console.log('productCategory02 : ', this.state.productCategory02)
-
-                                Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[2].category_id)
-                                    .then(res => {
-                                        this.setState({ productCategory03: res.data })
-                                        // console.log('productCategory03 : ', this.state.productCategory03)
-                                    })
-                                    .catch(err => console.log(err))
-                            })
-                            .catch(err => console.log(err))
-                    })
-                    .catch(err => console.log(err))
             })
             .catch(err => console.log(err))
     }
 
-    // async componentDidMount() {
-    //     try {
-    //         const package = await Axios.get(URL + '/getProductPackageDetails/' + this.props.location.search.slice(1))
-    //         this.setState({ selectedProductPackage: package.data })
+    // handling
+    handleCheck = (e) => {
+        console.log('cek', this.state.check)
+        console.log('target name :', e.target.name)
+        const tempCheck = { ...this.state.check }
+        tempCheck[e.target.name] = e.target.checked
 
-    //         const productCategory01 = await Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[0].category_id)
-    //         this.setState({ productCategory01e: productCategory01.data })
+        this.setState({ check: tempCheck }, () => { })
+    }
 
-    //         const productCategory02 = await Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[1].category_id)
-    //         this.setState({ productCategory01e: productCategory02.data })
+    handleAddToCart = () => {
+        console.log('add to cart')
+    }
 
-    //         const productCategory03 = await Axios.get(URL + '/getProdCate3/' + this.state.selectedProductPackage[2].category_id)
-    //         this.setState({ productCategory01e: productCategory03.data })
-
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
+    renderTableProductPackage = () => {
+        const { selectedProductPackage } = this.state
+        return selectedProductPackage.map((category, index) => {
+            return (
+                <Table key={category.category_id}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center"></TableCell>
+                            <TableCell align="center">Category {category.category_id}</TableCell>
+                            <TableCell align="center">Max quantity ({category.max_qty})</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            category.product.map((productItem, index) => {
+                                return (
+                                    <TableRow key={productItem.product_id}>
+                                        <TableCell align="center">{index + 1}</TableCell>
+                                        <TableCell>{productItem.product_name}</TableCell>
+                                        <TableCell align="center">0</TableCell>
+                                    </TableRow>
+                                )
+                            })
+                        }
+                    </TableBody>
+                </Table>
+            )
+        })
+    }
 
     render() {
-        const { selectedProductPackage, productCategory01, productCategory02, productCategory03 } = this.state
+        const { selectedProductPackage } = this.state
         // console.log('props location : ', this.props.location)
         console.log('selectedProductPackage :', selectedProductPackage)
-        console.log('productCategory01 : ', productCategory01)
-        console.log('productCategory02 : ', productCategory02)
-        console.log('productCategory03 : ', productCategory03)
-        // console.log('productCategory03 category : ', productCategory03[0])
 
         return (
             <div style={styles.root}>
                 {
                     selectedProductPackage[0] ?
-
-                        <Paper style={styles.rootContainer}>
-                            <div style={styles.leftContent}>
+                        <Paper style={styles.rootContainer} elevation={5}>
+                            {/* <div style={styles.leftContent}>
                                 <CardMedia image={selectedProductPackage[0].img} component="img" style={styles.contentImage} />
-                            </div>
+                            </div> */}
                             <div style={styles.rightContent}>
-                                <Fab style={{ padding: 10, display: 'flex', justifyContent: 'center', borderRadius: 20, marginBottom: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
-                                    <Typography variant='h6'>{selectedProductPackage[0].package_name}</Typography>
-                                </Fab>
-                                <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                                    <Typography>Package Price : IDR {`${selectedProductPackage[0].package_price.toLocaleString()}`}.00</Typography>
-                                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                                        {/* <Typography>{productCategory01[0].category}</Typography> */}
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Milk : </Typography>
-                                        <Button variant='contained' size="small" style={{ marginRight: 10, backgroundColor: 'blue', color: 'white', borderRadius: 20 }}>Fisian Flag</Button>
-                                        <Typography>Quantity : 5</Typography>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                                        {/* <Typography>{productCategory01[0].category}</Typography> */}
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Milk : </Typography>
-                                        <Button variant='contained' size="small" style={{ marginRight: 10, backgroundColor: 'blue', color: 'white', borderRadius: 20 }}>Fisian Flag</Button>
-                                        <Typography>Quantity : 5</Typography>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                                        {/* <Typography>{productCategory01[0].category}</Typography> */}
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Milk : </Typography>
-                                        <Button variant='contained' size="small" style={{ marginRight: 10, backgroundColor: 'blue', color: 'white', borderRadius: 20 }}>Fisian Flag</Button>
-                                        <Typography>Quantity : 5</Typography>
-                                    </div>
-                                </div>
-                                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Button variant='contained' style={{ backgroundColor: 'blue', color: 'white', borderRadius: 20 }} onClick={this.handleMinus}>-</Button>
-                                    <Button>0</Button>
-                                    <Button variant='contained' style={{ backgroundColor: 'blue', color: 'white', borderRadius: 20, marginRight: 20 }} onClick={this.handlePlus}>+</Button>
+                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                                    <Fab style={{ padding: 10, display: 'flex', borderRadius: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black', marginRight: 20 }}>
+                                        <Typography variant='h6'>Package : {selectedProductPackage[0].package_name}</Typography>
+                                    </Fab>
                                     <Button
+                                        onClick={this.handleAddToCart}
                                         variant='contained'
-                                        style={{ backgroundColor: 'yellow', borderRadius: 20 }}
+                                        style={{ backgroundColor: '#cbe2d6', borderRadius: 20, width: '20%' }}
                                         startIcon={<ShoppingCartIcon />}
                                     >Add to Cart</Button>
                                 </div>
+                                {this.renderTableProductPackage()}
                             </div>
                         </Paper>
-
                         : null
                 }
             </div>
@@ -143,21 +121,24 @@ class ProductPackageDetails extends React.Component {
 
 const styles = {
     root: {
-        height: '100vh',
+        minHeight: '100vh',
+        height: 'auto',
         width: '100vw',
-        backgroundColor: 'whitesmoke',
+        backgroundColor: '#cbe2d6',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10
+        paddingTop: 100
     },
     rootContainer: {
         width: '80%',
         height: '80%',
-        padding: 10,
+        padding: 20,
         borderRadius: 20,
         display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         // backgroundColor: 'yellow',
     },
     leftContent: {

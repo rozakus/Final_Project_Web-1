@@ -10,11 +10,16 @@ import {
   Button,
   Typography,
   InputAdornment,
+  IconButton,
 } from "@material-ui/core";
 import { signUp } from "../actions";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
 import EmailIcon from "@material-ui/icons/Email";
+import Wallpaper from "../assets/images/Wallpaper.jpg";
+import wallpaper2 from "../assets/images/wallpaper2.jpg";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -27,6 +32,7 @@ class RegisterPage extends React.Component {
       errorEmailMessage: "",
       errorPassword: false,
       errorPasswordMessage: "",
+      showPassword: false
     };
   }
 
@@ -41,8 +47,8 @@ class RegisterPage extends React.Component {
       !inputEmail ||
       !inputPassword ||
       !inputPasswordConfirm
-    ) 
-      return console.log("input kosong");
+    )
+      return console.log("Empty Input");
 
     console.log(
       { inputUsername },
@@ -52,11 +58,15 @@ class RegisterPage extends React.Component {
     );
 
     this.props.signUp({
-        username : inputUsername,
-        email : inputEmail,
-        password : inputPassword,
-        confpass : inputPasswordConfirm
-    })
+      username: inputUsername,
+      email: inputEmail,
+      password: inputPassword,
+      confpass: inputPasswordConfirm,
+    });
+  };
+
+  handleClick = () => {
+    this.setState({ showPassword: !this.state.showPassword });
   };
 
   handleInputUsername = (e) => {
@@ -84,7 +94,7 @@ class RegisterPage extends React.Component {
     let inputEmail = e.target.value;
 
     // regex
-    let email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    let email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
     // test validation
     let testEmail = email.test(inputEmail);
@@ -154,8 +164,9 @@ class RegisterPage extends React.Component {
       errorEmail,
       errorEmailMessage,
       errorPassword,
-      errorPasswordMessage,
+      errorPasswordMessage
     } = this.state;
+    
     if (redirect) return <Redirect to="/login" />;
 
     if (this.props.username) return <Redirect to="/" />;
@@ -184,6 +195,7 @@ class RegisterPage extends React.Component {
                   </InputAdornment>
                 ),
               }}
+             
             />
             <TextField
               style={{ marginBottom: 10 }}
@@ -210,13 +222,22 @@ class RegisterPage extends React.Component {
               helperText={
                 errorPassword ? errorPasswordMessage : errorPasswordMessage
               }
+              type={this.state.showPassword ? "text" : "password"}
               error={errorPassword}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <LockIcon />
                   </InputAdornment>
-                ),
+                ), endAdornment: (<InputAdornment position="end">
+                      <IconButton onClick={() => this.handleClick()}>
+                        {this.state.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>)
               }}
             />
             <TextField
@@ -226,12 +247,21 @@ class RegisterPage extends React.Component {
               inputRef={(inputPasswordConfirm) =>
                 (this.inputPasswordConfirm = inputPasswordConfirm)
               }
+              type={this.state.showPassword ? "text" : "password"}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <LockIcon />
                   </InputAdornment>
-                ),
+                ), endAdornment: (<InputAdornment position="end">
+                      <IconButton onClick={() => this.handleClick()}>
+                        {this.state.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>)
               }}
             />
           </div>
@@ -262,9 +292,9 @@ class RegisterPage extends React.Component {
 
 const styles = {
   root: {
-    marginTop: 50,
-    backgroundColor: "ghostwhite",
-    height: "100vh",
+    height: "auto",
+    minHeight: "100vh",
+    backgroundImage: `url(${Wallpaper})`,
     padding: 20,
     display: "flex",
     alignItems: "center",
@@ -278,6 +308,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     padding: 10,
+    backgroundImage: `url(${wallpaper2})`,
   },
   header: {
     marginBottom: 20,
