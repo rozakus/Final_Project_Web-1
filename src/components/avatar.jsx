@@ -16,7 +16,6 @@ class AvatarProfile extends React.Component {
   };
 
   handleLogout = () => {
-    localStorage.removeItem("token");
     this.props.LogOut();
   };
 
