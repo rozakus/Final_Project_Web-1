@@ -5,11 +5,7 @@ export const SignIn = (body) => {
   return async (dispatch) => {
     try {
       const res = await Axios.post(URL + "/login", body);
-<<<<<<< HEAD
       console.log(res);
-=======
-      console.log(res)
->>>>>>> 591434a3fef83dc1c0570091cdae02d201413636
 
       // save token into local storage
       console.log(`data token : `, res.data.token);
@@ -20,11 +16,7 @@ export const SignIn = (body) => {
     } catch (err) {
       // console.log(err)
       console.log(err.response ? err.response.data : err);
-<<<<<<< HEAD
       dispatch({ type: LOGIN_ERROR, payload: err.response.data });
-=======
-      dispatch({ type: LOGIN_ERROR, payload: err.response.data })
->>>>>>> 591434a3fef83dc1c0570091cdae02d201413636
     }
   };
 };
