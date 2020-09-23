@@ -1,18 +1,15 @@
 import React from "react";
 import Axios from "axios";
-import { connect } from "react-redux";
 import {
   Table,
   TableHead,
   TableBody,
   TableCell,
   TableRow,
-  TableContainer,
   Paper,
   CardMedia,
 } from "@material-ui/core";
 import Wallpaper from '../assets/images/Wallpaper.jpg'
-import wallpaper2 from '../assets/images/wallpaper2.jpg'
 
 class PackagePage extends React.Component {
   constructor(props) {
@@ -30,13 +27,13 @@ class PackagePage extends React.Component {
   }
 
   renderTableHead = () => {
+    console.log(this.state.data.details)
     return (
       <TableRow>
         <TableCell>No</TableCell>
         <TableCell>Image</TableCell>
         <TableCell>Package Name </TableCell>
-        <TableCell>Description</TableCell>
-        <TableCell>Product Name </TableCell>
+        <TableCell>Package Details</TableCell>
         <TableCell>Package Price</TableCell>
         {/* <TableCell>Address</TableCell> */}
       </TableRow>
@@ -56,9 +53,12 @@ class PackagePage extends React.Component {
             />
           </TableCell>
           <TableCell>{item.package_name}</TableCell>
-          <TableCell>{item.description}</TableCell>
-          <TableCell>{item.product_name}</TableCell>
-          <TableCell>{item.package_price}</TableCell>
+          <TableCell>
+              <p>Category: {item.details[0].category}, Quantity: {item.details[0].max_qty}</p>
+              <p>Category: {item.details[1].category}, Quantity: {item.details[1].max_qty}</p>
+              <p>Category: {item.details[2].category}, Quantity: {item.details[2].max_qty}</p>
+          </TableCell>
+          <TableCell>Rp {item.package_price.toLocaleString()}</TableCell>
         </TableRow>
       );
     });
@@ -86,10 +86,9 @@ const styles = {
     backgroundImage: `url(${Wallpaper})`,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 100,
-    paddingBottom: 100,
+    paddingLeft: '15vw',
+    paddingTop: '5vh',
+    paddingRight: '5vw'
   },
   contentImage: {
     maxWidth: 100,

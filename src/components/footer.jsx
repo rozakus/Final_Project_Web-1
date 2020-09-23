@@ -39,6 +39,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingLeft: "15vw"
   },
 };
 

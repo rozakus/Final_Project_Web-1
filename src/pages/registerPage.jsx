@@ -18,7 +18,6 @@ import LockIcon from "@material-ui/icons/Lock";
 import EmailIcon from "@material-ui/icons/Email";
 import Wallpaper from "../assets/images/Wallpaper.jpg";
 import wallpaper2 from "../assets/images/wallpaper2.jpg";
-// import LockIcon from "@material-ui/icons/Lock";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
@@ -165,7 +164,7 @@ class RegisterPage extends React.Component {
       errorEmail,
       errorEmailMessage,
       errorPassword,
-      errorPasswordMessage, showPassword
+      errorPasswordMessage
     } = this.state;
     
     if (redirect) return <Redirect to="/login" />;
@@ -296,7 +295,6 @@ const styles = {
     height: "auto",
     minHeight: "100vh",
     backgroundImage: `url(${Wallpaper})`,
-    height: "100vh",
     padding: 20,
     display: "flex",
     alignItems: "center",

@@ -1,14 +1,11 @@
 import React from "react";
 import Axios from "axios";
-// import Paper from "@material-ui/core/Paper";
-import { connect } from "react-redux";
 import {
   Table,
   TableHead,
   TableBody,
   TableCell,
   TableRow,
-  TableContainer,
   Paper,
   CardMedia,
 } from "@material-ui/core";
@@ -91,10 +88,9 @@ const styles = {
     backgroundImage: `url(${Wallpaper})`,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 100,
-    paddingBottom: 100
+    paddingLeft: '15vw',
+    paddingTop: '5vh',
+    paddingRight: '5vw'
   },
   contentImage: {
     maxWidth: 100,

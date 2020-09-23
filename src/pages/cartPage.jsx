@@ -25,7 +25,7 @@ class CartPage extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getCartUser(3)
+        this.props.getCartUser(localStorage.getItem('id'))
     }
 
     renderTableHead = () => {
