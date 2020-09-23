@@ -20,7 +20,7 @@ import {
     DialogActions,
     DialogContentText,
     DialogContent,
-    DialogTitle
+    // DialogTitle
 } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 

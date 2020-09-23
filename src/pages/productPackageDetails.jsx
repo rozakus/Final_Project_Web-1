@@ -12,7 +12,11 @@ import {
     CardMedia,
     Fab,
     Checkbox,
-    FormControlLabel
+    FormControlLabel,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
 } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
@@ -25,8 +29,6 @@ class ProductPackageDetails extends React.Component {
         super(props)
         this.state = {
             selectedProductPackage: [],
-            check: [false, false, false],
-            quantity: [0, 0, 0],
         }
     }
 
@@ -53,51 +55,19 @@ class ProductPackageDetails extends React.Component {
         console.log('add to cart')
     }
 
-    handleQuantityPlus = (indexPackage, indexQuantity) => {
-        const tempQuantity = { ...this.state.quantity }
-
-        if (tempQuantity[indexQuantity] >= this.state.selectedProductPackage[indexPackage].max_qty) return null
-
-        tempQuantity[indexQuantity] = tempQuantity[indexQuantity] + 1
-        this.setState({ quantity: tempQuantity }, () => { })
-    }
-
-    handleQuantityMinus = (indexPackage, indexQuantity) => {
-        const tempQuantity = { ...this.state.quantity }
-
-        if (tempQuantity[indexQuantity] === 0) return null
-        tempQuantity[indexQuantity] = tempQuantity[indexQuantity] - 1
-        this.setState({ quantity: tempQuantity }, () => { })
-    }
-
-    renderSelectProductPackage = () => {
-        const { selectedProductPackage, check, quantity } = this.state
+    renderTableProductPackage = () => {
+        const { selectedProductPackage } = this.state
         return (
-            <div style={{ display: 'flex', width: '100%' }}>
-                <FormControlLabel
-                    control={<Checkbox checked={check[0]} name={'0'} onChange={(e) => this.handleCheck(e)} />}
-                    label={selectedProductPackage[0].product_name[0]}
-                />
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Button
-                            onClick={() => this.handleQuantityPlus(0, 0)}
-                            variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                        <Typography>{quantity[0]}</Typography>
-                        <Button
-                            onClick={() => this.handleQuantityMinus(0, 0)}
-                            variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                    </div>
-                </div>
+            <div>
+
             </div>
         )
     }
 
     render() {
-        const { selectedProductPackage, check, quantity } = this.state
+        const { selectedProductPackage } = this.state
         // console.log('props location : ', this.props.location)
         console.log('selectedProductPackage :', selectedProductPackage)
-        console.log('check : ', check)
 
         return (
             <div style={styles.root}>
@@ -109,36 +79,14 @@ class ProductPackageDetails extends React.Component {
                                 <CardMedia image={selectedProductPackage[0].img} component="img" style={styles.contentImage} />
                             </div>
                             <div style={styles.rightContent}>
-                                <Fab style={{ padding: 10, display: 'flex', justifyContent: 'center', borderRadius: 20, marginBottom: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
+                                <Fab style={{ padding: 10, display: 'flex', justifyContent: 'center', borderRadius: 20, marginBottom: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black' }}>
                                     <Typography variant='h6'>{selectedProductPackage[0].package_name}</Typography>
                                 </Fab>
-                                <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px' }}>
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Category {selectedProductPackage[0].category_id} : </Typography>
-                                    </div>
-                                    <div style={{ display: 'flex', width: '100%' }}>
-                                        <FormControlLabel
-                                            control={<Checkbox checked={check[0]} name={'0'} onChange={(e) => this.handleCheck(e)} />}
-                                            label={selectedProductPackage[0].product[0].product_name}
-                                        />
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                <Button
-                                                    onClick={() => this.handleQuantityPlus(0, 0)}
-                                                    variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                                                <Typography>{quantity[0]}</Typography>
-                                                <Button
-                                                    onClick={() => this.handleQuantityMinus(0, 0)}
-                                                    variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <Button
                                         onClick={this.handleAddToCart}
                                         variant='contained'
-                                        style={{ backgroundColor: 'yellow', borderRadius: 20 }}
+                                        style={{ backgroundColor: '#cbe2d6', borderRadius: 20 }}
                                         startIcon={<ShoppingCartIcon />}
                                     >Add to Cart</Button>
                                 </div>
