@@ -21,7 +21,7 @@ import Wallpaper from '../assets/images/Wallpaper.jpg'
 
 // import { Link } from "react-router-dom";
 
-import { URL_IMG } from "../actions";
+import { URL_IMG, upload } from "../actions";
 
 import avatar from "../assets/no-profile.jpg";
 
@@ -29,6 +29,7 @@ class ProfilePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      image: null,
       edit: false,
       editUserOpen: false,
       passwordUsed: false,
@@ -46,6 +47,24 @@ class ProfilePage extends Component {
       errorTextConfPass: "Confirm password must be matched with password.",
       open: false,
     };
+  }
+
+  handleChoose = (e) => {
+    console.log('event : ', e.target.files)
+    this.setState({ image: e.target.files[0] }, () => console.log('image : ',this.state.image))
+  }
+
+  handleUpload = async () => {
+    console.log('image : ', this.state.image)
+
+    // create formdata
+    const data = new FormData()
+    data.append('IMG', this.state.image)
+    // data.append('filename', 'gambar profile')
+    console.log('form data : ', data.get('IMG'))
+
+    this.props.upload(data)
+    this.setState({ image: null })
   }
 
   handleClickOpen = () => {
@@ -74,7 +93,7 @@ class ProfilePage extends Component {
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
-    
+
     return (
       <div style={styles.root}>
         <Paper style={styles.profilebox} elevation={3}>
@@ -87,7 +106,17 @@ class ProfilePage extends Component {
             />
           </div>
           <div style={styles.buttonprofile}>
-            <Button variant="contained" color="primary">
+            <form encType="multipart/form-data">
+              <input
+                type="file"
+                accept="image/*"
+                name="IMG"
+                onChange={(e) => this.handleChoose(e)}
+              />
+            </form>
+            <Button
+              onClick={this.handleUpload}
+              variant="contained" color="primary">
               Upload
             </Button>
             <Button
@@ -230,4 +259,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(ProfilePage);
+export default connect(mapStateToProps, { upload })(ProfilePage);

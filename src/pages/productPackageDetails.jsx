@@ -9,10 +9,13 @@ import {
     Paper,
     Button,
     Typography,
-    CardMedia,
+    // CardMedia,
     Fab,
-    Checkbox,
-    FormControlLabel
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
 } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
@@ -25,8 +28,6 @@ class ProductPackageDetails extends React.Component {
         super(props)
         this.state = {
             selectedProductPackage: [],
-            check: [false, false, false],
-            quantity: [0, 0, 0],
         }
     }
 
@@ -50,130 +51,67 @@ class ProductPackageDetails extends React.Component {
     }
 
     handleAddToCart = () => {
-        const indexCheck = this.state.check.indexOf(false)
-        console.log('index check', indexCheck)
+        console.log('add to cart')
     }
 
-    handleQuantityPlus = (indexPackage, indexQuantity) => {
-        const tempQuantity = { ...this.state.quantity }
-
-        if (tempQuantity[indexQuantity] >= this.state.selectedProductPackage[indexPackage].max_qty) return null
-
-        tempQuantity[indexQuantity] = tempQuantity[indexQuantity] + 1
-        this.setState({ quantity: tempQuantity }, () => { })
-    }
-
-    handleQuantityMinus = (indexPackage, indexQuantity) => {
-        const tempQuantity = { ...this.state.quantity }
-
-        if (tempQuantity[indexQuantity] === 0) return null
-        tempQuantity[indexQuantity] = tempQuantity[indexQuantity] - 1
-        this.setState({ quantity: tempQuantity }, () => { })
-    }
-
-    renderSelectProductPackage = () => {
-        return (
-            <div>
-                {
-                    this.state.selectedProductPackage[0] ?
-                        this.state.selectedProductPackage.map((item, index) => {
-                            return (
-                                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px' }}>
-                                    <Typography style={{ marginRight: 10 }}>Select Product from Category {item[index].category_id} : </Typography>
-                                </div>
-                            )
-                        }) : null
-                }
-            </div>
-        )
+    renderTableProductPackage = () => {
+        const { selectedProductPackage } = this.state
+        return selectedProductPackage.map((category, index) => {
+            return (
+                <Table key={category.category_id}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center"></TableCell>
+                            <TableCell align="center">Category {category.category_id}</TableCell>
+                            <TableCell align="center">Max quantity ({category.max_qty})</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            category.product.map((productItem, index) => {
+                                return (
+                                    <TableRow key={productItem.product_id}>
+                                        <TableCell align="center">{index + 1}</TableCell>
+                                        <TableCell>{productItem.product_name}</TableCell>
+                                        <TableCell align="center">0</TableCell>
+                                    </TableRow>
+                                )
+                            })
+                        }
+                    </TableBody>
+                </Table>
+            )
+        })
     }
 
     render() {
-        const { selectedProductPackage, check, quantity } = this.state
+        const { selectedProductPackage } = this.state
         // console.log('props location : ', this.props.location)
         console.log('selectedProductPackage :', selectedProductPackage)
-        console.log('check : ', check)
 
         return (
             <div style={styles.root}>
                 {
                     selectedProductPackage[0] ?
-
-                        <Paper style={styles.rootContainer}>
-                            <div style={styles.leftContent}>
+                        <Paper style={styles.rootContainer} elevation={5}>
+                            {/* <div style={styles.leftContent}>
                                 <CardMedia image={selectedProductPackage[0].img} component="img" style={styles.contentImage} />
-                            </div>
+                            </div> */}
                             <div style={styles.rightContent}>
-                                <Fab style={{ padding: 10, display: 'flex', justifyContent: 'center', borderRadius: 20, marginBottom: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
-                                    <Typography variant='h6'>{selectedProductPackage[0].package_name}</Typography>
-                                </Fab>
-                                <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px' }}>
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Category {selectedProductPackage[0].category_id} : </Typography>
-                                        <div style={{ display: 'flex', width: '100%' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={check[0]} name={'0'} onChange={(e) => this.handleCheck(e)} />}
-                                                label={selectedProductPackage[0].product_name[0]}
-                                            />
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityPlus(0, 0)}
-                                                        variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                                                    <Typography>{quantity[0]}</Typography>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityMinus(0, 0)}
-                                                        variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div style={{ display: 'flex', width: '100%' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={check[1]} name={'1'} onChange={(e) => this.handleCheck(e)} />}
-                                                label={selectedProductPackage[0].product_name[1]}
-                                            />
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityPlus(0, 1)}
-                                                        variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                                                    <Typography>{quantity[1]}</Typography>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityMinus(0, 1)}
-                                                        variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div style={{ display: 'flex', width: '100%' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={check[2]} name={'2'} onChange={(e) => this.handleCheck(e)} />}
-                                                label={selectedProductPackage[0].product_name[2]}
-                                            />
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityPlus(0, 2)}
-                                                        variant='contained' size='small' color='secondary' style={{ marginRight: 10 }}>+</Button>
-                                                    <Typography>{quantity[2]}</Typography>
-                                                    <Button
-                                                        onClick={() => this.handleQuantityMinus(0, 2)}
-                                                        variant='outlined' size='small' color='secondary' style={{ margin: '0 10px' }}>-</Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                                    <Fab style={{ padding: 10, display: 'flex', borderRadius: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black', marginRight: 20 }}>
+                                        <Typography variant='h6'>Package : {selectedProductPackage[0].package_name}</Typography>
+                                    </Fab>
                                     <Button
                                         onClick={this.handleAddToCart}
                                         variant='contained'
-                                        style={{ backgroundColor: 'yellow', borderRadius: 20 }}
+                                        style={{ backgroundColor: '#cbe2d6', borderRadius: 20, width: '20%' }}
                                         startIcon={<ShoppingCartIcon />}
                                     >Add to Cart</Button>
                                 </div>
+                                {this.renderTableProductPackage()}
                             </div>
                         </Paper>
-
                         : null
                 }
             </div>
@@ -196,7 +134,7 @@ const styles = {
     rootContainer: {
         width: '80%',
         height: '80%',
-        padding: 10,
+        padding: 20,
         borderRadius: 20,
         display: 'flex',
         justifyContent: 'center',
