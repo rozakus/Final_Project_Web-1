@@ -8,7 +8,7 @@ export const getCartUser = (id_user) => {
         try {
             // req api
             const getCart = await Axios.get(URL + '/getusercart/' + id_user)
-            console.log(getCart.data)
+            console.log('get cart action : ',getCart.data)
 
             // store response
             dispatch({ type: GET_CART_USER, payload: getCart.data })
