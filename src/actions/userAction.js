@@ -5,10 +5,14 @@ export const SignIn = (body) => {
   return async (dispatch) => {
     try {
       const res = await Axios.post(URL + "/login", body);
+<<<<<<< HEAD
+      console.log(res);
+=======
       console.log(res)
+>>>>>>> 591434a3fef83dc1c0570091cdae02d201413636
 
       // save token into local storage
-      console.log(`data token : `, res.data.token)
+      console.log(`data token : `, res.data.token);
       localStorage.setItem("id", res.data.id_users); //id_users sesuai database
       localStorage.setItem("token", res.data.token);
 
@@ -16,7 +20,11 @@ export const SignIn = (body) => {
     } catch (err) {
       // console.log(err)
       console.log(err.response ? err.response.data : err);
+<<<<<<< HEAD
+      dispatch({ type: LOGIN_ERROR, payload: err.response.data });
+=======
       dispatch({ type: LOGIN_ERROR, payload: err.response.data })
+>>>>>>> 591434a3fef83dc1c0570091cdae02d201413636
     }
   };
 };
@@ -26,7 +34,7 @@ export const KeepLogin = () => {
     try {
       // get token from local storage
       const token = localStorage.getItem("token");
-      console.log(`token : `, token)
+      console.log(`token : `, token);
 
       // get user data using url keep login
       const res = await Axios.post(URL + "/keeplogin", { token });
@@ -34,17 +42,20 @@ export const KeepLogin = () => {
 
       dispatch({ type: LOGIN, payload: res.data }); //typenya harus sama dengan yg di helpers
     } catch (err) {
-      localStorage.removeItem('id')
-      localStorage.removeItem('token')
-      dispatch({ type: LOG_OUT })
+      localStorage.removeItem("id");
+      localStorage.removeItem("token");
+      dispatch({ type: LOG_OUT });
       console.log(err ? "Error KeepLogin: " + err.response.data : err);
     }
   };
 };
 
 export const LogOut = () => {
-  return {
-    type: 'LOG_OUT',
+  return async (dispatch) => {
+    dispatch({ type: LOG_OUT})
+    localStorage.removeItem("id");
+    localStorage.removeItem("token");
+
   };
 };
 
@@ -55,7 +66,7 @@ export const signUp = (body) => {
       const res = await Axios.post(URL + "/register", body); //alamatnya samakan di userRouter
       console.log(res.data);
 
-      dispatch({ type: REGISTER, payload: res.data })
+      dispatch({ type: REGISTER, payload: res.data });
     } catch (err) {
       console.log(err ? "Error signUp: " + err.response.data : err);
     }
