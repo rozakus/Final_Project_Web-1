@@ -9,11 +9,10 @@ import {
     Paper,
     Button,
     Typography,
-    CardMedia,
+    // CardMedia,
     Fab,
-    Checkbox,
-    FormControlLabel,
     Table,
+    TableHead,
     TableBody,
     TableRow,
     TableCell,
@@ -57,11 +56,32 @@ class ProductPackageDetails extends React.Component {
 
     renderTableProductPackage = () => {
         const { selectedProductPackage } = this.state
-        return (
-            <div>
-
-            </div>
-        )
+        return selectedProductPackage.map((category, index) => {
+            return (
+                <Table key={category.category_id}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center"></TableCell>
+                            <TableCell align="center">Category {category.category_id}</TableCell>
+                            <TableCell align="center">Max quantity ({category.max_qty})</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            category.product.map((productItem, index) => {
+                                return (
+                                    <TableRow key={productItem.product_id}>
+                                        <TableCell align="center">{index + 1}</TableCell>
+                                        <TableCell>{productItem.product_name}</TableCell>
+                                        <TableCell align="center">0</TableCell>
+                                    </TableRow>
+                                )
+                            })
+                        }
+                    </TableBody>
+                </Table>
+            )
+        })
     }
 
     render() {
@@ -73,26 +93,25 @@ class ProductPackageDetails extends React.Component {
             <div style={styles.root}>
                 {
                     selectedProductPackage[0] ?
-
-                        <Paper style={styles.rootContainer}>
-                            <div style={styles.leftContent}>
+                        <Paper style={styles.rootContainer} elevation={5}>
+                            {/* <div style={styles.leftContent}>
                                 <CardMedia image={selectedProductPackage[0].img} component="img" style={styles.contentImage} />
-                            </div>
+                            </div> */}
                             <div style={styles.rightContent}>
-                                <Fab style={{ padding: 10, display: 'flex', justifyContent: 'center', borderRadius: 20, marginBottom: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black' }}>
-                                    <Typography variant='h6'>{selectedProductPackage[0].package_name}</Typography>
-                                </Fab>
-                                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                                    <Fab style={{ padding: 10, display: 'flex', borderRadius: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black', marginRight: 20 }}>
+                                        <Typography variant='h6'>Package : {selectedProductPackage[0].package_name}</Typography>
+                                    </Fab>
                                     <Button
                                         onClick={this.handleAddToCart}
                                         variant='contained'
-                                        style={{ backgroundColor: '#cbe2d6', borderRadius: 20 }}
+                                        style={{ backgroundColor: '#cbe2d6', borderRadius: 20, width: '20%' }}
                                         startIcon={<ShoppingCartIcon />}
                                     >Add to Cart</Button>
                                 </div>
+                                {this.renderTableProductPackage()}
                             </div>
                         </Paper>
-
                         : null
                 }
             </div>
@@ -115,7 +134,7 @@ const styles = {
     rootContainer: {
         width: '80%',
         height: '80%',
-        padding: 10,
+        padding: 20,
         borderRadius: 20,
         display: 'flex',
         justifyContent: 'center',

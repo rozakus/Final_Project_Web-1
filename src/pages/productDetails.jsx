@@ -39,7 +39,7 @@ class ProductDetails extends React.Component {
             selectedQuantity: 0,
             total_sell: 0,
             total_modal: 0,
-            alertLogin: false
+            alertLogin: false,
         }
     }
 
@@ -70,7 +70,7 @@ class ProductDetails extends React.Component {
         if (localStorage.getItem('id') === null) return this.setState({ alertLogin: true })
 
         const body = {
-            user_id: localStorage.getItem('id'),
+            user_id: parseInt(localStorage.getItem('id')),
             product_id: this.state.selectedProduct.product_id,
             product_qty: this.state.selectedQuantity,
             total_modal: this.state.total_modal,
@@ -79,7 +79,7 @@ class ProductDetails extends React.Component {
 
         console.log({ body })
 
-        // Axios.post(URL + '/addtocartpcs', body)
+        Axios.post(URL + '/addtocartpcs', body)
     }
 
     handleClose = () => { this.setState({ alertLogin: false }) }
