@@ -27,7 +27,7 @@ class ProductPackageDetails extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedProductPackage: [],
+            selectedProductPackage: []
         }
     }
 
@@ -41,14 +41,14 @@ class ProductPackageDetails extends React.Component {
     }
 
     // handling
-    handleCheck = (e) => {
-        console.log('cek', this.state.check)
-        console.log('target name :', e.target.name)
-        const tempCheck = { ...this.state.check }
-        tempCheck[e.target.name] = e.target.checked
+    // handleCheck = (e) => {
+    //     console.log('cek', this.state.check)
+    //     console.log('target name :', e.target.name)
+    //     const tempCheck = { ...this.state.check }
+    //     tempCheck[e.target.name] = e.target.checked
 
-        this.setState({ check: tempCheck }, () => { })
-    }
+    //     this.setState({ check: tempCheck }, () => { })
+    // }
 
     handleAddToCart = () => {
         console.log('add to cart')
