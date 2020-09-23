@@ -63,7 +63,7 @@ class ProductPackageDetails extends React.Component {
                         <TableRow>
                             <TableCell align="center"></TableCell>
                             <TableCell align="center">Category {category.category_id}</TableCell>
-                            <TableCell align="center">Max quantity ({category.max_qty})</TableCell>
+                            <TableCell align="center">Choose product ({category.max_qty} pcs)</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -73,7 +73,9 @@ class ProductPackageDetails extends React.Component {
                                     <TableRow key={productItem.product_id}>
                                         <TableCell align="center">{index + 1}</TableCell>
                                         <TableCell>{productItem.product_name}</TableCell>
-                                        <TableCell align="center">0</TableCell>
+                                        <TableCell align="center">
+                                            0
+                                        </TableCell>
                                     </TableRow>
                                 )
                             })
