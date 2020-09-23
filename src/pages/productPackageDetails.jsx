@@ -9,10 +9,13 @@ import {
     Paper,
     Button,
     Typography,
-    CardMedia,
+    // CardMedia,
     Fab,
-    Checkbox,
-    FormControlLabel
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
 } from '@material-ui/core'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
@@ -37,6 +40,50 @@ class ProductPackageDetails extends React.Component {
             .catch(err => console.log(err))
     }
 
+    // handling
+    handleCheck = (e) => {
+        console.log('cek', this.state.check)
+        console.log('target name :', e.target.name)
+        const tempCheck = { ...this.state.check }
+        tempCheck[e.target.name] = e.target.checked
+
+        this.setState({ check: tempCheck }, () => { })
+    }
+
+    handleAddToCart = () => {
+        console.log('add to cart')
+    }
+
+    renderTableProductPackage = () => {
+        const { selectedProductPackage } = this.state
+        return selectedProductPackage.map((category, index) => {
+            return (
+                <Table key={category.category_id}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center"></TableCell>
+                            <TableCell align="center">Category {category.category_id}</TableCell>
+                            <TableCell align="center">Max quantity ({category.max_qty})</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            category.product.map((productItem, index) => {
+                                return (
+                                    <TableRow key={productItem.product_id}>
+                                        <TableCell align="center">{index + 1}</TableCell>
+                                        <TableCell>{productItem.product_name}</TableCell>
+                                        <TableCell align="center">0</TableCell>
+                                    </TableRow>
+                                )
+                            })
+                        }
+                    </TableBody>
+                </Table>
+            )
+        })
+    }
+
     render() {
         const { selectedProductPackage } = this.state
         // console.log('props location : ', this.props.location)
@@ -46,48 +93,25 @@ class ProductPackageDetails extends React.Component {
             <div style={styles.root}>
                 {
                     selectedProductPackage[0] ?
-
-                        <Paper style={styles.rootContainer}>
-                            <div style={styles.leftContent}>
+                        <Paper style={styles.rootContainer} elevation={5}>
+                            {/* <div style={styles.leftContent}>
                                 <CardMedia image={selectedProductPackage[0].img} component="img" style={styles.contentImage} />
-                            </div>
+                            </div> */}
                             <div style={styles.rightContent}>
-                                <Fab style={{ padding: 10, display: 'flex', justifyContent: 'center', borderRadius: 20, marginBottom: 20, width: '100%', backgroundColor: 'blue', color: 'white' }}>
-                                    <Typography variant='h6'>{selectedProductPackage[0].package_name}</Typography>
-                                </Fab>
-                                <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px' }}>
-                                        <Typography style={{ marginRight: 10 }}>Select Product from Category {selectedProductPackage[0].category_id} : </Typography>
-                                        <div style={{ display: 'flex' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={true} name="gilad" />}
-                                                label={selectedProductPackage[0].product_name[0]}
-                                            />
-                                        </div>
-                                        <div style={{ display: 'flex' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={true} name="gilad" />}
-                                                label={selectedProductPackage[0].product_name[1]}
-                                            />
-                                        </div>
-                                        <div style={{ display: 'flex' }}>
-                                            <FormControlLabel
-                                                control={<Checkbox checked={true} name="gilad" />}
-                                                label={selectedProductPackage[0].product_name[2]}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                                    <Fab style={{ padding: 10, display: 'flex', borderRadius: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black', marginRight: 20 }}>
+                                        <Typography variant='h6'>Package : {selectedProductPackage[0].package_name}</Typography>
+                                    </Fab>
                                     <Button
+                                        onClick={this.handleAddToCart}
                                         variant='contained'
-                                        style={{ backgroundColor: 'yellow', borderRadius: 20 }}
+                                        style={{ backgroundColor: '#cbe2d6', borderRadius: 20, width: '20%' }}
                                         startIcon={<ShoppingCartIcon />}
                                     >Add to Cart</Button>
                                 </div>
+                                {this.renderTableProductPackage()}
                             </div>
                         </Paper>
-
                         : null
                 }
             </div>
@@ -110,7 +134,7 @@ const styles = {
     rootContainer: {
         width: '80%',
         height: '80%',
-        padding: 10,
+        padding: 20,
         borderRadius: 20,
         display: 'flex',
         justifyContent: 'center',
