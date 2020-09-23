@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {connect} from 'react-redux'
 
 import Drawer from "@material-ui/core/Drawer";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,8 +16,15 @@ import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 
+import {LogOut} from '../actions/userAction'
+
 // class component
 class DrawerComp extends React.Component {
+
+  handleLogOut = () => {
+    this.props.LogOut()
+  }
+
   render() {
     return (
       <div style={styles.root}>
@@ -87,7 +95,7 @@ class DrawerComp extends React.Component {
               </List>
             </Link>
             <Link to="/">
-              <List>
+              <List onClick={this.handleLogOut}>
                 <ListItem button key={"LogOut"}>
                   <ListItemIcon>
                     <MeetingRoomIcon style={{ color: "#cbe2d6" }} />
@@ -123,4 +131,4 @@ const styles = {
   },
 };
 
-export default DrawerComp;
+export default connect(null, {LogOut})(DrawerComp);
