@@ -28,7 +28,7 @@ class CartPage extends React.Component {
         this.props.getCartUser(localStorage.getItem('id'))
     }
 
-    renderTableHead = () => {
+    renderTableHeadPcs = () => {
         return (
             <TableRow>
                 <TableCell align="center">No</TableCell>
@@ -42,43 +42,30 @@ class CartPage extends React.Component {
         )
     }
 
-    renderTableBody = () => {
-        return this.props.cart.map((item, index) => {
+    renderTableBodyPcs = () => {
+        return this.props.resultPcs.map((item, index) => {
             return (
                 <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{item.package_name}</TableCell>
-                    <TableCell style={{ display: 'flex', alignItems: 'center' }}><img src={item.image} width="50px" alt="product-img" />{item.product_name}</TableCell>
-                    <TableCell align="right">{`IDR ${item.price_sell.toLocaleString()},00`}</TableCell>
-                    <TableCell align="center">{item.product_qty}</TableCell>
-                    <TableCell align="right">{`IDR ${item.total_sell.toLocaleString()},00`}</TableCell>
-                    <TableCell align="center">
-                        <Button
-                            onClick={() => this.setState({ selectedIndex: index })}
-                            variant="contained"
-                            color="primary"
-                            size='small'
-                            style={{ marginRight: 10 }}
-                        >Edit</Button>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            size='small'
-                        >Delete</Button>
-                    </TableCell>
                 </TableRow>
             )
         })
     }
 
     render() {
+        console.log('resultPcs : ', this.props.resultPcs)
+        console.log('resultPkg : ', this.props.resultPkg)
         return (
             <div style={styles.root}>
                 <Paper style={styles.rootContainer}>
-                    <Table>
-                        <TableHead>{this.renderTableHead()}</TableHead>
-                        <TableBody>{this.renderTableBody()}</TableBody>
-                    </Table>
+                    {
+                        this.props.resultPcs[0] ?
+                            <Table>
+                                <TableHead>{this.renderTableHeadPcs()}</TableHead>
+                                <TableBody>{this.renderTableBodyPcs()}</TableBody>
+                            </Table>
+                            : null
+                    }
                 </Paper>
             </div>
         )
@@ -102,7 +89,8 @@ const styles = {
 
 const MapStateToProps = (globalState) => {
     return {
-        cart: globalState.cartReducer.cart
+        resultPcs: globalState.cartReducer.resultPcs,
+        resultPkg: globalState.cartReducer.resultPkg
     }
 }
 
