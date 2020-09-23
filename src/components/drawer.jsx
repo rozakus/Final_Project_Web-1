@@ -34,73 +34,73 @@ class DrawerComp extends React.Component {
         >
           <Toolbar />
           <div style={styles.drawerContainer}>
-            <Link to="/dashboard">
+            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <List>
                 <ListItem button key={"Dashboard"}>
                   <ListItemIcon>
-                    <DashboardIcon style={{ color: "#cbe2d6" }} />
+                    <DashboardIcon style={{ color: "#04FCF8" }} />
                   </ListItemIcon>
-                  <ListItemText primary={"Dashboard"} />
+                  <ListItemText primary={"Dashboard"} style={{ color: 'black' }} />
                 </ListItem>
               </List>
             </Link>
-            <Link to="/salesReport">
+            <Link to="/salesReport" style={{ textDecoration: 'none' }}>
               <List>
                 <ListItem button key={"Sales Report"}>
                   <ListItemIcon>
-                    <MonetizationOnIcon style={{ color: "#cbe2d6" }} />
+                    <MonetizationOnIcon style={{ color: "#04FCF8" }} />
                   </ListItemIcon>
-                  <ListItemText primary={"Sales Report"} />
+                  <ListItemText primary={"Sales Report"} style={{ color: 'black' }}/>
                 </ListItem>
               </List>
             </Link>
-            <Link to="/userInfo">
+            <Link to="/userInfo" style={{ textDecoration: 'none' }}>
               <List>
                 <ListItem button key={"Users"}>
                   <ListItemIcon>
-                    <AccountCircleIcon style={{ color: "#cbe2d6" }} />
+                    <AccountCircleIcon style={{ color: "#04FCF8" }} />
                   </ListItemIcon>
-                  <ListItemText primary={"Users"} />
+                  <ListItemText primary={"Users"} style={{ color: 'black' }}/>
                 </ListItem>
               </List>
             </Link>
-            <Link to="/productPage">
+            <Link to="/productPage" style={{ textDecoration: 'none' }}>
               <List>
                 <ListItem button key={"Product"}>
                   <ListItemIcon>
-                    <FormatListBulletedIcon style={{ color: "#cbe2d6" }} />
+                    <FormatListBulletedIcon style={{ color: "#04FCF8" }} />
                   </ListItemIcon>
-                  <ListItemText primary={"Product"} />
+                  <ListItemText primary={"Product"} style={{ color: 'black' }}/>
                 </ListItem>
               </List>
             </Link>
-            <Link to="/packagePage">
+            <Link to="/packagePage" style={{ textDecoration: 'none' }}>
               <List>
                 <ListItem button key={"Packages"}>
                   <ListItemIcon>
-                    <CardGiftcardIcon style={{ color: "#cbe2d6" }} />
+                    <CardGiftcardIcon style={{ color: "#04FCF8" }} />
                   </ListItemIcon>
-                  <ListItemText primary={"Packages"} />
+                  <ListItemText primary={"Packages"} style={{ color: 'black' }}/>
                 </ListItem>
               </List>
             </Link>
-            <Link to="/historyTrans">
+            <Link to="/historyTrans" style={{ textDecoration: 'none' }}>
               <List>
                 <ListItem button key={"Payment"}>
                   <ListItemIcon>
-                    <AccountBalanceWalletIcon style={{ color: "#cbe2d6" }} />
+                    <AccountBalanceWalletIcon style={{ color: "#04FCF8" }} />
                   </ListItemIcon>
-                  <ListItemText primary={"Payment"} />
+                  <ListItemText primary={"Payment"} style={{ color: 'black' }}/>
                 </ListItem>
               </List>
             </Link>
-            <Link to="/">
+            <Link to="/" style={{ textDecoration: 'none' }}>
               <List onClick={this.handleLogOut}>
                 <ListItem button key={"LogOut"}>
                   <ListItemIcon>
-                    <MeetingRoomIcon style={{ color: "#cbe2d6" }} />
+                    <MeetingRoomIcon style={{ color: "#04FCF8" }}/>
                   </ListItemIcon>
-                  <ListItemText primary={"LogOut"} />
+                  <ListItemText primary={"LogOut"} style={{ color: 'black' }}/>
                 </ListItem>
               </List>
             </Link>
