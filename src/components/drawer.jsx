@@ -13,6 +13,7 @@ import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 
 // class component
 class DrawerComp extends React.Component {
@@ -82,6 +83,16 @@ class DrawerComp extends React.Component {
                     <AccountBalanceWalletIcon style={{ color: "#cbe2d6" }} />
                   </ListItemIcon>
                   <ListItemText primary={"Payment"} />
+                </ListItem>
+              </List>
+            </Link>
+            <Link to="/">
+              <List>
+                <ListItem button key={"LogOut"}>
+                  <ListItemIcon>
+                    <MeetingRoomIcon style={{ color: "#cbe2d6" }} />
+                  </ListItemIcon>
+                  <ListItemText primary={"LogOut"} />
                 </ListItem>
               </List>
             </Link>
