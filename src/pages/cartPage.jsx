@@ -35,17 +35,28 @@ class CartPage extends React.Component {
         this.props.getCartUser(localStorage.getItem('id'))
     }
 
+    resetState = () => {
+        this.setState({ edited_product_qty: 0 },
+            () => this.setState({ edited_total_sell: 0 },
+                () => this.setState({ edited_total_modal: 0 },
+                    () => this.setState({ edited_product_id: null }))))
+    }
+
     // handling function
     handleDeletePcs = (item) => {
         console.log('Delete Pcs : ', item)
 
         const body = {
-            order_number: parseInt(item.order_number),
-            product_id: parseInt(item.product_id)
+            order_number: item.order_number,
+            product_id: item.product_id
         }
 
         console.log('body : ', body)
-        // Axios.delete(URL + '/deletepcs', body)
+        Axios.delete(URL + '/deletepcs', { data: body })
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => console.log(err))
 
         // this.renderTableBodyPcs()
     }
@@ -70,6 +81,9 @@ class CartPage extends React.Component {
     }
 
     handleEditConfirm = (item) => {
+
+        if (!this.state.edited_product_qty || !this.state.edited_total_modal || !this.state.edited_total_sell) return console.log('quantity is empty')
+
         const body = {
             qty: this.state.edited_product_qty,
             total_modal: this.state.edited_total_modal,
@@ -77,8 +91,19 @@ class CartPage extends React.Component {
             product_id: item.product_id,
             order_number: item.order_number
         }
-
         console.log('body : ', body)
+
+        Axios.patch(URL + '/editqtypcs', body)
+            .then(res => {
+                this.resetState()
+                this.props.getCartUser(localStorage.getItem('id'))
+                this.renderTableBodyPcs()
+            })
+            .catch(err => console.log(err))
+    }
+
+    handleEditCancel = () => {
+        this.resetState()
     }
 
     // render Product Pcs
@@ -119,7 +144,7 @@ class CartPage extends React.Component {
                             onClick={() => this.handleEditConfirm(item)}
                             variant="outlined" color="secondary">confirm</Button>
                         <Button
-                            onClick={() => this.setState({ edited_product_id: null })}
+                            onClick={this.handleEditCancel}
                             color="secondary">cancel</Button>
                     </TableCell>
                 </TableRow>
