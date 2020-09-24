@@ -3,7 +3,7 @@ import React from 'react'
 
 // import library
 import Axios from 'axios'
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 
 // import UI
 import {
@@ -81,9 +81,13 @@ class ProductDetails extends React.Component {
         console.log({ body })
 
         Axios.post(URL + '/addtocartpcs', body)
-        this.setState({ selectedQuantity: 0 },
-            () => this.setState({ total_sell: 0 },
-                () => this.setState({ total_modal: 0 })))
+            .then(res => {
+                this.setState({ selectedQuantity: 0 },
+                    () => this.setState({ total_sell: 0 },
+                        () => this.setState({ total_modal: 0 })))
+                // return < Redirect to='/cart' />
+            })
+            .catch(err => console.log(err))
     }
 
     handleClose = () => { this.setState({ alertLogin: false }) }

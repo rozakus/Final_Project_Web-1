@@ -11,6 +11,7 @@ import {
     TableHead,
     TableRow,
     TableCell,
+    Button,
 } from '@material-ui/core'
 
 // import action
@@ -18,6 +19,9 @@ import { getCartUser } from '../actions'
 
 // import
 import { URL } from '../actions'
+
+// import
+import Wallpaper from '../assets/images/Wallpaper.jpg'
 
 class CartPage extends React.Component {
     constructor(props) {
@@ -45,19 +49,16 @@ class CartPage extends React.Component {
     handleDeletePcs = (item) => {
         console.log('Delete Pcs : ', item)
 
-        const body = {
-            order_number: item.order_number,
-            product_id: item.product_id
-        }
+        const order_number = item.order_number
+        const product_id = item.product_id
 
-        console.log('body : ', body)
-        Axios.delete(URL + '/deletepcs', { data: body })
+        console.log({ order_number }, { product_id })
+        // axios delete gabisa ngirim body langsung, harus disetting, kalau params bisa
+        Axios.delete(URL + '/deletepcs/' + order_number + '/' + product_id)
             .then(res => {
-                console.log(res.data)
+                this.props.getCartUser(localStorage.getItem('id'))
             })
             .catch(err => console.log(err))
-
-        // this.renderTableBodyPcs()
     }
 
     handleEditPcs = (product_id) => {
@@ -230,13 +231,15 @@ class CartPage extends React.Component {
 const styles = {
     root: {
         padding: '100px 10px 10px 10px',
-        backgroundColor: '#cbe2d6',
+        backgroundImage: `url(${Wallpaper})`,
         minHeight: '100vh',
-        height: 'auto'
+        height: 'auto',
+        display: 'flex',
+        justifyContent: 'center'
     },
     rootContainer: {
         minHeight: '80vh',
-        width: '100%',
+        width: '80%',
         padding: '20px',
         borderRadius: 20
     }
