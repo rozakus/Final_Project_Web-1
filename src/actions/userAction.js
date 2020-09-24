@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { URL, LOGIN, LOG_OUT, REGISTER, LOGIN_ERROR } from "./helpers";
+import { URL, LOGIN, LOG_OUT, REGISTER, LOGIN_ERROR, PASS_ERROR } from "./helpers";
 
 export const SignIn = (body) => {
   return async (dispatch) => {
