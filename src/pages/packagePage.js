@@ -10,6 +10,7 @@ import {
   CardMedia,
 } from "@material-ui/core";
 import Wallpaper from '../assets/images/Wallpaper.jpg'
+import DialogDetails from '../components/dialogDetails'
 
 class PackagePage extends React.Component {
   constructor(props) {
@@ -54,9 +55,15 @@ class PackagePage extends React.Component {
           </TableCell>
           <TableCell>{item.package_name}</TableCell>
           <TableCell>
-              <p>Category: {item.details[0].category}, Quantity: {item.details[0].max_qty}</p>
-              <p>Category: {item.details[1].category}, Quantity: {item.details[1].max_qty}</p>
-              <p>Category: {item.details[2].category}, Quantity: {item.details[2].max_qty}</p>
+              <DialogDetails
+                detail={item.details}
+              // cate1={item.details[0].category}
+              // qty1={item.details[0].max_qty}
+              // cate2={item.details[1].category}
+              // qty2={item.details[1].max_qty}
+              // cate3={item.details[2].category}
+              // qty3={item.details[2].max_qty}
+              />
           </TableCell>
           <TableCell>Rp {item.package_price.toLocaleString()}</TableCell>
         </TableRow>

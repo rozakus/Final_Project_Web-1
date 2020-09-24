@@ -17,12 +17,8 @@ import {
   IconButton,
 } from "@material-ui/core";
 import Wallpaper from "../assets/images/Wallpaper.jpg";
-// import ClearIcon from "@material-ui/icons/Clear";
-// import CheckIcon from "@material-ui/icons/Check";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-
-// import { Link } from "react-router-dom";
 
 import { URL_IMG, upload, KeepLogin, URL } from "../actions";
 
@@ -111,6 +107,8 @@ class ProfilePage extends Component {
 
   render() {
     const { picture, address, edit } = this.props;
+    const { image } = this.props;
+
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
@@ -365,16 +363,6 @@ const styles = {
     flexDirection: "column",
     justifyContent: "space-between",
   },
-  // papel: {
-  //   height: "50%",
-  //   width: "50%",
-  //   elevation: 5,
-  //   display: "flex",
-  //   flexDirection: "column",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   padding: 10,
-  // },
 };
 
 const mapStateToProps = (state) => {

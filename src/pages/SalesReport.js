@@ -7,7 +7,6 @@ import {
   TableCell,
   TableRow,
   Paper,
-  CardMedia,
 } from "@material-ui/core";
 import Wallpaper from '../assets/images/Wallpaper.jpg'
 
