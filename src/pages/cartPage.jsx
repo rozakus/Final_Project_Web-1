@@ -12,6 +12,7 @@ import {
     TableRow,
     TableCell,
     Button,
+    Typography
 } from '@material-ui/core'
 
 // import action
@@ -30,19 +31,31 @@ class CartPage extends React.Component {
             edited_product_id: null,
             edited_product_qty: 0,
             edited_total_sell: 0,
-            edited_total_modal: 0
+            edited_total_modal: 0,
+            amount: 0
         }
     }
 
-    componentDidMount() {
-        this.props.getCartUser(localStorage.getItem('id'))
+    async componentDidMount() {
+        await this.props.getCartUser(localStorage.getItem('id'))
+        this.calculateAmount()
     }
 
-    resetState = () => {
-        this.setState({ edited_product_qty: 0 },
-            () => this.setState({ edited_total_sell: 0 },
-                () => this.setState({ edited_total_modal: 0 },
-                    () => this.setState({ edited_product_id: null }))))
+    // async componentDidUpdate() {
+    //     await this.props.resultPcs.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
+    //     await this.props.resultPkg.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
+    // }
+
+    calculateAmount = async () => {
+        await this.props.resultPcs.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
+        await this.props.resultPkg.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
+    }
+
+    resetState = async () => {
+        await this.setState({ edited_product_qty: 0 })
+        await this.setState({ edited_total_sell: 0 })
+        await this.setState({ edited_total_modal: 0 })
+        await this.setState({ edited_product_id: null })
     }
 
     // handling function
@@ -55,29 +68,28 @@ class CartPage extends React.Component {
         console.log({ order_number }, { product_id })
         // axios delete gabisa ngirim body langsung, harus disetting, kalau params bisa
         Axios.delete(URL + '/deletepcs/' + order_number + '/' + product_id)
-            .then(res => {
-                this.props.getCartUser(localStorage.getItem('id'))
-            })
+            .then(res => { this.props.getCartUser(localStorage.getItem('id')) })
             .catch(err => console.log(err))
     }
 
-    handleEditPcs = (product_id) => {
+    handleEditPcs = async (product_id) => {
         console.log('Product Id : ', product_id)
-        this.setState({ edited_product_id: product_id },
-            () => console.log('edited_product_id : ', this.state.edited_product_id))
+        await this.setState({ edited_product_id: product_id })
+        await console.log('edited_product_id : ', this.state.edited_product_id)
     }
 
-    handleEditMinus = (item) => {
+    handleEditMinus = async (item) => {
         if (this.state.edited_product_qty === 0) return null
-        this.setState({ edited_product_qty: this.state.edited_product_qty - 1 },
-            () => this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty },
-                () => this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })))
+
+        await this.setState({ edited_product_qty: this.state.edited_product_qty - 1 })
+        await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
+        await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
     }
 
-    handleEditPlus = (item) => {
-        this.setState({ edited_product_qty: this.state.edited_product_qty + 1 },
-            () => this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty },
-                () => this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })))
+    handleEditPlus = async (item) => {
+        await this.setState({ edited_product_qty: this.state.edited_product_qty + 1 })
+        await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
+        await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
     }
 
     handleEditConfirm = (item) => {
@@ -97,13 +109,27 @@ class CartPage extends React.Component {
             .then(res => {
                 this.resetState()
                 this.props.getCartUser(localStorage.getItem('id'))
-                this.renderTableBodyPcs()
+                this.calculateAmount()
             })
             .catch(err => console.log(err))
     }
 
     handleEditCancel = () => {
         this.resetState()
+    }
+
+    // package
+    handleDeletePkg = (item) => {
+        console.log('item package', item)
+
+        const order_number = item.order_number
+        const package_id = item.package_no
+        const package_no = item.package_no
+        console.log({ order_number }, { package_id }, { package_no })
+
+        Axios.delete(URL + '/deletepkg/' + order_number + '/' + package_id + '/' + package_no)
+            .then(res => { this.props.getCartUser(localStorage.getItem('id')) })
+            .catch(err => console.log(err))
     }
 
     // render Product Pcs
@@ -180,8 +206,9 @@ class CartPage extends React.Component {
             <TableRow>
                 <TableCell align="center">No</TableCell>
                 <TableCell align="center">Package</TableCell>
-                <TableCell align="center">Price</TableCell>
                 <TableCell align="center">Package Composition</TableCell>
+                <TableCell align="center">Price</TableCell>
+                <TableCell align="center">Action</TableCell>
             </TableRow>
         )
     }
@@ -192,8 +219,16 @@ class CartPage extends React.Component {
                 <TableRow key={index}>
                     <TableCell align="center">{index + 1}</TableCell>
                     <TableCell>{item.package_name}</TableCell>
-                    <TableCell>{item.total_sell}</TableCell>
                     <TableCell>{item.product_name}</TableCell>
+                    <TableCell>
+                        {item.total_sell}
+                        {/* {item.total_sell.split(',').forEach(element => console.log(element))} */}
+                    </TableCell>
+                    <TableCell>
+                        <Button
+                            onClick={() => this.handleDeletePkg(item)}
+                            color="secondary">delete</Button>
+                    </TableCell>
                 </TableRow>
             )
         })
@@ -206,6 +241,12 @@ class CartPage extends React.Component {
         return (
             <div style={styles.root}>
                 <Paper style={styles.rootContainer} elevation={10}>
+                    <div style={styles.header}>
+                        {this.state.amount}
+                        <Button>
+                            Checkout
+                        </Button>
+                    </div>
                     {
                         this.props.resultPcs[0] ?
                             <Table style={{ marginBottom: 20 }}>
@@ -242,6 +283,11 @@ const styles = {
         width: '80%',
         padding: '20px',
         borderRadius: 20
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 }
 
