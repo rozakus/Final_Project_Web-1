@@ -68,6 +68,7 @@ class ProductDetails extends React.Component {
     handleAddToCart = () => {
         // if (this.state.selectedQuantity === 0 || this.state.selectedTotal === 0) return null
         if (localStorage.getItem('id') === null) return this.setState({ alertLogin: true })
+        if (!this.state.selectedQuantity || !this.state.total_modal || !this.state.total_sell) return console.log('please order')
 
         const body = {
             user_id: parseInt(localStorage.getItem('id')),
@@ -80,6 +81,9 @@ class ProductDetails extends React.Component {
         console.log({ body })
 
         Axios.post(URL + '/addtocartpcs', body)
+        this.setState({ selectedQuantity: 0 },
+            () => this.setState({ total_sell: 0 },
+                () => this.setState({ total_modal: 0 })))
     }
 
     handleClose = () => { this.setState({ alertLogin: false }) }
