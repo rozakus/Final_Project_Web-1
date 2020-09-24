@@ -110,7 +110,7 @@ class ProfilePage extends Component {
   }
 
   render() {
-    const { image, address, edit } = this.props;
+    const { picture, address, edit } = this.props;
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
@@ -120,7 +120,7 @@ class ProfilePage extends Component {
         <Paper style={styles.profilebox} elevation={3}>
           <div style={styles.avatar}>
             <img
-              src={image ? URL_IMG + image : avatar}
+              src={picture ? URL_IMG + picture : avatar}
               height="100%"
               width="100%"
               alt="profile-img"
@@ -383,7 +383,8 @@ const mapStateToProps = (state) => {
     username: state.userReducer.username,
     email: state.userReducer.email,
     address: state.userReducer.address,
-    errorMsg: state.userReducer.errorMsg
+    errorMsg: state.userReducer.errorMsg,
+    picture: state.userReducer.picture
   };
 };
 
