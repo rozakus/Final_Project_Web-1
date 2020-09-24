@@ -72,7 +72,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     padding: '0px 20px',
-    backgroundColor: 'rgba(19,15,0, .5)',
+    backgroundColor: 'rgba(0,0,0, .6)',
     borderRadius: 20
   },
   leftContent: {
