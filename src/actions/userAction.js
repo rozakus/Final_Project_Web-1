@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { URL, LOGIN, LOG_OUT, REGISTER, LOGIN_ERROR } from "./helpers";
+import { URL, LOGIN, LOG_OUT, REGISTER, LOGIN_ERROR, PASS_ERROR } from "./helpers";
 
 export const SignIn = (body) => {
   return async (dispatch) => {
@@ -44,10 +44,9 @@ export const KeepLogin = () => {
 
 export const LogOut = () => {
   return async (dispatch) => {
-    dispatch({ type: LOG_OUT})
+    dispatch({ type: LOG_OUT });
     localStorage.removeItem("id");
     localStorage.removeItem("token");
-
   };
 };
 
@@ -68,12 +67,15 @@ export const signUp = (body) => {
 export const upload = (data) => {
   return async (dispatch) => {
     try {
-      const option = { headers: { 'Content-Type': 'multipart/form-data' } }
-      const res = await Axios.post(URL + '/profile/upload/' + localStorage.getItem('id'), data, option)
-      console.log(res.data)
-
+      const option = { headers: { "Content-Type": "multipart/form-data" } };
+      const res = await Axios.post(
+        URL + "/profile/upload/" + localStorage.getItem("id"),
+        data,
+        option
+      );
+      console.log(res.data);
     } catch (err) {
-      console.log(err ? err.response.data : err)
+      console.log(err ? err.response.data : err);
     }
-  }
-}
+  };
+};

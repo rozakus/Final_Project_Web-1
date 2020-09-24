@@ -1,6 +1,6 @@
 // import component
 import React, { Component } from "react";
-// import Axios from "axios";
+import Axios from "axios";
 import { connect } from "react-redux";
 import {
   Paper,
@@ -12,17 +12,15 @@ import {
   DialogContentText,
   DialogTitle,
   TableCell,
-  InputAdornment, IconButton, 
+  Grid,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
 import Wallpaper from "../assets/images/Wallpaper.jpg";
-// import ClearIcon from "@material-ui/icons/Clear";
-// import CheckIcon from "@material-ui/icons/Check";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
-// import { Link } from "react-router-dom";
-
-import { URL_IMG, upload } from "../actions";
+import { URL_IMG, upload, KeepLogin, URL } from "../actions";
 
 import avatar from "../assets/no-profile.jpg";
 
@@ -81,8 +79,36 @@ class ProfilePage extends Component {
     this.setState({ openEditAdress: false });
   };
 
+  handleSaveEditedAddress = () => {
+    if (this.newaddress.value === "") return console.log("Empty Input");
+    const newaddress = this.newaddress.value;
+    const body = {
+      address: newaddress
+    };
+
+    Axios.patch(URL + '/editaddress/' + localStorage.getItem("id"), body)
+    console.log(body)
+    this.props.KeepLogin()
+    this.setState({ openEditAdress: false });
+  };
+
+  handleSaveEditedPassword = () => {
+  if (!this.oldpass.value || !this.newpass.value || !this.confpass.value === '') return console.log('Empty Password');
+
+  const body = { oldpass: this.oldpass.value, newpass: this.newpass.value, confpass: this.confpass.value };
+  console.log(body);
+
+  let temp = Axios.patch(URL + '/editpass/' + localStorage.getItem("id"), body);
+  console.log(temp.data)
+  
+  this.props.KeepLogin();
+  this.setState({ openEditPass: false});
+  }
+
   render() {
+    const { picture, address, edit } = this.props;
     const { image } = this.props;
+
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
@@ -92,7 +118,7 @@ class ProfilePage extends Component {
         <Paper style={styles.profilebox} elevation={3}>
           <div style={styles.avatar}>
             <img
-              src={image ? URL_IMG + image : avatar}
+              src={picture ? URL_IMG + picture : avatar}
               height="100%"
               width="100%"
               alt="profile-img"
@@ -149,7 +175,7 @@ class ProfilePage extends Component {
                 <DialogTitle id="form-dialog-title">
                   Change the address
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent style={{ display: "flex", flexDirection: "column" }}>
                   <DialogContentText>
                     Please enter your new address.
                   </DialogContentText>
@@ -162,19 +188,24 @@ class ProfilePage extends Component {
                     variant="outlined"
                   />
                   <TextField
+                  style={{ marginTop: 10}}
                     id="outlined-multiline-static"
                     label="Your New Address"
                     multiline
                     rows={4}
-                    defaultValue="Input your new address here...."
+                    placeholder="Input your new address here...."
                     variant="outlined"
+                    inputRef={(newaddress) => (this.newaddress = newaddress)}
                   />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={this.handleCloseEditAdress} color="primary">
                     Cancel
                   </Button>
-                  <Button onClick={this.handleClose} color="primary">
+                  <Button
+                    onClick={this.handleSaveEditedAddress}
+                    color="primary"
+                  >
                     Submit
                   </Button>
                 </DialogActions>
@@ -209,6 +240,7 @@ class ProfilePage extends Component {
                     id="name"
                     label="Password"
                     type={this.state.showPassword ? "text" : "password"}
+                    inputRef={(oldpass) => (this.oldpass = oldpass)}
                     fullWidth
                     InputProps={{
                       endAdornment: (
@@ -230,6 +262,7 @@ class ProfilePage extends Component {
                     id="name"
                     label="New-password"
                     type={this.state.showPassword ? "text" : "password"}
+                    inputRef={(newpass) => (this.newpass = newpass)}
                     fullWidth
                     InputProps={{
                       endAdornment: (
@@ -251,6 +284,7 @@ class ProfilePage extends Component {
                     id="name"
                     label="Confirm New-password"
                     type={this.state.showPassword ? "text" : "password"}
+                    inputRef={(confpass) => (this.confpass = confpass)}
                     fullWidth
                     InputProps={{
                       endAdornment: (
@@ -271,7 +305,7 @@ class ProfilePage extends Component {
                   <Button onClick={this.handleCloseEditPass} color="primary">
                     Cancel
                   </Button>
-                  <Button onClick={this.handleClose} color="primary">
+                  <Button onClick={this.handleSaveEditedPassword} color="primary">
                     Submit
                   </Button>
                 </DialogActions>
@@ -329,16 +363,6 @@ const styles = {
     flexDirection: "column",
     justifyContent: "space-between",
   },
-  // papel: {
-  //   height: "50%",
-  //   width: "50%",
-  //   elevation: 5,
-  //   display: "flex",
-  //   flexDirection: "column",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   padding: 10,
-  // },
 };
 
 const mapStateToProps = (state) => {
@@ -347,7 +371,9 @@ const mapStateToProps = (state) => {
     username: state.userReducer.username,
     email: state.userReducer.email,
     address: state.userReducer.address,
+    errorMsg: state.userReducer.errorMsg,
+    picture: state.userReducer.picture
   };
 };
 
-export default connect(mapStateToProps, { upload })(ProfilePage);
+export default connect(mapStateToProps, { upload, KeepLogin })(ProfilePage);
