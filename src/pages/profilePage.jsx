@@ -12,7 +12,6 @@ import {
   DialogContentText,
   DialogTitle,
   TableCell,
-  Grid,
   InputAdornment, IconButton, 
 } from "@material-ui/core";
 import Wallpaper from "../assets/images/Wallpaper.jpg";
@@ -83,7 +82,7 @@ class ProfilePage extends Component {
   };
 
   render() {
-    const { image, address, edit } = this.props;
+    const { image } = this.props;
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
