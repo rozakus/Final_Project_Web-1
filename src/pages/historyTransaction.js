@@ -7,7 +7,6 @@ import {
   TableCell,
   TableRow,
   Paper,
-  CardMedia,
   Button
 } from "@material-ui/core";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -21,10 +20,34 @@ class HistoryTrans extends React.Component {
   }
 
   componentDidMount() {
+    this.getData()
+  }
+
+  getData = () => {
     Axios.get(`http://localhost:2000/transhistory`)
+    .then((res) => {
+      console.log(`data : `, res.data);
+      this.setState({ data: res.data });
+    })
+    .catch((err) => console.log(err));
+  }
+
+  approvePayment = async (on) => {
+      console.log('approve : ', on)
+      await Axios.patch(`http://localhost:2000/approvalpayment/${on}`)
       .then((res) => {
-        console.log(` products data : `, res.data);
-        this.setState({ data: res.data });
+        console.log(`data : `, res.data);
+        this.getData()
+      })
+      .catch((err) => console.log(err));
+  }
+
+  cancelPayment = async (on) => {
+      console.log('cancel : ', on)
+      await Axios.patch(`http://localhost:2000/cancelpayment/${on}`)
+      .then((res) => {
+        console.log(`data : `, res.data);
+        this.getData()
       })
       .catch((err) => console.log(err));
   }
@@ -57,11 +80,11 @@ class HistoryTrans extends React.Component {
           <TableCell>{item.status}</TableCell>
           <TableCell>
               {
-                item.payment_status_id == 1
+                parseInt(item.payment_status_id) === 1
                 ? 
                 <div>
-                    <Button><CheckCircleIcon/></Button>
-                    <Button><CancelIcon/></Button>
+                    <Button onClick={() => this.approvePayment(item.order_number)}><CheckCircleIcon style={{color: 'lime'}} /></Button>
+                    <Button onClick={() => this.cancelPayment(item.order_number)}><CancelIcon style={{color: '#FC1A04'}}/></Button>
                 </div>
                 :
                 <div></div>

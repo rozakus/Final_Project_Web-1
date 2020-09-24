@@ -2,7 +2,7 @@ import React from "react";
 import { IconButton, Avatar, Menu, MenuItem } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { LogOut } from "../actions/";
+import { LogOut, SignIn } from "../actions/";
 
 class AvatarProfile extends React.Component {
   constructor(props) {
@@ -32,9 +32,7 @@ class AvatarProfile extends React.Component {
           onClick={(event) => this.handleClick(event)}
         >
           {this.props.username ? (
-            <Avatar style={{ backgroundColor: "#14D690 " }}>
-              {this.props.username.charAt(0).toUpperCase()}
-            </Avatar>
+            <Avatar alt="img" src={"http://localhost:2000/"+this.props.picture}  />
           ) : (
             <Avatar>U</Avatar>
           )}
@@ -78,7 +76,6 @@ class AvatarProfile extends React.Component {
               <Link to="/package">
                 <MenuItem>Packages Info</MenuItem>
               </Link>
-              
             </>
           ) : (
             <>
@@ -100,7 +97,8 @@ const mapStateToProps = (state) => {
   return {
     username: state.userReducer.username,
     role: state.userReducer.role,
+    picture: state.userReducer.picture,
   };
 };
 
-export default connect(mapStateToProps, { LogOut })(AvatarProfile);
+export default connect(mapStateToProps, { LogOut, SignIn })(AvatarProfile);
