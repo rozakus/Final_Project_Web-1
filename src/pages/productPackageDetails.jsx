@@ -3,7 +3,7 @@ import React from "react";
 
 // import library
 import Axios from "axios";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 
 // import UI
 import {
@@ -15,6 +15,10 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
@@ -27,19 +31,10 @@ class ProductPackageDetails extends React.Component {
     super(props);
     this.state = {
       data: [],
-      productName: [],
-      productId0: [],
-      productId1: [],
-      productId2: [],
-      qty0: [],
-      qty1: [],
-      qty2: [],
-      modal0: [],
-      modal1: [],
-      modal2: [],
-      cate1: false,
-      cate2: false,
-      cate3: false
+      cart: [],
+      openErr: false,
+      maxQtyErr: null,
+      cateErr: "",
     };
   }
 
@@ -51,118 +46,121 @@ class ProductPackageDetails extends React.Component {
       .catch((err) => console.log(err));
   }
 
-  handleAddToCart = () => {
-    const { data, productId0, productId1, productId2, qty0, qty1, qty2, modal0, modal1, modal2 } = this.state;
+  handleClose = () => {
+    this.setState({ openErr: false, maxQtyErr: null, cateErr: "" });
+  };
 
-    console.log("add to cart");
-    const user_id = this.props.userId
-    const package_id = data[0].id_product_package
-    const product_id = [...productId0, ...productId1, ...productId2]
-    const product_qty = [...qty0, ...qty1, ...qty2]
-    const total_modal = [...modal0, ...modal1, ...modal2]
-    const total_sell = data[0].package_price
-    const body = {
-      user_id,
-      package_id,
-      product_id,
-      product_qty,
-      total_modal,
-      total_sell
-    }
+  handleAddToCart = () => {
+    const { data, cart } = this.state
+    let user_id = this.props.userId
+    let package_id = data[0].id_product_package
+    let product_id = []
+    let product_qty = []
+    let total_modal = []
+    let total_sell = data[0].package_price
+    cart.forEach(item => {
+      item.product.forEach(value => {
+        product_id.push(value.product_id)
+        product_qty.push(value.prodQty)
+        total_modal.push(value.modal)
+      })
+    })
+
+    let body = {user_id, package_id, product_id, product_qty, total_modal, total_sell}
     console.log(body)
   };
 
-  pushToPackage = async (product) => {
-    const { productName, productId1, productId2, productId0, qty1, qty2, qty0, modal1, modal2, modal0, data } = this.state;
-    console.log(product);
-
-    const tProductName = [...productName];
-    const tProductId1 = [...productId1]
-    const tProductId2 = [...productId2]
-    const tProductId0 = [...productId0]
-    const tQty1 = [...qty1]
-    const tQty2 = [...qty2]
-    const tQty0 = [...qty0]
-    const tModal1 = [...modal1]
-    const tModal2 = [...modal2]
-    const tModal0 = [...modal0]
-    
-    if (product.category_id == data[0].product[0].category_id) {
-      console.log(product.product_id)
-      let checkId = tProductId0.filter(item => item == parseInt(product.product_id))
-      console.log(checkId)
-      const checkQty = tQty0.reduce((a, b) => a + b, 0)
-      // console.log(checkQty)
-      // console.log(data[0].max_qty)
-      if (checkQty < data[0].max_qty) {
-        tProductName.push(product.product_name);
-        if (checkId.length === 0) {
-          console.log('belum ada di array')
-          tProductId0.push(parseInt(product.product_id))
-          tQty0.push(1)
-          tModal0.push(parseInt(product.price_modal))
-        } else {
-          console.log('ada di array')
-          const id = tProductId0.findIndex(item => item == product.product_id)
-          // console.log(id)
-          tQty0[id] = tQty0[id] + 1
-          tModal0[id] = tModal0[id] + parseInt(product.price_modal)
-        }
-      }
-    } else if (product.category_id == data[1].product[1].category_id) {
-      let checkId = tProductId1.filter(item => item == product.product_id)
-      const checkQty = tQty1.reduce((a, b) => a + b, 0)
-      if (checkQty < data[1].max_qty) {
-        tProductName.push(product.product_name);
-        if (checkId.length === 0) {
-          tProductId1.push(product.product_id)
-          tQty1.push(1)
-          tModal1.push(parseInt(product.price_modal))
-        } else {
-          const id = tProductId1.findIndex(item => item == product.product_id)
-          tQty1[id] = tQty1[id] + 1
-          tModal1[id] = tModal1[id] + parseInt(product.price_modal)
-        }
-      }
-
-    } else {
-      let checkId = tProductId2.filter(item => item == product.product_id)
-      const checkQty = tQty2.reduce((a, b) => a + b, 0)
-      if (checkQty < data[2].max_qty) {
-        tProductName.push(product.product_name);
-        if (checkId.length === 0) {
-          tProductId2.push(product.product_id)
-          tQty2.push(1)
-          tModal2.push(parseInt(product.price_modal))
-        } else {
-          const id = tProductId2.findIndex(item => item == product.product_id)
-          tQty2[id] = tQty2[id] + 1
-          tModal2[id] = tModal2[id] + parseInt(product.price_modal)
-        }
-      }
+  pushToPackage = async (product, maxQty, cate) => {
+    if (!this.state.cart.length) {
+      let tempCart = [...this.state.cart];
+      tempCart.push({
+        category_id: product.category_id,
+        qty: 1,
+        product: [
+          {
+            product_name: product.product_name,
+            product_id: parseInt(product.product_id),
+            modal: parseInt(product.price_modal),
+            prodQty: 1,
+          },
+        ],
+      });
+      this.setState({ cart: tempCart });
     }
+    this.state.cart.forEach((element, index) => {
+      console.log(product.product_id);
+      if (element.category_id === product.category_id) {
+        const id =
+          this.state.cart[index].product.findIndex(
+            (item) => item.product_id == product.product_id
+          ) + 1;
+        console.log(id);
+        let tempCart = [...this.state.cart];
+        if (this.state.cart[index].qty >= maxQty) {
+          this.setState({ openErr: true, maxQtyErr: maxQty, cateErr: cate });
+          console.log('dialog true')
+          return;
+        }
+        if (!id && this.state.cart[index].qty < maxQty) {
+          tempCart[index].qty = tempCart[index].qty + 1;
+          tempCart[index].product.push({
+            product_name: product.product_name,
+            product_id: parseInt(product.product_id),
+            modal: parseInt(product.price_modal),
+            prodQty: 1,
+          });
 
-    this.setState({ 
-      productName: tProductName,
-      productId0: tProductId0,
-      productId1: tProductId1,
-      productId2: tProductId2,
-      qty0: tQty0,
-      qty1: tQty1,
-      qty2: tQty2,
-      modal0: tModal0,
-      modal1: tModal1,
-      modal2: tModal2,
+          this.setState({ cart: tempCart });
+        } else if (id && this.state.cart[index].qty < maxQty) {
+          tempCart[index].qty = tempCart[index].qty + 1;
+          tempCart[index].product[id - 1].prodQty =
+            tempCart[index].product[id - 1].prodQty + 1;
+          tempCart[index].product[id - 1].modal =
+            tempCart[index].product[id - 1].modal +
+            parseInt(product.price_modal);
+
+          this.setState({ cart: tempCart });
+        }
+
+        this.setState({ cart: tempCart });
+      } else {
+        let tempCart = [...this.state.cart];
+        tempCart.push({
+          category_id: product.category_id,
+          qty: 1,
+          product: [
+            {
+              product_name: product.product_name,
+              product_id: parseInt(product.product_id),
+              modal: parseInt(product.price_modal),
+              prodQty: 1,
+            },
+          ],
+        });
+        this.setState({ cart: tempCart });
+      }
     });
   };
 
-  renderCard = (dataProduct) => {
+  renderCompos = () => {
+    return this.state.cart.map((item, index) => {
+      return item.product.map((product, id) => {
+        return (
+          <li>
+            {product.product_name} = {product.prodQty} Pcs
+          </li>
+        );
+      });
+    });
+  };
+
+  renderCard = (dataProduct, maxQty, cate) => {
     return dataProduct.map((item, index) => {
       return (
         <Card
           style={styles.card}
           key={item.product_id}
-          onClick={() => this.pushToPackage(item)}
+          onClick={() => this.pushToPackage(item, maxQty, cate)}
         >
           <CardActionArea style={styles.contentArea}>
             <CardMedia
@@ -212,7 +210,7 @@ class ProductPackageDetails extends React.Component {
               flexGrow: 1,
             }}
           >
-            {this.renderCard(item.product)}
+            {this.renderCard(item.product, item.max_qty, item.category)}
           </div>
         </Paper>
       );
@@ -220,17 +218,10 @@ class ProductPackageDetails extends React.Component {
   };
 
   render() {
-    const { data, productId0, productId1, productId2, qty0, qty1, qty2, modal0, modal1, modal2 } = this.state;
-    console.log("selectedProductPackage : ", data);
-    console.log(productId0)
-    console.log(productId1)
-    console.log(productId2)
-    console.log(qty0)
-    console.log(qty1)
-    console.log(qty2)
-    console.log(modal0)
-    console.log(modal1)
-    console.log(modal2)
+    const { data, cart, openErr, maxQtyErr, cateErr } = this.state;
+    // console.log("selectedProductPackage : ", data);
+    console.log("cart : ", cart);
+    console.log(openErr, maxQtyErr, cateErr);
 
     return (
       <div style={styles.root}>
@@ -271,11 +262,7 @@ class ProductPackageDetails extends React.Component {
             <div style={styles.rightContent}>
               <h1>Composition Package:</h1>
               <div style={{ marginLeft: 15 }}>
-                <ul>
-                  {this.state.productName.map((item, index) => {
-                    return <li>{item}</li>;
-                  })}
-                </ul>
+                <ul>{this.renderCompos()}</ul>
               </div>
             </div>
           </div>
@@ -290,6 +277,23 @@ class ProductPackageDetails extends React.Component {
           }}
         >
           {this.renderDivCate()}
+        </div>
+        <div>
+          <Dialog
+            open={openErr}
+            onClose={this.handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Sorry Customer"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Maximum quantity for category {cateErr} is {maxQtyErr}
+              </DialogContentText>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     );
@@ -373,8 +377,8 @@ const styles = {
 
 const MapStateToProps = (state) => {
   return {
-    userId: state.userReducer.id
-  }
-}
+    userId: state.userReducer.id,
+  };
+};
 
 export default connect(MapStateToProps)(ProductPackageDetails);
