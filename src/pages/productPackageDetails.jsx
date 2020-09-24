@@ -1,172 +1,243 @@
 // import React Component
-import React from 'react'
+import React from "react";
 
 // import library
-import Axios from 'axios'
+import Axios from "axios";
 
 // import UI
 import {
-    Paper,
-    Button,
-    Typography,
-    // CardMedia,
-    Fab,
-    Table,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-} from '@material-ui/core'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+  Paper,
+  Button,
+  Typography,
+  CardMedia,
+  Fab,
+  Card,
+  CardActionArea,
+  CardContent,
+} from "@material-ui/core";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
-// import 
-import { URL } from '../actions'
+// import
+import { URL } from "../actions";
 
 // class component
 class ProductPackageDetails extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            selectedProductPackage: [],
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+    };
+  }
 
-    componentDidMount() {
-        Axios.get(URL + '/getPackage/' + this.props.location.search.slice(1))
-            .then(res => {
-                this.setState({ selectedProductPackage: res.data })
-                // console.log('selectedProductPackage : ', this.state.selectedProductPackage)
-            })
-            .catch(err => console.log(err))
-    }
+  async componentDidMount() {
+    await Axios.get(URL + "/getPackage/" + this.props.location.search.slice(1))
+      .then((res) => {
+        this.setState({ data: res.data });
+      })
+      .catch((err) => console.log(err));
+  }
 
-    // handling
-    handleCheck = (e) => {
-        console.log('cek', this.state.check)
-        console.log('target name :', e.target.name)
-        const tempCheck = { ...this.state.check }
-        tempCheck[e.target.name] = e.target.checked
+  handleAddToCart = () => {
+    console.log("add to cart");
+  };
 
-        this.setState({ check: tempCheck }, () => { })
-    }
+  pushToPackage = (product) => {
+      console.log(product)
+  }
 
-    handleAddToCart = () => {
-        console.log('add to cart')
-    }
+  renderCard = (dataProduct) => {
+    return dataProduct.map((item, index) => {
+      return (
+        <Card style={styles.card} key={item.product_id} onClick={() => this.pushToPackage(item)}>
+          <CardActionArea style={styles.contentArea}>
+            <CardMedia
+              image={item.image}
+              component="img"
+              style={styles.contentImage}
+            />
+            <CardContent style={{ flexGrow: 1 }}>
+              <Typography gutterBottom variant="caption" component="h2">
+                {item.product_name}
+              </Typography>
+              <Typography variant="caption" color="textSecondary" component="p">
+                {`IDR ${item.price_sell.toLocaleString()}.00`}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      );
+    });
+  };
 
-    renderTableProductPackage = () => {
-        const { selectedProductPackage } = this.state
-        return selectedProductPackage.map((category, index) => {
-            return (
-                <Table key={category.category_id}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="center"></TableCell>
-                            <TableCell align="center">Category {category.category_id}</TableCell>
-                            <TableCell align="center">Max quantity ({category.max_qty})</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            category.product.map((productItem, index) => {
-                                return (
-                                    <TableRow key={productItem.product_id}>
-                                        <TableCell align="center">{index + 1}</TableCell>
-                                        <TableCell>{productItem.product_name}</TableCell>
-                                        <TableCell align="center">0</TableCell>
-                                    </TableRow>
-                                )
-                            })
-                        }
-                    </TableBody>
-                </Table>
-            )
-        })
-    }
+  renderDivCate = () => {
+    return this.state.data.map((item, index) => {
+      return (
+        <Paper
+          style={{
+            padding: 10,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            backgroundColor: "white",
+            flexBasis: 1,
+            minWidth: "33%",
+            borderRadius: 10,
+          }}
+          elevation={5}
+          key={index}
+        >
+          <div style={{}}>
+            <h2>Category {item.category}</h2>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              flexGrow: 1,
+            }}
+          >
+            {this.renderCard(item.product)}
+          </div>
+        </Paper>
+      );
+    });
+  };
 
-    render() {
-        const { selectedProductPackage } = this.state
-        // console.log('props location : ', this.props.location)
-        console.log('selectedProductPackage :', selectedProductPackage)
+  render() {
+    const { data } = this.state;
+    console.log("selectedProductPackage : ", data);
 
-        return (
-            <div style={styles.root}>
-                {
-                    selectedProductPackage[0] ?
-                        <Paper style={styles.rootContainer} elevation={5}>
-                            {/* <div style={styles.leftContent}>
-                                <CardMedia image={selectedProductPackage[0].img} component="img" style={styles.contentImage} />
-                            </div> */}
-                            <div style={styles.rightContent}>
-                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-                                    <Fab style={{ padding: 10, display: 'flex', borderRadius: 20, width: '100%', backgroundColor: '#cbe2d6', color: 'black', marginRight: 20 }}>
-                                        <Typography variant='h6'>Package : {selectedProductPackage[0].package_name}</Typography>
-                                    </Fab>
-                                    <Button
-                                        onClick={this.handleAddToCart}
-                                        variant='contained'
-                                        style={{ backgroundColor: '#cbe2d6', borderRadius: 20, width: '20%' }}
-                                        startIcon={<ShoppingCartIcon />}
-                                    >Add to Cart</Button>
-                                </div>
-                                {this.renderTableProductPackage()}
-                            </div>
-                        </Paper>
-                        : null
-                }
+    return (
+      <div style={styles.root}>
+        <Paper style={styles.rootContainer} elevation={5}>
+          <div style={styles.header}>
+            <Fab
+              style={{
+                padding: 10,
+                display: "flex",
+                borderRadius: 10,
+                width: "50%",
+                backgroundColor: "#cbe2d6",
+                color: "black",
+                marginRight: 20,
+              }}
+            >
+              <Typography variant="h6">
+                Package : {data[0] ? data[0].package_name : null}
+              </Typography>
+            </Fab>
+            <Button
+              onClick={this.handleAddToCart}
+              variant="contained"
+              style={{
+                backgroundColor: "#cbe2d6",
+                borderRadius: 10,
+                width: "15%",
+              }}
+              startIcon={<ShoppingCartIcon />}
+            >
+              Add to Cart
+            </Button>
+          </div>
+          <div style={styles.content}>
+            <div style={styles.leftContent}>
+              <CardMedia image={data[0] ? data[0].img : null} component="img" />
             </div>
-        )
-    }
+            <div style={styles.rightContent}>
+              <h1>Composition Package:</h1>
+            </div>
+          </div>
+        </Paper>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            margin: "2% 1%",
+            width: "80%",
+            justifyContent: "space-between",
+          }}
+        >
+          {this.renderDivCate()}
+        </div>
+      </div>
+    );
+  }
 }
 
 const styles = {
-    root: {
-        minHeight: '100vh',
-        height: 'auto',
-        width: '100vw',
-        backgroundColor: '#cbe2d6',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 100
-    },
-    rootContainer: {
-        width: '80%',
-        height: '80%',
-        padding: 20,
-        borderRadius: 20,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        // backgroundColor: 'yellow',
-    },
-    leftContent: {
-        width: '30%',
-        height: '100%',
-        backgroundColor: 'white',
-        padding: 10,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginRight: 10
-    },
-    contentImage: {
-        maxWidth: 300,
-        maxHeight: '100%',
-        padding: '5%',
-        backgroundColor: 'white',
-        borderRadius: 20
-    },
-    rightContent: {
-        display: 'flex',
-        flex: 1,
-        borderRadius: 20,
-        padding: 10,
-        flexDirection: 'column',
-        // backgroundColor: 'whitesmoke',
-    }
-}
+  root: {
+    minHeight: "100vh",
+    height: "auto",
+    width: "100vw",
+    backgroundColor: "#cbe2d6",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 100,
+  },
+  rootContainer: {
+    width: "80%",
+    height: "80%",
+    padding: 20,
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  content: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    height: 300,
+    marginTop: 10,
+  },
+  leftContent: {
+    width: "30%",
+    height: "100%",
+    padding: 10,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  contentImage: {
+    width: "15%",
+  },
+  rightContent: {
+    display: "flex",
+    flex: 1,
+    borderRadius: 10,
+    borderStyle: "solid",
+    borderWidth: 1,
+    padding: 10,
+    flexDirection: "column",
+  },
+  card: {
+    height: 70,
+    margin: "5px 3px",
+    borderRadius: "10px",
+    padding: "0px 10px",
+  },
+  contentArea: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 0,
+    margin: 0,
+    width: "100%",
+    height: "100%",
+    justifyContent: "space-between",
+  },
+};
 
-export default ProductPackageDetails
+export default ProductPackageDetails;

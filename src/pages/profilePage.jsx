@@ -11,13 +11,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TableCell
+  TableCell,
+  Grid,
+  InputAdornment, IconButton, 
 } from "@material-ui/core";
-import Wallpaper from '../assets/images/Wallpaper.jpg'
+import Wallpaper from "../assets/images/Wallpaper.jpg";
 // import ClearIcon from "@material-ui/icons/Clear";
 // import CheckIcon from "@material-ui/icons/Check";
-// import Visibility from "@material-ui/icons/Visibility";
-// import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 // import { Link } from "react-router-dom";
 
@@ -30,66 +32,58 @@ class ProfilePage extends Component {
     super(props);
     this.state = {
       image: null,
+      openEditAdress: false,
+      openEditPass: false,
       edit: false,
-      editUserOpen: false,
-      passwordUsed: false,
-      userError: false,
-      passwordError: false,
-      errorCurrentPass: false,
+      errorPassword: false,
+      errorPasswordMessage: "",
       showPassword: false,
-      indexPassword: false,
-      errorPass: false,
-      errorConfPass: false,
-      setOpen: false,
-      errorTextCurrentPass: "Input your current password.",
-      errorTextPass:
-        "Password must be at least 6 characters combination of letters, numbers, and symbol.",
-      errorTextConfPass: "Confirm password must be matched with password.",
-      open: false,
+      errorMsg: "",
     };
   }
 
   handleChoose = (e) => {
-    console.log('event : ', e.target.files)
-    this.setState({ image: e.target.files[0] }, () => console.log('image : ',this.state.image))
-  }
+    console.log("event : ", e.target.files);
+    this.setState({ image: e.target.files[0] }, () =>
+      console.log("image : ", this.state.image)
+    );
+  };
 
   handleUpload = async () => {
-    console.log('image : ', this.state.image)
+    console.log("image : ", this.state.image);
 
     // create formdata
-    const data = new FormData()
-    data.append('IMG', this.state.image)
+    const data = new FormData();
+    data.append("IMG", this.state.image);
     // data.append('filename', 'gambar profile')
-    console.log('form data : ', data.get('IMG'))
+    console.log("form data : ", data.get("IMG"));
 
-    this.props.upload(data)
-    this.setState({ image: null })
-  }
-
-  handleClickOpen = () => {
-    this.setState({ open: true });
+    this.props.upload(data);
+    this.setState({ image: null });
   };
 
-  handleSave = () => {
-    const body = {
-      username: this.username.value,
-      email: this.email.value,
-      address: this.address.value,
-      password: this.password.value,
-    };
-    this.props.editProfile(body);
-    this.setState({ edit: false });
+  handleClick = () => {
+    this.setState({ showPassword: !this.state.showPassword });
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleClickOpenEditPass = () => {
+    this.setState({ openEditPass: true });
+  };
+
+  handleCloseEditPass = () => {
+    this.setState({ openEditPass: false });
+  };
+
+  handleClickOpenEditAddress = () => {
+    this.setState({ openEditAdress: true });
+  };
+
+  handleCloseEditAdress = () => {
+    this.setState({ openEditAdress: false });
   };
 
   render() {
-    const {
-      image
-    } = this.props;
+    const { image, address, edit } = this.props;
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);
     console.log(`address : `, this.props.address);
@@ -116,7 +110,9 @@ class ProfilePage extends Component {
             </form>
             <Button
               onClick={this.handleUpload}
-              variant="contained" color="primary">
+              variant="contained"
+              color="primary"
+            >
               Upload
             </Button>
             <Button
@@ -132,10 +128,59 @@ class ProfilePage extends Component {
               disabled
               id="outlined-disabled"
               label="Email"
-              defaultValue={this.props.email}
+              value={this.props.email}
               variant="outlined"
             />
-
+          </div>
+          <div style={styles.addressdialog}>
+            <TableCell colSpan={2}>Address</TableCell>
+            <TableCell>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={this.handleClickOpenEditAddress}
+              >
+                Edit Address
+              </Button>
+              <Dialog
+                open={this.state.openEditAdress}
+                onClose={this.handleCloseEditAdress}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">
+                  Change the address
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please enter your new address.
+                  </DialogContentText>
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Your Old Address"
+                    multiline
+                    rows={4}
+                    value={this.props.address}
+                    variant="outlined"
+                  />
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Your New Address"
+                    multiline
+                    rows={4}
+                    defaultValue="Input your new address here...."
+                    variant="outlined"
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleCloseEditAdress} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={this.handleClose} color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </TableCell>
           </div>
           <div>
             <TableCell colSpan={2}>Password</TableCell>
@@ -143,16 +188,18 @@ class ProfilePage extends Component {
               <Button
                 variant="outlined"
                 color="primary"
-                onClick={this.handleClickOpen}
+                onClick={this.handleClickOpenEditPass}
               >
                 Edit Password
               </Button>
               <Dialog
-                open={this.state.open}
-                onClose={this.handleClose}
+                open={this.state.openEditPass}
+                onClose={this.handleCloseEditPass}
                 aria-labelledby="form-dialog-title"
               >
-                <DialogTitle id="form-dialog-title">Change the password</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                  Change the password
+                </DialogTitle>
                 <DialogContent>
                   <DialogContentText>
                     Please enter your password.
@@ -162,28 +209,67 @@ class ProfilePage extends Component {
                     margin="dense"
                     id="name"
                     label="Password"
-                    type="password"
+                    type={this.state.showPassword ? "text" : "password"}
                     fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => this.handleClick()}>
+                            {this.state.showPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   <TextField
                     autoFocus
                     margin="dense"
                     id="name"
                     label="New-password"
-                    type="password"
+                    type={this.state.showPassword ? "text" : "password"}
                     fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => this.handleClick()}>
+                            {this.state.showPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   <TextField
                     autoFocus
                     margin="dense"
                     id="name"
                     label="Confirm New-password"
-                    type="password"
+                    type={this.state.showPassword ? "text" : "password"}
                     fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => this.handleClick()}>
+                            {this.state.showPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={this.handleClose} color="primary">
+                  <Button onClick={this.handleCloseEditPass} color="primary">
                     Cancel
                   </Button>
                   <Button onClick={this.handleClose} color="primary">
@@ -202,21 +288,26 @@ class ProfilePage extends Component {
 const styles = {
   root: {
     width: "100%",
-    height: "96vh",
+    height: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     paddingTop: "50px",
-    backgroundImage: `url(${Wallpaper})`
+    backgroundImage: `url(${Wallpaper})`,
   },
   profilebox: {
     width: "30vw",
-    height: "80vh",
+    height: "100vh",
     backgroundColor: "#f2f2f2",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "2% 5%",
+  },
+  addressdialog: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   avatar: {
     backgroundColor: "salmon",
@@ -252,11 +343,12 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
-  console.log(`state profile page: `, state.userReducer)
+  console.log(`state profile page: `, state.userReducer);
   return {
     username: state.userReducer.username,
-    email: state.userReducer.email
-  }
-}
+    email: state.userReducer.email,
+    address: state.userReducer.address,
+  };
+};
 
 export default connect(mapStateToProps, { upload })(ProfilePage);
