@@ -6,6 +6,7 @@ export const LOGIN = 'LOGIN'
 export const LOG_OUT = 'LOG_OUT'
 export const REGISTER = 'REGISTER'
 export const LOGIN_ERROR = 'LOGIN_ERROR'
+export const PASS_ERROR = 'PASS_ERROR'
 
 // profile
 export const GET_PROFILE = 'GET_PROFILE'
