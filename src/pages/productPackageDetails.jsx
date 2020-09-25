@@ -4,6 +4,7 @@ import React from "react";
 // import library
 import Axios from "axios";
 import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom'
 
 // import UI
 import {
@@ -35,6 +36,8 @@ class ProductPackageDetails extends React.Component {
       openErr: false,
       maxQtyErr: null,
       cateErr: "",
+      loginErr: false,
+      toCart: false
     };
   }
 
@@ -50,28 +53,55 @@ class ProductPackageDetails extends React.Component {
     this.setState({ openErr: false, maxQtyErr: null, cateErr: "" });
   };
 
-  handleAddToCart = () => {
-    const { data, cart } = this.state
-    let user_id = this.props.userId
-    let package_id = data[0].id_product_package
-    let product_id = []
-    let product_qty = []
-    let total_modal = []
-    let total_sell = data[0].package_price
-    cart.forEach(item => {
-      item.product.forEach(value => {
-        product_id.push(value.product_id)
-        product_qty.push(value.prodQty)
-        total_modal.push(value.modal)
-      })
-    })
+  handleAddToCart = async () => {
+    const { data, cart } = this.state;
 
-    let body = {user_id, package_id, product_id, product_qty, total_modal, total_sell}
-    console.log(body)
+    if (!this.props.userId) {
+      this.setState({ loginErr: true });
+      return;
+    }
+
+    let user_id = this.props.userId;
+    let package_id = data[0].id_product_package;
+    let product_id = [];
+    let product_qty = [];
+    let total_modal = [];
+    let total_sell = data[0].package_price;
+    cart.forEach((item) => {
+      item.product.forEach((value) => {
+        product_id.push(value.product_id);
+        product_qty.push(value.prodQty);
+        total_modal.push(value.modal);
+      });
+    });
+
+    let body = {
+      user_id,
+      package_id,
+      product_id,
+      product_qty,
+      total_modal,
+      total_sell,
+    };
+    console.log(body);
+
+    await Axios.post(URL + "/addtocartpkg", body)
+      .then((res) => {
+        console.log(res.data)
+        this.setState({toCart: true})
+      })
+      .catch((err) => console.log(err));
+    
   };
 
   pushToPackage = async (product, maxQty, cate) => {
-    if (!this.state.cart.length) {
+    let tempCart = [...this.state.cart];
+    const index = tempCart.findIndex(
+      (item) => item.category_id === product.category_id
+    );
+    console.log(index);
+    if (index === -1) {
+      console.log("beda category lagi");
       let tempCart = [...this.state.cart];
       tempCart.push({
         category_id: product.category_id,
@@ -86,67 +116,46 @@ class ProductPackageDetails extends React.Component {
         ],
       });
       this.setState({ cart: tempCart });
-    }
-    this.state.cart.forEach((element, index) => {
-      console.log(product.product_id);
-      if (element.category_id === product.category_id) {
-        const id =
-          this.state.cart[index].product.findIndex(
-            (item) => item.product_id == product.product_id
-          ) + 1;
-        console.log(id);
-        let tempCart = [...this.state.cart];
-        if (this.state.cart[index].qty >= maxQty) {
-          this.setState({ openErr: true, maxQtyErr: maxQty, cateErr: cate });
-          console.log('dialog true')
-          return;
-        }
-        if (!id && this.state.cart[index].qty < maxQty) {
-          tempCart[index].qty = tempCart[index].qty + 1;
-          tempCart[index].product.push({
-            product_name: product.product_name,
-            product_id: parseInt(product.product_id),
-            modal: parseInt(product.price_modal),
-            prodQty: 1,
-          });
-
-          this.setState({ cart: tempCart });
-        } else if (id && this.state.cart[index].qty < maxQty) {
-          tempCart[index].qty = tempCart[index].qty + 1;
-          tempCart[index].product[id - 1].prodQty =
-            tempCart[index].product[id - 1].prodQty + 1;
-          tempCart[index].product[id - 1].modal =
-            tempCart[index].product[id - 1].modal +
-            parseInt(product.price_modal);
-
-          this.setState({ cart: tempCart });
-        }
+    } else {
+      console.log("sama category");
+      const id =
+        this.state.cart[index].product.findIndex(
+          (item) => item.product_id == product.product_id
+        ) + 1;
+      console.log(id);
+      let tempCart = [...this.state.cart];
+      if (this.state.cart[index].qty >= maxQty) {
+        this.setState({ openErr: true, maxQtyErr: maxQty, cateErr: cate });
+        console.log("dialog true");
+        return;
+      }
+      if (!id && this.state.cart[index].qty < maxQty) {
+        tempCart[index].qty = tempCart[index].qty + 1;
+        tempCart[index].product.push({
+          product_name: product.product_name,
+          product_id: parseInt(product.product_id),
+          modal: parseInt(product.price_modal),
+          prodQty: 1,
+        });
 
         this.setState({ cart: tempCart });
-      } else {
-        let tempCart = [...this.state.cart];
-        tempCart.push({
-          category_id: product.category_id,
-          qty: 1,
-          product: [
-            {
-              product_name: product.product_name,
-              product_id: parseInt(product.product_id),
-              modal: parseInt(product.price_modal),
-              prodQty: 1,
-            },
-          ],
-        });
+      } else if (id && this.state.cart[index].qty < maxQty) {
+        tempCart[index].qty = tempCart[index].qty + 1;
+        tempCart[index].product[id - 1].prodQty =
+          tempCart[index].product[id - 1].prodQty + 1;
+        tempCart[index].product[id - 1].modal =
+          tempCart[index].product[id - 1].modal + parseInt(product.price_modal);
+
         this.setState({ cart: tempCart });
       }
-    });
+    }
   };
 
   renderCompos = () => {
     return this.state.cart.map((item, index) => {
       return item.product.map((product, id) => {
         return (
-          <li>
+          <li key={product.product_id}>
             {product.product_name} = {product.prodQty} Pcs
           </li>
         );
@@ -218,10 +227,10 @@ class ProductPackageDetails extends React.Component {
   };
 
   render() {
-    const { data, cart, openErr, maxQtyErr, cateErr } = this.state;
-    // console.log("selectedProductPackage : ", data);
-    console.log("cart : ", cart);
-    console.log(openErr, maxQtyErr, cateErr);
+    const { data, cart, openErr, maxQtyErr, cateErr, loginErr, toCart } = this.state;
+    console.log(cart);
+    if (loginErr) return <Redirect to='/login'/>
+    if (toCart) return <Redirect to='/cart'/>
 
     return (
       <div style={styles.root}>
