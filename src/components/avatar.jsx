@@ -32,7 +32,10 @@ class AvatarProfile extends React.Component {
           onClick={(event) => this.handleClick(event)}
         >
           {this.props.username ? (
-            <Avatar alt="img" src={"http://localhost:2000/"+this.props.picture}  />
+            <Avatar
+              alt="img"
+              src={"http://localhost:2000/" + this.props.picture}
+            />
           ) : (
             <Avatar>U</Avatar>
           )}
@@ -55,26 +58,17 @@ class AvatarProfile extends React.Component {
         >
           {this.props.role === "user" ? (
             <>
-              <Link to="/profile">
+              <Link to="/profile" style={{ textDecoration: "none" }}>
                 <MenuItem>Profile</MenuItem>
               </Link>
-              <Link to="/cart">
+              <Link to="/cart" style={{ textDecoration: "none" }}>
                 <MenuItem>Cart</MenuItem>
               </Link>
-              <Link to="/historyUser">
+              <Link to="/historyUser" style={{ textDecoration: "none" }}>
                 <MenuItem>History</MenuItem>
               </Link>
-              <Link to="/">
+              <Link to="/" style={{ textDecoration: "none" }}>
                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-              </Link>
-              <Link to="/userinfo">
-                <MenuItem>Users Info</MenuItem>
-              </Link>
-              <Link to="/product">
-                <MenuItem>Products Info</MenuItem>
-              </Link>
-              <Link to="/package">
-                <MenuItem>Packages Info</MenuItem>
               </Link>
             </>
           ) : (
@@ -92,6 +86,12 @@ class AvatarProfile extends React.Component {
     );
   }
 }
+
+const styles = {
+  linklink: {
+    textDecoration: "none",
+  },
+};
 
 const mapStateToProps = (state) => {
   return {
