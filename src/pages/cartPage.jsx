@@ -12,8 +12,12 @@ import {
     TableRow,
     TableCell,
     Button,
-    Typography
-
+    Typography,
+    Modal,
+    FormControl,
+    MenuItem,
+    Select,
+    InputLabel
 } from '@material-ui/core'
 
 // import action
@@ -35,15 +39,23 @@ class CartPage extends React.Component {
             edited_total_modal: 0,
             amount_product: 0,
             amount_package: 0,
-            amount: 0
+            amount: 0,
+            modalOpen: false,
+            paymentMethod: [],
+            selected_payment_type_id: null,
         }
     }
 
     async componentDidMount() {
         await this.props.getCartUser(localStorage.getItem('id'))
-        this.calculateAmountProduct()
-        this.calculateAmountPackage()
-        this.calculateAmount()
+        await this.calculateAmountProduct()
+        await this.calculateAmountPackage()
+        await this.calculateAmount()
+        await Axios.get(URL + '/paymentMethod')
+            .then(res => {
+                this.setState({ paymentMethod: res.data })
+            })
+            .catch(err => console.log(err))
     }
 
     calculateAmountProduct = async () => {
@@ -124,8 +136,8 @@ class CartPage extends React.Component {
         await this.calculateAmount()
     }
 
-    handleEditCancel = () => {
-        this.resetState()
+    handleEditCancel = async () => {
+        await this.resetState()
     }
 
     // package
@@ -143,8 +155,18 @@ class CartPage extends React.Component {
         await this.calculateAmount()
     }
 
-    handleCheckout = () => {
+    handleCheckout = async () => {
         console.log('amount : ', this.state.amount)
+        await this.setState({ modalOpen: true })
+    }
+
+    handleModalClose = async () => {
+        await this.setState({ modalOpen: false })
+    }
+
+    handleChangePayment = async (event) => {
+        await this.setState({ selected_payment_type_id: event.target.value })
+        await console.log('selected payment type id : ', this.state.selected_payment_type_id)
     }
 
     // render Product Pcs
@@ -249,6 +271,40 @@ class CartPage extends React.Component {
         })
     }
 
+    // render modal
+    renderModalCheckOutPayment = () => {
+        // console.log('Payment method : ', this.state.paymentMethod)
+        return (
+            <Paper style={styles.modalContent} elevation={5}>
+                <Typography>Total Payment : {this.state.amount}</Typography>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography> Choose Payment Type : </Typography>
+                    {
+                        this.state.paymentMethod[0] ?
+                            <FormControl variant="" style={{ minWidth: 200, backgroundColor: '' }}>
+                                <InputLabel id='payment'>Payment Method</InputLabel>
+                                <Select
+                                    value={this.state.selected_payment_type_id}
+                                    onChange={(event) => this.handleChangePayment(event)}
+                                    label="Payment Method"
+                                    id='payment'
+                                >
+                                    <MenuItem value="">
+                                        <em>via bank</em>
+                                    </MenuItem>
+                                    <MenuItem value={this.state.paymentMethod[0].id_payment_type}>{this.state.paymentMethod[0].via_bank}</MenuItem>
+                                    <MenuItem value={this.state.paymentMethod[1].id_payment_type}>{this.state.paymentMethod[1].via_bank}</MenuItem>
+                                    <MenuItem value={this.state.paymentMethod[2].id_payment_type}>{this.state.paymentMethod[2].via_bank}</MenuItem>
+                                </Select>
+                            </FormControl>
+                            : null
+                    }
+                </div>
+                <Button variant='contained' color='primary'>Upload Transaction Receipt</Button>
+            </Paper>
+        )
+    }
+
     render() {
         // console.log('resultPcs : ', this.props.resultPcs)
         // console.log('resultPkg : ', this.props.resultPkg)
@@ -278,6 +334,15 @@ class CartPage extends React.Component {
                             </Table>
                             : null
                     }
+                    <div style={styles.modalContainer}>
+                        <Modal
+                            open={this.state.modalOpen}
+                            onClose={this.handleModalClose}
+                            style={styles.modal}
+                        >
+                            {this.renderModalCheckOutPayment()}
+                        </Modal>
+                    </div>
                 </Paper>
             </div>
         )
@@ -303,6 +368,17 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    modal: {
+        position: 'absolute',
+        width: '100%',
+        heigh: '100%',
+        padding: '100px 50px 50px 50px',
+    },
+    modalContent: {
+        width: '100%',
+        height: '100%',
+        padding: 20,
     }
 }
 
