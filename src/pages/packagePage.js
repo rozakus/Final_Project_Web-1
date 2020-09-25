@@ -36,22 +36,58 @@ class PackagePage extends React.Component {
       selectedQuantity: 0,
       openDialogDelete: false,
       productName: [],
+      catlvlthree: [],
+      selectedCategory: "",
+      newListPkgDetails: [],
     };
   }
 
-  componentDidMount() {
-    Axios.get(`http://localhost:2000/getAllPackages`)
+  async componentDidMount() {
+    await Axios.get(`http://localhost:2000/getAllPackages`)
       .then((res) => {
         console.log(` packages data : `, res.data);
         this.setState({ data: res.data });
       })
       .catch((err) => console.log(`error get data in allPackages : `, err));
+
+    await Axios.get(`http://localhost:2000/getLvl3Cate`)
+      .then((resp) => {
+        console.log(`Level 3 Category : `, resp.data);
+        this.setState({ catlvlthree: resp.data });
+      })
+      .catch((error) => console.log(`error get catlevelthree : `, error));
   }
 
-  handleAddToList = () => {
-    const { newPkgName, newPkgQty } = this.state;
-    console.log("test");
+  handleUpload = async () => {
+    console.log("image : ", this.state.image);
+
+    // create formdata
+    const data = new FormData();
+    data.append("IMG", this.state.image);
+    // data.append('filename', 'gambar profile')
+    console.log("form data : ", data.get("IMG"));
+
+    this.props.upload(data);
+    this.setState({ image: null });
   };
+
+  handleAddToList = () => {
+    const newPkgName = this.newPkgName.value;
+    const newPkgCat = this.state.selectedCategory;
+    const newPkgQty = this.newPkgQty.value;
+
+    const body = { newPkgName, newPkgQty, newPkgCat };
+    console.log("addtolist : ", body);
+
+    let temp = [...this.state.newListPkgDetails];
+    temp.push(body);
+    this.setState({ newListPkgDetails: temp });
+
+    this.newPkgName.value = "";
+    this.state.selectedCategory = "";
+    this.newPkgQty.value = 0;
+  };
+
   handleClickOpenDialogDelete = () => {
     this.setState({ openDialogDelete: true });
     console.log(`open dialog delete`);
@@ -65,18 +101,14 @@ class PackagePage extends React.Component {
     this.setState({ openAddPkgButton: true });
   };
 
+  handleChange = (e) => {
+    // e.target.value
+    console.log(e.target.value);
+    this.setState({ selectedCategory: e.target.value });
+  };
+
   handleCloseAddPkgButton = () => {
     this.setState({ openAddPkgButton: false });
-  };
-
-  handleMinus = () => {
-    if (this.state.selectedQuantity === 0) return null;
-    this.setState({ selectedQuantity: this.state.selectedQuantity - 1 });
-  };
-
-  handleMinus = () => {
-    if (this.state.selectedQuantity === 0) return null;
-    this.setState({ selectedQuantity: this.state.selectedQuantity + 1 });
   };
 
   renderTableHead = () => {
@@ -137,13 +169,6 @@ class PackagePage extends React.Component {
               <DialogTitle id="alert-dialog-title">
                 {"Do yo want to delete this package?"}
               </DialogTitle>
-              {/* <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Let Google help apps determine location. This means sending
-                  anonymous location data to Google, even when no apps are
-                  running.
-                </DialogContentText>
-              </DialogContent> */}
               <DialogActions>
                 <Button onClick={this.handleCloseDialogDelete} color="primary">
                   No
@@ -215,7 +240,8 @@ class PackagePage extends React.Component {
                       variant="contained"
                       style={{
                         backgroundColor: "#cbe2d6",
-                        borderRadius: 20,
+                        borderRadius: 10,
+                        width: 120,
                       }}
                     >
                       Upload
@@ -235,22 +261,20 @@ class PackagePage extends React.Component {
                     Input the Category Package
                   </DialogContentText>
                   <div style={styles.catpkg}>
-                    {/* <InputLabel id="demo-simple-select-outlined-label">
-                    Category Package
-                    </InputLabel> */}
                     <Select
                       labelId="demo-simple-select-outlined-label"
                       id="demo-simple-select-outlined"
-                      // value={age}
-                      // onChange={handleChange}
+                      onChange={this.handleChange}
                       label="Category Package"
+                      value={this.state.selectedCategory}
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
+                      {this.state.catlvlthree.map((item, index) => {
+                        return (
+                          <MenuItem value={item.category}>
+                            {item.category}
+                          </MenuItem>
+                        );
+                      })}
                     </Select>
                     <TextField
                       id="standard-number"
@@ -278,10 +302,14 @@ class PackagePage extends React.Component {
                     <Typography>List Package Details</Typography>
                     <div style={{ marginLeft: 15 }}>
                       <ul>
-                        {/* {this.state.productName.map((item, index) => {
-                        return <li>{item}</li>;
-                      })} */}
-                        <Typography>msh kosong</Typography>
+                        {this.state.newListPkgDetails.map((item) => {
+                          return (
+                            <li>
+                              Package Name : {item.newPkgName}, Category Name :{" "}
+                              {item.newPkgCat}, Quantity : {item.newPkgQty}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   </div>
