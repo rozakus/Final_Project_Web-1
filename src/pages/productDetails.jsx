@@ -3,7 +3,7 @@ import React from 'react'
 
 // import library
 import Axios from 'axios'
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 
 // import UI
 import {
@@ -40,6 +40,7 @@ class ProductDetails extends React.Component {
             total_sell: 0,
             total_modal: 0,
             alertLogin: false,
+            directToCart: false
         }
     }
 
@@ -51,21 +52,21 @@ class ProductDetails extends React.Component {
             .catch(err => console.log(err))
     }
 
-    handleMinus = () => {
+    handleMinus = async () => {
         if (this.state.selectedQuantity === 0) return null
-        this.setState({ selectedQuantity: this.state.selectedQuantity - 1 },
-            () => this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell },
-                () => this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })))
+        await this.setState({ selectedQuantity: this.state.selectedQuantity - 1 })
+        await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
+        await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
     }
 
-    handlePlus = () => {
+    handlePlus = async () => {
         if (this.state.selectedQuantity === this.state.selectedProduct.product_stock) return null
-        this.setState({ selectedQuantity: this.state.selectedQuantity + 1 },
-            () => this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell },
-                () => this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })))
+        await this.setState({ selectedQuantity: this.state.selectedQuantity + 1 })
+        await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
+        await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
     }
 
-    handleAddToCart = () => {
+    handleAddToCart = async () => {
         // if (this.state.selectedQuantity === 0 || this.state.selectedTotal === 0) return null
         if (localStorage.getItem('id') === null) return this.setState({ alertLogin: true })
         if (!this.state.selectedQuantity || !this.state.total_modal || !this.state.total_sell) return console.log('please order')
@@ -81,20 +82,23 @@ class ProductDetails extends React.Component {
         console.log({ body })
 
         Axios.post(URL + '/addtocartpcs', body)
-        this.setState({ selectedQuantity: 0 },
-            () => this.setState({ total_sell: 0 },
-                () => this.setState({ total_modal: 0 })))
+        await this.setState({ selectedQuantity: 0 })
+        await this.setState({ total_sell: 0 })
+        await this.setState({ total_modal: 0 })
+        await this.setState({ directToCart: true })
     }
 
     handleClose = () => { this.setState({ alertLogin: false }) }
 
     render() {
-        const { selectedProduct, selectedQuantity, alertLogin } = this.state
+        const { selectedProduct, selectedQuantity, alertLogin, directToCart } = this.state
         // console.log('props location : ', this.props.location)
         // console.log('selectedProduct', selectedProduct)
         // console.log('selectedQuantity', selectedQuantity)
         // console.log('total_sell', this.state.total_sell)
         // console.log('total_modal', this.state.total_modal)
+
+        if (directToCart) return <Redirect to='/cart' />
 
         return (
             <div style={styles.root}>

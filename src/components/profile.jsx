@@ -45,10 +45,10 @@ class Profile extends React.Component {
             horizontal: "right",
           }}
         >
-          <Link to="/login">
+          <Link to="/login" style={{textDecoration: "none"}}>
             <MenuItem>Login</MenuItem>
           </Link>
-          <Link to="/register">
+          <Link to="/register" style={{textDecoration: "none"}}>
             <MenuItem>Register</MenuItem>
           </Link>
         </Menu>
