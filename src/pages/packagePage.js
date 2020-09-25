@@ -35,6 +35,7 @@ class PackagePage extends React.Component {
       openAddPkgButton: false,
       selectedQuantity: 0,
       openDialogDelete: false,
+      productName: [],
     };
   }
 
@@ -46,6 +47,11 @@ class PackagePage extends React.Component {
       })
       .catch((err) => console.log(`error get data in allPackages : `, err));
   }
+
+  handleAddToList = () => {
+    const { newPkgName, newPkgQty } = this.state;
+    console.log("test");
+  };
   handleClickOpenDialogDelete = () => {
     this.setState({ openDialogDelete: true });
     console.log(`open dialog delete`);
@@ -169,6 +175,12 @@ class PackagePage extends React.Component {
               color="primary"
               size="medium"
               onClick={this.handleOpenAddPkgButton}
+              style={{
+                backgroundColor: "#cbe2d6",
+                color: "black",
+                borderRadius: 20,
+                marginRight: 20,
+              }}
               // className={classes.button}
               startIcon={<AddBoxIcon />}
             >
@@ -188,10 +200,8 @@ class PackagePage extends React.Component {
                 style={{ display: "flex", flexDirection: "column", margin: 5 }}
               >
                 <FormControl variant="outlined">
+                  <DialogContentText>Input the Package Image</DialogContentText>
                   <div style={styles.pkgimg}>
-                    <DialogContentText>
-                      Input the Package Image
-                    </DialogContentText>
                     <form encType="multipart/form-data">
                       <input
                         type="file"
@@ -203,26 +213,51 @@ class PackagePage extends React.Component {
                     <Button
                       onClick={this.handleUpload}
                       variant="contained"
-                      color="primary"
+                      style={{
+                        backgroundColor: "#cbe2d6",
+                        borderRadius: 20,
+                      }}
                     >
                       Upload
                     </Button>
                   </div>
-                  <div style={styles.buttonprofile}>
-                    <DialogContentText>
-                      Input the Package Name
-                    </DialogContentText>
+                  <DialogContentText>Input the Package Name</DialogContentText>
+                  <div style={styles.pkgname}>
                     <TextField
                       id="outlined-textarea"
                       label="Package Name"
                       placeholder="Input the package name here..."
                       variant="outlined"
+                      inputRef={(newPkgName) => (this.newPkgName = newPkgName)}
                     />
+                  </div>
+                  <DialogContentText>
+                    Input the Category Package
+                  </DialogContentText>
+                  <div style={styles.catpkg}>
+                    {/* <InputLabel id="demo-simple-select-outlined-label">
+                    Category Package
+                    </InputLabel> */}
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      // value={age}
+                      // onChange={handleChange}
+                      label="Category Package"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
                     <TextField
                       id="standard-number"
                       label="Quantity"
                       type="number"
                       defaultValue="0"
+                      inputRef={(newPkgQty) => (this.newPkgQty = newPkgQty)}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -234,34 +269,39 @@ class PackagePage extends React.Component {
                         borderRadius: 20,
                         marginRight: 20,
                       }}
-                      onClick={this.handlePlus}
+                      onClick={this.handleAddToList}
                     >
                       Add to List
                     </Button>
                   </div>
-                  <TextField
-                    disabled
-                    id="outlined-disabled"
-                    label="List Package Detail"
-                    value={this.props.email}
-                    variant="outlined"
-                    multiline
-                  />
-                <div style={styles.buttonprofile}>
-                  <DialogContentText>Input the Package Price</DialogContentText>
-                  <TextField
-                    label="Package Price"
-                    id="outlined-start-adornment"
-                    defaultValue='0'
-                    type="number"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">Rp</InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                  />
-                </div>
+                  <div style={styles.disableBox}>
+                    <Typography>List Package Details</Typography>
+                    <div style={{ marginLeft: 15 }}>
+                      <ul>
+                        {/* {this.state.productName.map((item, index) => {
+                        return <li>{item}</li>;
+                      })} */}
+                        <Typography>msh kosong</Typography>
+                      </ul>
+                    </div>
+                  </div>
+                  <div style={styles.pgkprice}>
+                    <DialogContentText>
+                      Input the Package Price
+                    </DialogContentText>
+                    <TextField
+                      label="Package Price"
+                      id="outlined-start-adornment"
+                      defaultValue="0"
+                      type="number"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">Rp</InputAdornment>
+                        ),
+                      }}
+                      variant="outlined"
+                    />
+                  </div>
                 </FormControl>
               </DialogContent>
               <DialogActions>
@@ -297,10 +337,26 @@ const styles = {
   },
   pkgimg: {
     margin: 5,
-    justifyContent: "space-between"
+    display: "flex",
+    flexDirection: "row",
+    width: 40,
+  },
+  pgkprice: {
+    marginTop: 5,
+  },
+  pkgname: {
+    marginBottom: 5,
+    marginTop: 0,
+  },
+  catpkg: {
+    width: 600,
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   buttonplusminus: {
     marginTop: 5,
+    justifyContent: "space-between",
   },
   contentImage: {
     maxWidth: 100,
@@ -314,6 +370,12 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     margin: "1%",
+  },
+  disableBox: {
+    borderRadius: 10,
+    borderStyle: "solid",
+    borderWidth: 1,
+    padding: 10,
   },
 };
 
