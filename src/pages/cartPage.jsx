@@ -169,6 +169,19 @@ class CartPage extends React.Component {
         await console.log('selected payment type id : ', this.state.selected_payment_type_id)
     }
 
+    handleUploadReceipt = async () => {
+        // await this.props.resultPcs.map((item, index) => this.setState({ amount_product: this.state.amount_product + item.total_sell }))
+
+        // const body = {
+        //     users_id: localStorage.getItem('id'),
+        //     order_number: ,
+        //     payment_type: ,
+        //     amount: 
+        // }
+
+        // console.log('body payment : ', body)
+    }
+
     // render Product Pcs
     renderTableHeadPcs = () => {
         return (
@@ -252,15 +265,15 @@ class CartPage extends React.Component {
 
     renderTableBodyPkg = () => {
         return this.props.resultPkg.map((item, index) => {
+            // console.log(item.product_name.split(','))
             return (
                 <TableRow key={index}>
                     <TableCell align="center">{index + 1}</TableCell>
                     <TableCell>{item.package_name}</TableCell>
-                    <TableCell>{item.product_name}</TableCell>
                     <TableCell>
-                        {item.total_sell}
-                        {/* {item.total_sell.split(',').forEach(element => console.log(element))} */}
+                        {item.product_name}
                     </TableCell>
+                    <TableCell>{item.total_sell}</TableCell>
                     <TableCell>
                         <Button
                             onClick={() => this.handleDeletePkg(item)}
@@ -274,33 +287,62 @@ class CartPage extends React.Component {
     // render modal
     renderModalCheckOutPayment = () => {
         // console.log('Payment method : ', this.state.paymentMethod)
+
         return (
             <Paper style={styles.modalContent} elevation={5}>
-                <Typography>Total Payment : {this.state.amount}</Typography>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography> Choose Payment Type : </Typography>
-                    {
-                        this.state.paymentMethod[0] ?
-                            <FormControl variant="" style={{ minWidth: 200, backgroundColor: '' }}>
-                                <InputLabel id='payment'>Payment Method</InputLabel>
-                                <Select
-                                    value={this.state.selected_payment_type_id}
-                                    onChange={(event) => this.handleChangePayment(event)}
-                                    label="Payment Method"
-                                    id='payment'
-                                >
-                                    <MenuItem value="">
-                                        <em>via bank</em>
-                                    </MenuItem>
-                                    <MenuItem value={this.state.paymentMethod[0].id_payment_type}>{this.state.paymentMethod[0].via_bank}</MenuItem>
-                                    <MenuItem value={this.state.paymentMethod[1].id_payment_type}>{this.state.paymentMethod[1].via_bank}</MenuItem>
-                                    <MenuItem value={this.state.paymentMethod[2].id_payment_type}>{this.state.paymentMethod[2].via_bank}</MenuItem>
-                                </Select>
-                            </FormControl>
-                            : null
-                    }
-                </div>
-                <Button variant='contained' color='primary'>Upload Transaction Receipt</Button>
+                <Typography style={{ marginBottom: 20 }} variant='h5'>Payment</Typography>
+                <Table style={{ width: '40%' }}>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>Total Payment</TableCell>
+                            <TableCell>{this.state.amount}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Address</TableCell>
+                            <TableCell>
+                                {this.props.address}
+                                <Button variant='contained' color='primary' style={{ marginLeft: 10 }}>
+                                    Send different Address
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Choose Payment</TableCell>
+                            <TableCell>
+                                {
+                                    this.state.paymentMethod[0] ?
+                                        <FormControl variant="" style={{ minWidth: 200, backgroundColor: '' }}>
+                                            <InputLabel id='payment'>Transfer via bank</InputLabel>
+                                            <Select
+                                                value={this.state.selected_payment_type_id}
+                                                onChange={(event) => this.handleChangePayment(event)}
+                                                label="payment"
+                                                id='payment'
+                                            >
+                                                <MenuItem value="">
+                                                    <em>select bank</em>
+                                                </MenuItem>
+                                                <MenuItem value={this.state.paymentMethod[0].id_payment_type}>{this.state.paymentMethod[0].via_bank}</MenuItem>
+                                                <MenuItem value={this.state.paymentMethod[1].id_payment_type}>{this.state.paymentMethod[1].via_bank}</MenuItem>
+                                                <MenuItem value={this.state.paymentMethod[2].id_payment_type}>{this.state.paymentMethod[2].via_bank}</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        : null
+                                }
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell>
+                                <Button
+                                    onClick={this.handleUploadReceipt}
+                                    variant='contained' color='primary'
+                                >Upload Transaction Receipt</Button>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+
             </Paper>
         )
     }
@@ -308,6 +350,7 @@ class CartPage extends React.Component {
     render() {
         // console.log('resultPcs : ', this.props.resultPcs)
         // console.log('resultPkg : ', this.props.resultPkg)
+        // console.log('address : ', this.props.address)
 
         return (
             <div style={styles.root}>
@@ -379,13 +422,18 @@ const styles = {
         width: '100%',
         height: '100%',
         padding: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 }
 
 const MapStateToProps = (globalState) => {
     return {
         resultPcs: globalState.cartReducer.resultPcs,
-        resultPkg: globalState.cartReducer.resultPkg
+        resultPkg: globalState.cartReducer.resultPkg,
+        address: globalState.userReducer.address
     }
 }
 
