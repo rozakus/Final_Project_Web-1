@@ -24,6 +24,7 @@ import ProductPage from './pages/productPage'
 import PackagePage from './pages/packagePage';
 import DashboardPage from './pages/dashboard'
 import SalesReport from './pages/SalesReport'
+import NotFound from './pages/404';
 
 class App extends Component {
 
@@ -43,6 +44,7 @@ class App extends Component {
                         <Route path='/productPage' component={ProductPage}/>
                         <Route path='/packagePage' component={PackagePage}/>
                         <Route path='/historyTrans' component={HistoryTransaction}/>
+                        {/* <Route path="*" component={NotFound} /> */}
                     </Switch>
                 </div>
             )
@@ -59,6 +61,7 @@ class App extends Component {
                         <Route path='/productDetails' component={ProductDetails} />
                         <Route path='/productPackageDetails' component={ProductPackageDetails} />
                         <Route path='/cart' component={CartPage} />
+                        <Route path="*" component={NotFound} />
                     </Switch>
                     <Footer />
                 </div>

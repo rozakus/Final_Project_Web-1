@@ -42,15 +42,15 @@ class PackagePage extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    await Axios.get(`http://localhost:2000/getAllPackages`)
+  componentDidMount() {
+    Axios.get(`http://localhost:2000/getAllPackages`)
       .then((res) => {
         console.log(` packages data : `, res.data);
         this.setState({ data: res.data });
       })
       .catch((err) => console.log(`error get data in allPackages : `, err));
 
-    await Axios.get(`http://localhost:2000/getLvl3Cate`)
+    Axios.get(`http://localhost:2000/getLvl3Cate`)
       .then((resp) => {
         console.log(`Level 3 Category : `, resp.data);
         this.setState({ catlvlthree: resp.data });
