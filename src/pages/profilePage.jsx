@@ -140,13 +140,13 @@ class ProfilePage extends Component {
             >
               Upload
             </Button>
-            <Button
+            {/* <Button
               variant="contained"
               color="secondary"
               style={{ marginLeft: "5px" }}
             >
               Delete
-            </Button>
+            </Button> */}
           </div>
           <div style={styles.profileinfo}>
             <TextField
