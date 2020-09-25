@@ -13,6 +13,7 @@ import {
     TableCell,
     Button,
     Typography
+
 } from '@material-ui/core'
 
 // import action
@@ -32,23 +33,32 @@ class CartPage extends React.Component {
             edited_product_qty: 0,
             edited_total_sell: 0,
             edited_total_modal: 0,
+            amount_product: 0,
+            amount_package: 0,
             amount: 0
         }
     }
 
     async componentDidMount() {
         await this.props.getCartUser(localStorage.getItem('id'))
+        this.calculateAmountProduct()
+        this.calculateAmountPackage()
         this.calculateAmount()
     }
 
-    // async componentDidUpdate() {
-    //     await this.props.resultPcs.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
-    //     await this.props.resultPkg.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
-    // }
+    calculateAmountProduct = async () => {
+        await this.setState({ amount_product: 0 })
+        await this.props.resultPcs.map((item, index) => this.setState({ amount_product: this.state.amount_product + item.total_sell }))
+    }
+
+    calculateAmountPackage = async () => {
+        await this.setState({ amount_package: 0 })
+        await this.props.resultPkg.map((item, index) => this.setState({ amount_package: this.state.amount_package + item.total_sell }))
+    }
 
     calculateAmount = async () => {
-        await this.props.resultPcs.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
-        await this.props.resultPkg.map((item, index) => { this.setState({ amount: this.state.amount + item.total_sell }) })
+        await this.setState({ amount: 0 })
+        await this.setState({ amount: this.state.amount_product + this.state.amount_package })
     }
 
     resetState = async () => {
@@ -59,7 +69,7 @@ class CartPage extends React.Component {
     }
 
     // handling function
-    handleDeletePcs = (item) => {
+    handleDeletePcs = async (item) => {
         console.log('Delete Pcs : ', item)
 
         const order_number = item.order_number
@@ -68,8 +78,10 @@ class CartPage extends React.Component {
         console.log({ order_number }, { product_id })
         // axios delete gabisa ngirim body langsung, harus disetting, kalau params bisa
         Axios.delete(URL + '/deletepcs/' + order_number + '/' + product_id)
-            .then(res => { this.props.getCartUser(localStorage.getItem('id')) })
-            .catch(err => console.log(err))
+        await this.resetState()
+        await this.props.getCartUser(localStorage.getItem('id'))
+        await this.calculateAmountProduct()
+        await this.calculateAmount()
     }
 
     handleEditPcs = async (product_id) => {
@@ -92,7 +104,7 @@ class CartPage extends React.Component {
         await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
     }
 
-    handleEditConfirm = (item) => {
+    handleEditConfirm = async (item) => {
 
         if (!this.state.edited_product_qty || !this.state.edited_total_modal || !this.state.edited_total_sell) return console.log('quantity is empty')
 
@@ -105,13 +117,11 @@ class CartPage extends React.Component {
         }
         console.log('body : ', body)
 
-        Axios.patch(URL + '/editqtypcs', body)
-            .then(res => {
-                this.resetState()
-                this.props.getCartUser(localStorage.getItem('id'))
-                this.calculateAmount()
-            })
-            .catch(err => console.log(err))
+        await Axios.patch(URL + '/editqtypcs', body)
+        await this.resetState()
+        await this.props.getCartUser(localStorage.getItem('id'))
+        await this.calculateAmountProduct()
+        await this.calculateAmount()
     }
 
     handleEditCancel = () => {
@@ -119,17 +129,22 @@ class CartPage extends React.Component {
     }
 
     // package
-    handleDeletePkg = (item) => {
+    handleDeletePkg = async (item) => {
         console.log('item package', item)
 
         const order_number = item.order_number
-        const package_id = item.package_no
+        const package_id = item.package_id
         const package_no = item.package_no
         console.log({ order_number }, { package_id }, { package_no })
 
         Axios.delete(URL + '/deletepkg/' + order_number + '/' + package_id + '/' + package_no)
-            .then(res => { this.props.getCartUser(localStorage.getItem('id')) })
-            .catch(err => console.log(err))
+        await this.props.getCartUser(localStorage.getItem('id'))
+        await this.calculateAmountPackage()
+        await this.calculateAmount()
+    }
+
+    handleCheckout = () => {
+        console.log('amount : ', this.state.amount)
     }
 
     // render Product Pcs
@@ -242,10 +257,10 @@ class CartPage extends React.Component {
             <div style={styles.root}>
                 <Paper style={styles.rootContainer} elevation={10}>
                     <div style={styles.header}>
-                        {this.state.amount}
-                        <Button>
-                            Checkout
-                        </Button>
+                        <Typography>{this.state.amount}</Typography>
+                        <Button
+                            onClick={this.handleCheckout}
+                        >Checkout</Button>
                     </div>
                     {
                         this.props.resultPcs[0] ?
