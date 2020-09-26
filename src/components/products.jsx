@@ -39,7 +39,7 @@ class Products extends React.Component {
                                 {item.product_name}
                             </Typography>
                             <Typography variant="caption" color="textSecondary" component="p">
-                                {`IDR ${item.price_sell}.00`}
+                                {`IDR ${item.price_sell.toLocaleString()}.00`}
                             </Typography>
                         </CardContent>
                     </CardActionArea>
