@@ -12,11 +12,12 @@ import {
   DialogContentText,
   DialogTitle,
   TableCell,
-  Grid,
   InputAdornment,
   IconButton,
+  Typography,
 } from "@material-ui/core";
 import Wallpaper from "../assets/images/Wallpaper.jpg";
+import wallpaper2 from "../assets/images/wallpaper2.jpg";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
@@ -36,6 +37,7 @@ class ProfilePage extends Component {
       errorPasswordMessage: "",
       showPassword: false,
       errorMsg: "",
+      data: [],
     };
   }
 
@@ -55,8 +57,9 @@ class ProfilePage extends Component {
     // data.append('filename', 'gambar profile')
     console.log("form data : ", data.get("IMG"));
 
-    this.props.upload(data);
-    this.setState({ image: null });
+    await this.props.upload(data);
+    await this.setState({ image: null });
+    await this.props.KeepLogin();
   };
 
   handleClick = () => {
@@ -83,27 +86,49 @@ class ProfilePage extends Component {
     if (this.newaddress.value === "") return console.log("Empty Input");
     const newaddress = this.newaddress.value;
     const body = {
-      address: newaddress
+      address: newaddress,
     };
 
-    Axios.patch(URL + '/editaddress/' + localStorage.getItem("id"), body)
-    console.log(body)
-    this.props.KeepLogin()
-    this.setState({ openEditAdress: false });
+    Axios.patch(URL + "/editaddress/" + localStorage.getItem("id"), body)
+      .then((res) => {
+        console.log(`edit address data : `, res.data);
+        this.setState({ data: res.data });
+        this.props.KeepLogin();
+        this.setState({ openEditAdress: false });
+      })
+      .catch((error) => {
+        console.log(`error edit address : `, error);
+      });
+    // console.log(body)
   };
 
   handleSaveEditedPassword = () => {
-  if (!this.oldpass.value || !this.newpass.value || !this.confpass.value === '') return console.log('Empty Password');
+    if (
+      !this.oldpass.value ||
+      !this.newpass.value ||
+      !this.confpass.value === ""
+    )
+      return console.log("Empty Password");
 
-  const body = { oldpass: this.oldpass.value, newpass: this.newpass.value, confpass: this.confpass.value };
-  console.log(body);
+    const body = {
+      oldpass: this.oldpass.value,
+      newpass: this.newpass.value,
+      confpass: this.confpass.value,
+    };
+    console.log(body);
 
-  let temp = Axios.patch(URL + '/editpass/' + localStorage.getItem("id"), body);
-  console.log(temp.data)
-  
-  this.props.KeepLogin();
-  this.setState({ openEditPass: false});
-  }
+    Axios.patch(URL + "/editpass/" + localStorage.getItem("id"), body)
+      .then((res) => {
+        console.log(` edit pass data : `, res.data);
+        this.setState({ data: res.data });
+        this.props.KeepLogin();
+        this.setState({ openEditPass: false });
+      })
+      .catch((error) => {
+        console.log(`error edit password : `, error.response ? error.response.data : error);
+        this.setState({ errorMsg: error.response.data})
+      });
+  };
 
   render() {
     const { picture, address, edit } = this.props;
@@ -125,7 +150,14 @@ class ProfilePage extends Component {
             />
           </div>
           <div style={styles.buttonprofile}>
-            <form encType="multipart/form-data">
+            <form
+              encType="multipart/form-data"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <input
                 type="file"
                 accept="image/*"
@@ -136,7 +168,12 @@ class ProfilePage extends Component {
             <Button
               onClick={this.handleUpload}
               variant="contained"
-              color="primary"
+              color="black"
+              style={{
+                backgroundColor: "#cbe2d6",
+                borderRadius: 20,
+                marginTop: 5,
+              }}
             >
               Upload
             </Button>
@@ -148,22 +185,27 @@ class ProfilePage extends Component {
               Delete
             </Button> */}
           </div>
-          <div style={styles.profileinfo}>
+          <div style={styles.disablemail}>
             <TextField
               disabled
               id="outlined-disabled"
-              label="Email"
+              label="EMAIL"
               value={this.props.email}
               variant="outlined"
             />
           </div>
           <div style={styles.addressdialog}>
-            <TableCell colSpan={2}>Address</TableCell>
-            <TableCell>
+            <Typography>ADDRESS</Typography>
+            <div>
               <Button
                 variant="outlined"
-                color="primary"
+                color="BLACK"
                 onClick={this.handleClickOpenEditAddress}
+                style={{
+                  backgroundColor: "#cbe2d6",
+                  borderRadius: 20,
+                  marginTop: 5,
+                }}
               >
                 Edit Address
               </Button>
@@ -175,7 +217,9 @@ class ProfilePage extends Component {
                 <DialogTitle id="form-dialog-title">
                   Change the address
                 </DialogTitle>
-                <DialogContent style={{ display: "flex", flexDirection: "column" }}>
+                <DialogContent
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
                   <DialogContentText>
                     Please enter your new address.
                   </DialogContentText>
@@ -188,7 +232,7 @@ class ProfilePage extends Component {
                     variant="outlined"
                   />
                   <TextField
-                  style={{ marginTop: 10}}
+                    style={{ marginTop: 10 }}
                     id="outlined-multiline-static"
                     label="Your New Address"
                     multiline
@@ -210,15 +254,20 @@ class ProfilePage extends Component {
                   </Button>
                 </DialogActions>
               </Dialog>
-            </TableCell>
+            </div>
           </div>
-          <div>
-            <TableCell colSpan={2}>Password</TableCell>
-            <TableCell>
+          <div style={styles.passdialog}>
+            <Typography>PASSWORD</Typography>
+            <div>
               <Button
                 variant="outlined"
-                color="primary"
+                color="black"
                 onClick={this.handleClickOpenEditPass}
+                style={{
+                  backgroundColor: "#cbe2d6",
+                  borderRadius: 20,
+                  marginTop: 5,
+                }}
               >
                 Edit Password
               </Button>
@@ -286,6 +335,7 @@ class ProfilePage extends Component {
                     type={this.state.showPassword ? "text" : "password"}
                     inputRef={(confpass) => (this.confpass = confpass)}
                     fullWidth
+                    helperText={this.state.errorMsg ? this.state.errorMsg : ""}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -305,12 +355,15 @@ class ProfilePage extends Component {
                   <Button onClick={this.handleCloseEditPass} color="primary">
                     Cancel
                   </Button>
-                  <Button onClick={this.handleSaveEditedPassword} color="primary">
+                  <Button
+                    onClick={this.handleSaveEditedPassword}
+                    color="primary"
+                  >
                     Submit
                   </Button>
                 </DialogActions>
               </Dialog>
-            </TableCell>
+            </div>
           </div>
         </Paper>
       </div>
@@ -330,17 +383,28 @@ const styles = {
   },
   profilebox: {
     width: "30vw",
-    height: "100vh",
-    backgroundColor: "#f2f2f2",
+    height: "80vh",
+    // backgroundColor: "#f2f2f2",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "2% 5%",
+    backgroundImage: `url(${wallpaper2})`,
   },
   addressdialog: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 5,
+  },
+  passdialog: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 5,
+    marginBottom: 5,
   },
   avatar: {
     backgroundColor: "salmon",
@@ -352,13 +416,17 @@ const styles = {
     alignItems: "center",
   },
   buttonprofile: {
-    marginTop: "2%",
+    marginBottom: "2%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  profileinfo: {
+  disablemail: {
     width: "100%",
-    height: "30%",
+    height: "30",
     marginTop: "2%",
-    paddingBottom: "3%",
+    marginBottom: 10,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -372,7 +440,7 @@ const mapStateToProps = (state) => {
     email: state.userReducer.email,
     address: state.userReducer.address,
     errorMsg: state.userReducer.errorMsg,
-    picture: state.userReducer.picture
+    picture: state.userReducer.picture,
   };
 };
 
