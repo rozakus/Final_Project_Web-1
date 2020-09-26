@@ -68,11 +68,7 @@ export const upload = (data) => {
   return async (dispatch) => {
     try {
       const option = { headers: { "Content-Type": "multipart/form-data" } };
-      const res = await Axios.post(
-        URL + "/profile/upload/" + localStorage.getItem("id"),
-        data,
-        option
-      );
+      const res = await Axios.post(URL + "/profile/upload/" + localStorage.getItem("id"), data, option)
       console.log(res.data);
     } catch (err) {
       console.log(err ? err.response.data : err);

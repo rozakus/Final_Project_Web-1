@@ -124,7 +124,7 @@ class ProductDetails extends React.Component {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell style={{ borderBottom: "none", color: 'red' }}>Total Price</TableCell>
-                                        <TableCell style={{ borderBottom: "none", color: 'red' }} align="right">{this.state.total_sell}</TableCell>
+                                        <TableCell style={{ borderBottom: "none", color: 'red' }} align="right">{`IDR ${this.state.total_sell.toLocaleString()}.00`}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
