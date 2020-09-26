@@ -56,6 +56,11 @@ export const signUp = (body) => {
       //add data
       const res = await Axios.post(URL + "/register", body); //alamatnya samakan di userRouter
       console.log(res.data);
+      
+      // save token into local storage
+      console.log(`data token : `, res.data.token);
+      localStorage.setItem("id", res.data.id_users); //id_users sesuai database
+      localStorage.setItem("token", res.data.token);
 
       dispatch({ type: REGISTER, payload: res.data });
     } catch (err) {
@@ -68,11 +73,7 @@ export const upload = (data) => {
   return async (dispatch) => {
     try {
       const option = { headers: { "Content-Type": "multipart/form-data" } };
-      const res = await Axios.post(
-        URL + "/profile/upload/" + localStorage.getItem("id"),
-        data,
-        option
-      );
+      const res = await Axios.post(URL + "/profile/upload/" + localStorage.getItem("id"), data, option)
       console.log(res.data);
     } catch (err) {
       console.log(err ? err.response.data : err);

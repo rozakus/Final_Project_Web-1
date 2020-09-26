@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import Wallpaper from '../assets/images/Wallpaper.jpg'
-
+import wallpaper2 from '../assets/images/wallpaper2.jpg'
 
 class SalesReport extends React.Component {
   constructor(props) {
@@ -98,7 +98,7 @@ class SalesReport extends React.Component {
   render() {
     return (
       <div style={styles.root}>
-        <Paper elevation={3}>
+        <Paper elevation={3} style={styles.paper}>
           <h1>
             Sales Report per Transaction
           </h1>
@@ -113,13 +113,6 @@ class SalesReport extends React.Component {
             <TableHead>{this.renderTableHeadPkg()}</TableHead>
             <TableBody>{this.renderTableBodyPkg()}</TableBody>
           </Table>
-          {/* <h1>
-            Sales Report per Transaction
-          </h1>
-          <Table>
-            <TableHead>{this.renderTableHead()}</TableHead>
-            <TableBody>{this.renderTableBody()}</TableBody>
-          </Table> */}
         </Paper>
       </div>
     );
@@ -138,6 +131,10 @@ const styles = {
     paddingTop: '5vh',
     paddingRight: '5vw'
   },
+  paper: {
+    backgroundImage: `url(${wallpaper2})`,
+    padding: 20
+  }
 };
 
 export default SalesReport;
