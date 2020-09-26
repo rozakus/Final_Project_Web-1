@@ -12,8 +12,12 @@ import {
     TableRow,
     TableCell,
     Button,
-    Typography
-
+    Typography,
+    Modal,
+    FormControl,
+    MenuItem,
+    Select,
+    InputLabel
 } from '@material-ui/core'
 
 // import action
@@ -35,15 +39,23 @@ class CartPage extends React.Component {
             edited_total_modal: 0,
             amount_product: 0,
             amount_package: 0,
-            amount: 0
+            amount: 0,
+            modalOpen: false,
+            paymentMethod: [],
+            selected_payment_type_id: null,
         }
     }
 
     async componentDidMount() {
         await this.props.getCartUser(localStorage.getItem('id'))
-        this.calculateAmountProduct()
-        this.calculateAmountPackage()
-        this.calculateAmount()
+        await this.calculateAmountProduct()
+        await this.calculateAmountPackage()
+        await this.calculateAmount()
+        await Axios.get(URL + '/paymentMethod')
+            .then(res => {
+                this.setState({ paymentMethod: res.data })
+            })
+            .catch(err => console.log(err))
     }
 
     calculateAmountProduct = async () => {
@@ -124,8 +136,8 @@ class CartPage extends React.Component {
         await this.calculateAmount()
     }
 
-    handleEditCancel = () => {
-        this.resetState()
+    handleEditCancel = async () => {
+        await this.resetState()
     }
 
     // package
@@ -143,8 +155,31 @@ class CartPage extends React.Component {
         await this.calculateAmount()
     }
 
-    handleCheckout = () => {
+    handleCheckout = async () => {
         console.log('amount : ', this.state.amount)
+        await this.setState({ modalOpen: true })
+    }
+
+    handleModalClose = async () => {
+        await this.setState({ modalOpen: false })
+    }
+
+    handleChangePayment = async (event) => {
+        await this.setState({ selected_payment_type_id: event.target.value })
+        await console.log('selected payment type id : ', this.state.selected_payment_type_id)
+    }
+
+    handleUploadReceipt = async () => {
+        // await this.props.resultPcs.map((item, index) => this.setState({ amount_product: this.state.amount_product + item.total_sell }))
+
+        // const body = {
+        //     users_id: localStorage.getItem('id'),
+        //     order_number: ,
+        //     payment_type: ,
+        //     amount: 
+        // }
+
+        // console.log('body payment : ', body)
     }
 
     // render Product Pcs
@@ -230,15 +265,15 @@ class CartPage extends React.Component {
 
     renderTableBodyPkg = () => {
         return this.props.resultPkg.map((item, index) => {
+            // console.log(item.product_name.split(','))
             return (
                 <TableRow key={index}>
                     <TableCell align="center">{index + 1}</TableCell>
                     <TableCell>{item.package_name}</TableCell>
-                    <TableCell>{item.product_name}</TableCell>
                     <TableCell>
-                        {item.total_sell}
-                        {/* {item.total_sell.split(',').forEach(element => console.log(element))} */}
+                        {item.product_name}
                     </TableCell>
+                    <TableCell>{item.total_sell}</TableCell>
                     <TableCell>
                         <Button
                             onClick={() => this.handleDeletePkg(item)}
@@ -249,9 +284,73 @@ class CartPage extends React.Component {
         })
     }
 
+    // render modal
+    renderModalCheckOutPayment = () => {
+        // console.log('Payment method : ', this.state.paymentMethod)
+
+        return (
+            <Paper style={styles.modalContent} elevation={5}>
+                <Typography style={{ marginBottom: 20 }} variant='h5'>Payment</Typography>
+                <Table style={{ width: '40%' }}>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>Total Payment</TableCell>
+                            <TableCell>{this.state.amount}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Address</TableCell>
+                            <TableCell>
+                                {this.props.address}
+                                <Button variant='contained' color='primary' style={{ marginLeft: 10 }}>
+                                    Send different Address
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Choose Payment</TableCell>
+                            <TableCell>
+                                {
+                                    this.state.paymentMethod[0] ?
+                                        <FormControl variant="" style={{ minWidth: 200, backgroundColor: '' }}>
+                                            <InputLabel id='payment'>Transfer via bank</InputLabel>
+                                            <Select
+                                                value={this.state.selected_payment_type_id}
+                                                onChange={(event) => this.handleChangePayment(event)}
+                                                label="payment"
+                                                id='payment'
+                                            >
+                                                <MenuItem value="">
+                                                    <em>select bank</em>
+                                                </MenuItem>
+                                                <MenuItem value={this.state.paymentMethod[0].id_payment_type}>{this.state.paymentMethod[0].via_bank}</MenuItem>
+                                                <MenuItem value={this.state.paymentMethod[1].id_payment_type}>{this.state.paymentMethod[1].via_bank}</MenuItem>
+                                                <MenuItem value={this.state.paymentMethod[2].id_payment_type}>{this.state.paymentMethod[2].via_bank}</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        : null
+                                }
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell>
+                                <Button
+                                    onClick={this.handleUploadReceipt}
+                                    variant='contained' color='primary'
+                                >Upload Transaction Receipt</Button>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+
+            </Paper>
+        )
+    }
+
     render() {
         // console.log('resultPcs : ', this.props.resultPcs)
         // console.log('resultPkg : ', this.props.resultPkg)
+        // console.log('address : ', this.props.address)
 
         return (
             <div style={styles.root}>
@@ -278,6 +377,15 @@ class CartPage extends React.Component {
                             </Table>
                             : null
                     }
+                    <div style={styles.modalContainer}>
+                        <Modal
+                            open={this.state.modalOpen}
+                            onClose={this.handleModalClose}
+                            style={styles.modal}
+                        >
+                            {this.renderModalCheckOutPayment()}
+                        </Modal>
+                    </div>
                 </Paper>
             </div>
         )
@@ -303,13 +411,29 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    modal: {
+        position: 'absolute',
+        width: '100%',
+        heigh: '100%',
+        padding: '100px 50px 50px 50px',
+    },
+    modalContent: {
+        width: '100%',
+        height: '100%',
+        padding: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 }
 
 const MapStateToProps = (globalState) => {
     return {
         resultPcs: globalState.cartReducer.resultPcs,
-        resultPkg: globalState.cartReducer.resultPkg
+        resultPkg: globalState.cartReducer.resultPkg,
+        address: globalState.userReducer.address
     }
 }
 

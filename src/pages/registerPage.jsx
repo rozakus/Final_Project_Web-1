@@ -175,7 +175,7 @@ class RegisterPage extends React.Component {
       <div style={styles.root}>
         <Paper style={styles.registerContainer}>
           <Typography variant="h5" style={styles.header}>
-            Register
+            REGISTER FORM
           </Typography>
           <div style={styles.inputContainer}>
             <TextField
@@ -268,7 +268,12 @@ class RegisterPage extends React.Component {
           <Button
             onClick={this.handleRegister}
             variant="contained"
-            color="primary"
+            color="black"
+            style={{
+                        backgroundColor: "#cbe2d6",
+                        borderRadius: 20,
+                        marginRight: 20,
+                      }}
           >
             Register
           </Button>
