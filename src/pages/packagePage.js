@@ -260,6 +260,7 @@ class PackagePage extends React.Component {
                       id="demo-simple-select-outlined"
                       onChange={this.handleChange}
                       label="Category Package"
+                      style={{ width: 200 }}
                       value={this.state.selectedCategory}
                     >
                       {this.state.catlvlthree.map((item, index) => {
@@ -327,7 +328,7 @@ class PackagePage extends React.Component {
                 </FormControl>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleCloseAddPkgButton} color="primary">
+                <Button onClick={this.handleCloseAddPkgButton} color="secondary">
                   Cancel
                 </Button>
                 <Button onClick={this.handleSaveEditedAddress} color="primary">

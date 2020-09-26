@@ -39,6 +39,7 @@ class App extends Component {
                     <Drawer/>
                     <Switch>
                         <Route path='/dashboard' component={DashboardPage} exact/>
+                        <Route path='/login' component={LoginPage} />
                         <Route path='/salesReport' component={SalesReport}/>
                         <Route path='/userInfo' component={UserInfo}/>
                         <Route path='/productPage' component={ProductPage}/>
