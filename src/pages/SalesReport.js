@@ -113,13 +113,6 @@ class SalesReport extends React.Component {
             <TableHead>{this.renderTableHeadPkg()}</TableHead>
             <TableBody>{this.renderTableBodyPkg()}</TableBody>
           </Table>
-          {/* <h1>
-            Sales Report per Transaction
-          </h1>
-          <Table>
-            <TableHead>{this.renderTableHead()}</TableHead>
-            <TableBody>{this.renderTableBody()}</TableBody>
-          </Table> */}
         </Paper>
       </div>
     );
@@ -139,7 +132,8 @@ const styles = {
     paddingRight: '5vw'
   },
   paper: {
-    backgroundImage: `url(${wallpaper2})`
+    backgroundImage: `url(${wallpaper2})`,
+    padding: 20
   }
 };
 

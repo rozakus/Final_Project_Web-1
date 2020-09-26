@@ -141,12 +141,6 @@ class PackagePage extends React.Component {
           <TableCell>
             <DialogDetails
               detail={item.details}
-              // cate1={item.details[0].category}
-              // qty1={item.details[0].max_qty}
-              // cate2={item.details[1].category}
-              // qty2={item.details[1].max_qty}
-              // cate3={item.details[2].category}
-              // qty3={item.details[2].max_qty}
             />
           </TableCell>
           <TableCell>Rp {item.package_price.toLocaleString()}</TableCell>
