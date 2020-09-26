@@ -12,6 +12,7 @@ import {
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Wallpaper from "../assets/images/Wallpaper.jpg";
+import {URL_IMG} from '../actions'
 
 class HistoryTrans extends React.Component {
   constructor(props) {
@@ -76,7 +77,12 @@ class HistoryTrans extends React.Component {
           <TableCell>{item.payment_date}</TableCell>
           <TableCell>{item.via_bank}</TableCell>
           <TableCell>{item.amount}</TableCell>
-          <TableCell>{item.transaction_receipt}</TableCell>
+          <TableCell>
+            {
+              item.transaction_receipt ? <img src={ URL_IMG + item.transaction_receipt} style={{width: 100}} alt="payment-img"
+              /> : null
+            }
+          </TableCell>
           <TableCell>{item.status}</TableCell>
           <TableCell>
               {
