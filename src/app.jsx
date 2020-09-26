@@ -46,6 +46,7 @@ class App extends Component {
                         <Route path='/historyTrans' component={HistoryTransaction}/>
                         {/* <Route path="*" component={NotFound} /> */}
                     </Switch>
+                    <Footer />
                 </div>
             )
         } else {
