@@ -54,9 +54,17 @@ class LoginPage extends React.Component {
 
   render() {
     
-    if (this.props.username) {
-      return <Redirect to="/" />;
+    if(this.props.role === 'admin') {
+      return <Redirect to='/dashboard' />;
+    } else if (this.props.role === 'user' ) {
+      return <Redirect to='/' />
     }
+    
+
+    // if (this.props.username) {
+    //   return <Redirect to="/" />;
+    // }
+
 
     if (this.state.redirect) {
       return <Redirect to="/register" />;
@@ -171,7 +179,8 @@ const styles = {
 const mapStateToProps = (state) => {
   return {
     username: state.userReducer.username,
-    errorMsg: state.userReducer.errorMsg
+    errorMsg: state.userReducer.errorMsg,
+    role: state.userReducer.role
   };
 };
 
