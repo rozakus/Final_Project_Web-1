@@ -9,7 +9,8 @@ import {
   TableCell,
   TableRow,
 } from "@material-ui/core";
-import Wallpaper from '../assets/images/Wallpaper.jpg'
+import Wallpaper from '../assets/images/Wallpaper.jpg';
+import wallpaper2 from '../assets/images/wallpaper2.jpg'
 
 class UserInfo extends React.Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class UserInfo extends React.Component {
   render() {
     return (
       <div style={styles.root}>
-        <Paper elevation={3}>
+        <Paper elevation={3} style={styles.paper}>
           <h1>Users Info</h1>
           <Table>
                 <TableHead>
@@ -80,6 +81,9 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
   },
+  paper: {
+    backgroundImage: `url(${wallpaper2})`
+  }
 };
 
 export default UserInfo;

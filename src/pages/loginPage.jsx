@@ -66,7 +66,7 @@ class LoginPage extends React.Component {
       <div style={styles.root}>
         <Paper style={styles.loginContainer} elevation={3}>
           <Typography variant="h5" style={styles.header}>
-            Login
+            LOGIN FORM
           </Typography>
           <div style={styles.inputContainer}>
             <TextField
@@ -113,7 +113,11 @@ class LoginPage extends React.Component {
           <Button
             onClick={this.handleLogin}
             variant="contained"
-            color="primary"
+            color="black"
+            style={{
+                        backgroundColor: "#cbe2d6",
+                        borderRadius: 20,
+                      }}
           >
             login
           </Button>
