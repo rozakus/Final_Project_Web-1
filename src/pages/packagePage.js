@@ -58,6 +58,15 @@ class PackagePage extends React.Component {
       .catch((error) => console.log(`error get catlevelthree : `, error));
   }
 
+  handleSaveNewPackage = () => {
+    const package_name = this.newPkgName.value
+    const details = this.state.newListPkgDetails
+    const package_price = this.newPkgPrice.value
+    const body = {package_name, details, package_price}
+
+    console.log(body)
+  }
+
   handleUpload = async () => {
     console.log("image : ", this.state.image);
 
@@ -72,18 +81,16 @@ class PackagePage extends React.Component {
   };
 
   handleAddToList = () => {
-    const newPkgName = this.newPkgName.value;
     const newPkgCat = this.state.selectedCategory;
     const newPkgQty = this.newPkgQty.value;
 
-    const body = { newPkgName, newPkgQty, newPkgCat };
+    const body = { newPkgQty, newPkgCat };
     console.log("addtolist : ", body);
 
     let temp = [...this.state.newListPkgDetails];
     temp.push(body);
     this.setState({ newListPkgDetails: temp });
 
-    this.newPkgName.value = "";
     this.state.selectedCategory = "";
     this.newPkgQty.value = 0;
   };
@@ -101,18 +108,11 @@ class PackagePage extends React.Component {
     this.setState({ openAddPkgButton: true });
   };
 
-  handleChange = (e) => {
-    // e.target.value
-    console.log(e.target.value);
-    this.setState({ selectedCategory: e.target.value });
-  };
-
   handleCloseAddPkgButton = () => {
-    this.setState({ openAddPkgButton: false });
+    this.setState({ openAddPkgButton: false, selectedCategory: "", newListPkgDetails: [] });
   };
 
   renderTableHead = () => {
-    console.log(this.state.data.details);
     return (
       <TableRow>
         <TableCell>No</TableCell>
@@ -139,9 +139,7 @@ class PackagePage extends React.Component {
           </TableCell>
           <TableCell>{item.package_name}</TableCell>
           <TableCell>
-            <DialogDetails
-              detail={item.details}
-            />
+            <DialogDetails detail={item.details} />
           </TableCell>
           <TableCell>Rp {item.package_price.toLocaleString()}</TableCell>
           <TableCell>
@@ -206,131 +204,159 @@ class PackagePage extends React.Component {
               Add Package
             </Button>
             <Dialog
-              fullScreen
+              
               open={this.state.openAddPkgButton}
               onClose={this.handleCloseAddPkgButton}
-              // TransitionComponent={Transition}
-              // aria-labelledby="form-dialog-title"
+              style={{ display: 'flex', flexDirection: 'column'}}
+              maxWidth='lg'
             >
               <DialogTitle id="form-dialog-title">
-                Input the Details Package
+                Input the New Details Package
               </DialogTitle>
               <DialogContent
-                style={{ display: "flex", flexDirection: "column", margin: 5 }}
+                style={{}}
               >
-                <FormControl variant="outlined">
-                  <DialogContentText>Input the Package Image</DialogContentText>
-                  <div style={styles.pkgimg}>
-                    <form encType="multipart/form-data">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        name="IMG"
-                        onChange={(e) => this.handleChoose(e)}
-                      />
-                    </form>
-                    <Button
-                      onClick={this.handleUpload}
-                      variant="contained"
-                      style={{
-                        backgroundColor: "#cbe2d6",
-                        borderRadius: 10,
-                        width: 120,
-                      }}
-                    >
-                      Upload
-                    </Button>
-                  </div>
-                  <DialogContentText>Input the Package Name</DialogContentText>
-                  <div style={styles.pkgname}>
-                    <TextField
-                      id="outlined-textarea"
-                      label="Package Name"
-                      placeholder="Input the package name here..."
-                      variant="outlined"
-                      inputRef={(newPkgName) => (this.newPkgName = newPkgName)}
-                    />
-                  </div>
-                  <DialogContentText>
-                    Input the Category Package
-                  </DialogContentText>
-                  <div style={styles.catpkg}>
-                    <Select
-                      labelId="demo-simple-select-outlined-label"
-                      id="demo-simple-select-outlined"
-                      onChange={this.handleChange}
-                      label="Category Package"
-                      value={this.state.selectedCategory}
-                    >
-                      {this.state.catlvlthree.map((item, index) => {
-                        return (
-                          <MenuItem value={item.category}>
-                            {item.category}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                    <TextField
-                      id="standard-number"
-                      label="Quantity"
-                      type="number"
-                      defaultValue="0"
-                      inputRef={(newPkgQty) => (this.newPkgQty = newPkgQty)}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                    <Button
-                      variant="contained"
-                      style={{
-                        backgroundColor: "#cbe2d6",
-                        borderRadius: 20,
-                        marginRight: 20,
-                      }}
-                      onClick={this.handleAddToList}
-                    >
-                      Add to List
-                    </Button>
-                  </div>
-                  <div style={styles.disableBox}>
-                    <Typography>List Package Details</Typography>
-                    <div style={{ marginLeft: 15 }}>
-                      <ul>
-                        {this.state.newListPkgDetails.map((item) => {
-                          return (
-                            <li>
-                              Package Name : {item.newPkgName}, Category Name :{" "}
-                              {item.newPkgCat}, Quantity : {item.newPkgQty}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  </div>
-                  <div style={styles.pgkprice}>
-                    <DialogContentText>
-                      Input the Package Price
-                    </DialogContentText>
-                    <TextField
-                      label="Package Price"
-                      id="outlined-start-adornment"
-                      defaultValue="0"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Rp</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                    />
-                  </div>
-                </FormControl>
+                <Table style={{ width: "40%" }}>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>Image</TableCell>
+                      <TableCell>
+                        <div style={styles.pkgimg}>
+                          <form encType="multipart/form-data">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              name="IMG"
+                              onChange={(e) => this.handleChoose(e)}
+                            />
+                          </form>
+                          <Button
+                            onClick={this.handleUpload}
+                            variant="contained"
+                            style={{
+                              backgroundColor: "#cbe2d6",
+                              borderRadius: 10,
+                              width: 120,
+                            }}
+                          >
+                            Upload
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Package Name</TableCell>
+                      <TableCell>
+                        <div style={styles.pkgname}>
+                          <TextField
+                            id="outlined-textarea"
+                            label="Package Name"
+                            placeholder="Input the package name here..."
+                            variant="outlined"
+                            inputRef={(newPkgName) =>
+                              (this.newPkgName = newPkgName)
+                            }
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Package Details</TableCell>
+                      <TableCell>
+                        <div style={styles.catpkg}>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            onChange={(e) => {
+                              this.setState({ selectedCategory: e.target.value });
+                            }}
+                            label="Category Package"
+                            value={this.state.selectedCategory}
+                          >
+                            <MenuItem>Select</MenuItem>
+                            {this.state.catlvlthree.map((item, index) => {
+                              return (
+                                <MenuItem key={index} value={item.category}>
+                                  {item.category}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                          <TextField
+                            id="standard-number"
+                            label="Quantity"
+                            type="number"
+                            defaultValue="0"
+                            inputRef={(newPkgQty) =>
+                              (this.newPkgQty = newPkgQty)
+                            }
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                          />
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "#cbe2d6",
+                              borderRadius: 20,
+                              marginRight: 20,
+                            }}
+                            onClick={this.handleAddToList}
+                          >
+                            Add to List
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Selected Category</TableCell>
+                      <TableCell>
+                        <div style={styles.disableBox}>
+                          <Typography>List Package Details</Typography>
+                          <div style={{ marginLeft: 15 }}>
+                            <ul>
+                              {this.state.newListPkgDetails.map((item, index) => {
+                                return (
+                                  <li key={index}>
+                                    Category Name : {item.newPkgCat}, Quantity : {item.newPkgQty}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Price</TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Package Price"
+                          id="outlined-start-adornment"
+                          defaultValue="0"
+                          type="number"
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                Rp
+                              </InputAdornment>
+                            ),
+                          }}
+                          variant="outlined"
+                          inputRef={(newPkgPrice) =>
+                            (this.newPkgPrice = newPkgPrice)
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleCloseAddPkgButton} color="primary">
+                <Button onClick={this.handleCloseAddPkgButton} color="secondary">
                   Cancel
                 </Button>
-                <Button onClick={this.handleSaveEditedAddress} color="primary">
+                <Button onClick={this.handleSaveNewPackage} color="primary">
                   Submit
                 </Button>
               </DialogActions>
