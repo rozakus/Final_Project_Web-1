@@ -8,16 +8,15 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import Wallpaper from '../assets/images/Wallpaper.jpg'
-import wallpaper2 from '../assets/images/wallpaper2.jpg'
+import Wallpaper from "../assets/images/Wallpaper.jpg";
 
 class SalesReport extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       salesReport: [],
-      package: []
-     };
+      package: [],
+    };
   }
 
   async componentDidMount() {
@@ -99,16 +98,12 @@ class SalesReport extends React.Component {
     return (
       <div style={styles.root}>
         <Paper elevation={3} style={styles.paper}>
-          <h1>
-            Sales Report per Transaction
-          </h1>
+          <h1>Sales Report per Transaction</h1>
           <Table>
             <TableHead>{this.renderTableHead()}</TableHead>
             <TableBody>{this.renderTableBody()}</TableBody>
           </Table>
-          <h1 style={{ marginTop: 20 }}>
-            Sales Report Package
-          </h1>
+          <h1 style={{ marginTop: 20 }}>Sales Report Package</h1>
           <Table>
             <TableHead>{this.renderTableHeadPkg()}</TableHead>
             <TableBody>{this.renderTableBodyPkg()}</TableBody>
@@ -127,14 +122,13 @@ const styles = {
     backgroundImage: `url(${Wallpaper})`,
     display: "flex",
     flexDirection: "column",
-    paddingLeft: '15vw',
-    paddingTop: '5vh',
-    paddingRight: '5vw'
+    paddingLeft: "15vw",
+    paddingTop: "5vh",
+    paddingRight: "5vw",
   },
   paper: {
-    backgroundImage: `url(${wallpaper2})`,
-    padding: 20
-  }
+    padding: 20,
+  },
 };
 
 export default SalesReport;
