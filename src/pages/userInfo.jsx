@@ -9,8 +9,7 @@ import {
   TableCell,
   TableRow,
 } from "@material-ui/core";
-import Wallpaper from '../assets/images/Wallpaper.jpg';
-import wallpaper2 from '../assets/images/wallpaper2.jpg'
+import Wallpaper from "../assets/images/Wallpaper.jpg";
 
 class UserInfo extends React.Component {
   constructor(props) {
@@ -30,7 +29,7 @@ class UserInfo extends React.Component {
   renderTableHead = () => {
     return (
       <TableRow>
-      <TableCell>No</TableCell>
+        <TableCell>No</TableCell>
         <TableCell>ID-Users</TableCell>
         <TableCell>Username</TableCell>
         <TableCell>Email</TableCell>
@@ -41,30 +40,26 @@ class UserInfo extends React.Component {
 
   renderTableBody = () => {
     return this.state.data.map((item, index) => {
-        return (
-            <TableRow key={index}>
-                <TableCell>{index+ 1}</TableCell>
-                <TableCell>{item.id_users}</TableCell>
-                <TableCell>{item.username}</TableCell>
-                <TableCell>{item.email}</TableCell>
-            </TableRow>
-        )
+      return (
+        <TableRow key={index}>
+          <TableCell>{index + 1}</TableCell>
+          <TableCell>{item.id_users}</TableCell>
+          <TableCell>{item.username}</TableCell>
+          <TableCell>{item.email}</TableCell>
+        </TableRow>
+      );
     });
   };
 
   render() {
     return (
       <div style={styles.root}>
-        <Paper elevation={3} style={styles.paper}>
+        <Paper elevation={3}>
           <h1>Users Info</h1>
           <Table>
-                <TableHead>
-                    {this.renderTableHead()}
-                </TableHead>
-                <TableBody>
-                    {this.renderTableBody()}
-                </TableBody>
-            </Table>
+            <TableHead>{this.renderTableHead()}</TableHead>
+            <TableBody>{this.renderTableBody()}</TableBody>
+          </Table>
         </Paper>
       </div>
     );
@@ -81,9 +76,6 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
   },
-  paper: {
-    backgroundImage: `url(${wallpaper2})`
-  }
 };
 
 export default UserInfo;
