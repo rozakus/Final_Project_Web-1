@@ -42,7 +42,7 @@ class LoginPage extends React.Component {
     if (!this.inputIdentity || !this.password)
       return console.log("Empty Input");
 
-    console.log(body);
+    // console.log(body);
     this.props.SignIn(body);
     this.inputIdentity.value = "";
     this.password.value = "";
@@ -121,10 +121,10 @@ class LoginPage extends React.Component {
           <Button
             onClick={this.handleLogin}
             variant="contained"
-            color="black"
             style={{
                         backgroundColor: "#cbe2d6",
                         borderRadius: 20,
+                        color: "black"
                       }}
           >
             login

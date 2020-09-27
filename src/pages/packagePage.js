@@ -12,13 +12,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
-  FormControl,
   MenuItem,
   Typography,
-  InputLabel,
   InputAdornment,
   Select,
 } from "@material-ui/core";
@@ -47,14 +44,14 @@ class PackagePage extends React.Component {
   componentDidMount() {
     Axios.get(`http://localhost:2000/getAllPackages`)
       .then((res) => {
-        console.log(` packages data : `, res.data);
+        // console.log(` packages data : `, res.data);
         this.setState({ data: res.data });
       })
       .catch((err) => console.log(`error get data in allPackages : `, err));
 
     Axios.get(`http://localhost:2000/getLvl3Cate`)
       .then((resp) => {
-        console.log(`Level 3 Category : `, resp.data);
+        // console.log(`Level 3 Category : `, resp.data);
         this.setState({ catlvlthree: resp.data });
       })
       .catch((error) => console.log(`error get catlevelthree : `, error));
@@ -110,7 +107,7 @@ class PackagePage extends React.Component {
     temp.push(body);
     this.setState({ newListPkgDetails: temp });
 
-    this.state.selectedCategory = "cate";
+    this.setState({selectedCategory : "cate"});
     this.newPkgQty.value = 0;
   };
 
@@ -205,7 +202,7 @@ class PackagePage extends React.Component {
   };
 
   render() {
-    const { selectedQuantity } = this.state;
+    // const { selectedQuantity } = this.state;
     return (
       <div style={styles.root}>
         <Paper elevation={3}>

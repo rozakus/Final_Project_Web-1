@@ -20,7 +20,7 @@ class UserInfo extends React.Component {
   componentDidMount() {
     Axios.get(`http://localhost:2000/users`)
       .then((res) => {
-        console.log(` users data : `, res.data);
+        // console.log(` users data : `, res.data);
         this.setState({ data: res.data });
       })
       .catch((err) => console.log(`error get data in UserInfo : `, err));
