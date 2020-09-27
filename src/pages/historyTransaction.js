@@ -27,7 +27,7 @@ class HistoryTrans extends React.Component {
   getData = () => {
     Axios.get(`http://localhost:2000/transhistory`)
     .then((res) => {
-      console.log(`data : `, res.data);
+      // console.log(`data : `, res.data);
       this.setState({ data: res.data });
     })
     .catch((err) => console.log(err));
@@ -37,17 +37,17 @@ class HistoryTrans extends React.Component {
       console.log('approve : ', on)
       await Axios.patch(`http://localhost:2000/approvalpayment/${on}`)
       .then((res) => {
-        console.log(`data : `, res.data);
+        // console.log(`data : `, res.data);
         this.getData()
       })
       .catch((err) => console.log(err));
   }
 
   cancelPayment = async (on) => {
-      console.log('cancel : ', on)
+      // console.log('cancel : ', on)
       await Axios.patch(`http://localhost:2000/cancelpayment/${on}`)
       .then((res) => {
-        console.log(`data : `, res.data);
+        // console.log(`data : `, res.data);
         this.getData()
       })
       .catch((err) => console.log(err));
@@ -104,7 +104,7 @@ class HistoryTrans extends React.Component {
   render() {
     return (
       <div style={styles.root}>
-        <Paper elevation={3}>
+        <Paper elevation={3} style={{padding: 15}}>
           <h1>Transaction Info</h1>
           <Table>
             <TableHead>{this.renderTableHead()}</TableHead>

@@ -58,16 +58,16 @@ class AvatarProfile extends React.Component {
         >
           {this.props.role === "user" ? (
             <>
-              <Link to="/profile" style={{ textDecoration: "none" }}>
+              <Link to="/profile" style={styles.linklink}>
                 <MenuItem>Profile</MenuItem>
               </Link>
-              <Link to="/cart" style={{ textDecoration: "none" }}>
+              <Link to="/cart" style={styles.linklink}>
                 <MenuItem>Cart</MenuItem>
               </Link>
-              <Link to="/historyUser" style={{ textDecoration: "none" }}>
+              <Link to="/historyUser" style={styles.linklink}>
                 <MenuItem>History</MenuItem>
               </Link>
-              <Link to="/" style={{ textDecoration: "none" }}>
+              <Link to="/" style={styles.linklink}>
                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
               </Link>
             </>

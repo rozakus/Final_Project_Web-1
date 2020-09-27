@@ -21,7 +21,7 @@ class ProductPage extends React.Component {
   componentDidMount() {
     Axios.get(`http://localhost:2000/getAllProducts`)
       .then((res) => {
-        console.log(` products data : `, res.data);
+        // console.log(` products data : `, res.data);
         this.setState({ data: res.data });
       })
       .catch((err) => console.log(`error get data in allProducts : `, err));
