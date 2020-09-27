@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TableCell,
   InputAdornment,
   IconButton,
   Typography,
@@ -59,7 +58,6 @@ class ProfilePage extends Component {
 
     await this.props.upload(data);
     await this.setState({ image: null });
-    await this.props.KeepLogin();
   };
 
   handleClick = () => {
@@ -131,8 +129,9 @@ class ProfilePage extends Component {
   };
 
   render() {
-    const { picture, address, edit } = this.props;
-    const { image } = this.props;
+    const { picture } = this.props;
+    // const { picture, address, edit } = this.props;
+    // const { image } = this.props;
 
     console.log(`username : `, this.props.username);
     console.log(`email : `, this.props.email);

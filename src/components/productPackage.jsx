@@ -17,7 +17,7 @@ import {
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 // import action
-import { getAllProductPackage } from "../actions";
+import { getAllProductPackage, URL_IMG } from "../actions";
 
 class ProductPackage extends React.Component {
   componentDidMount() {
@@ -43,7 +43,7 @@ class ProductPackage extends React.Component {
           </Fab>
           <CardActionArea style={styles.contentArea}>
             <CardMedia
-              image={item.img}
+              image={URL_IMG + item.img}
               component="img"
               style={styles.contentImage}
             />

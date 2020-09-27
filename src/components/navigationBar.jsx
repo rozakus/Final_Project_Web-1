@@ -96,7 +96,7 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
-  console.log(`username : `, state);
+  // console.log(`username : `, state);
   return {
     username: state.userReducer.username,
   };
