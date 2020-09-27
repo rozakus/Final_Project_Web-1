@@ -26,6 +26,7 @@ import Wallpaper from "../assets/images/Wallpaper.jpg";
 import DialogDetails from "../components/dialogDetails";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddBoxIcon from "@material-ui/icons/AddBox";
+import {URL, URL_IMG} from '../actions'
 
 class PackagePage extends React.Component {
   constructor(props) {
@@ -37,8 +38,9 @@ class PackagePage extends React.Component {
       openDialogDelete: false,
       productName: [],
       catlvlthree: [],
-      selectedCategory: "",
+      selectedCategory: "cate",
       newListPkgDetails: [],
+      image: null,
     };
   }
 
@@ -58,40 +60,57 @@ class PackagePage extends React.Component {
       .catch((error) => console.log(`error get catlevelthree : `, error));
   }
 
+  handleChoose = (e) => {
+    console.log("event : ", e.target.files);
+    this.setState({ image: e.target.files[0] }, () =>
+      console.log("image : ", this.state.image)
+    );
+  };
+
   handleSaveNewPackage = () => {
-    const package_name = this.newPkgName.value
-    const details = this.state.newListPkgDetails
-    const package_price = this.newPkgPrice.value
-    const body = {package_name, details, package_price}
-
-    console.log(body)
-  }
-
-  handleUpload = async () => {
-    console.log("image : ", this.state.image);
+    const package_name = this.newPkgName.value;
+    const description = this.newPkgDesc.value;
+    const details = [...this.state.newListPkgDetails];
+    details.forEach((element) => {
+      const id = this.state.catlvlthree.findIndex(
+        (item) => item.category === element.category
+      );
+      element.category_id = this.state.catlvlthree[id].id_category;
+      delete element.category;
+    });
+    const package_price = this.newPkgPrice.value;
+    const body = { package_name, description, details, package_price };
+    console.log(body);
 
     // create formdata
     const data = new FormData();
     data.append("IMG", this.state.image);
     // data.append('filename', 'gambar profile')
     console.log("form data : ", data.get("IMG"));
+    const option = { headers: { "Content-Type": "multipart/form-data" } };
 
-    this.props.upload(data);
-    this.setState({ image: null });
+    Axios.post(URL + '/addNewPackage', body)
+    .then((res) => {
+      Axios.post(URL + '/postImgPkg/' + res.data.id_package, data, option)
+      .then((res) => {
+        this.setState({ openAddPkgButton: false, newListPkgDetails: [], image: null })
+      })
+    })
+    .catch(err => console.log(err))
   };
 
   handleAddToList = () => {
-    const newPkgCat = this.state.selectedCategory;
-    const newPkgQty = this.newPkgQty.value;
+    const category = this.state.selectedCategory;
+    const max_qty = this.newPkgQty.value;
 
-    const body = { newPkgQty, newPkgCat };
+    const body = { category, max_qty };
     console.log("addtolist : ", body);
 
     let temp = [...this.state.newListPkgDetails];
     temp.push(body);
     this.setState({ newListPkgDetails: temp });
 
-    this.state.selectedCategory = "";
+    this.state.selectedCategory = "cate";
     this.newPkgQty.value = 0;
   };
 
@@ -109,7 +128,11 @@ class PackagePage extends React.Component {
   };
 
   handleCloseAddPkgButton = () => {
-    this.setState({ openAddPkgButton: false, selectedCategory: "", newListPkgDetails: [] });
+    this.setState({
+      openAddPkgButton: false,
+      selectedCategory: "",
+      newListPkgDetails: [],
+    });
   };
 
   renderTableHead = () => {
@@ -132,9 +155,10 @@ class PackagePage extends React.Component {
           <TableCell>{index + 1}</TableCell>
           <TableCell>
             <CardMedia
-              image={item.img}
+              image={URL_IMG + item.img}
               component="img"
               style={styles.contentImage}
+              alt='package-img'
             />
           </TableCell>
           <TableCell>{item.package_name}</TableCell>
@@ -204,18 +228,15 @@ class PackagePage extends React.Component {
               Add Package
             </Button>
             <Dialog
-              
               open={this.state.openAddPkgButton}
               onClose={this.handleCloseAddPkgButton}
-              style={{ display: 'flex', flexDirection: 'column'}}
-              maxWidth='lg'
+              style={{ display: "flex", flexDirection: "column" }}
+              maxWidth="lg"
             >
               <DialogTitle id="form-dialog-title">
                 Input the New Details Package
               </DialogTitle>
-              <DialogContent
-                style={{}}
-              >
+              <DialogContent style={{}}>
                 <Table style={{ width: "40%" }}>
                   <TableBody>
                     <TableRow>
@@ -230,17 +251,6 @@ class PackagePage extends React.Component {
                               onChange={(e) => this.handleChoose(e)}
                             />
                           </form>
-                          <Button
-                            onClick={this.handleUpload}
-                            variant="contained"
-                            style={{
-                              backgroundColor: "#cbe2d6",
-                              borderRadius: 10,
-                              width: 120,
-                            }}
-                          >
-                            Upload
-                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -251,10 +261,24 @@ class PackagePage extends React.Component {
                           <TextField
                             id="outlined-textarea"
                             label="Package Name"
-                            placeholder="Input the package name here..."
                             variant="outlined"
                             inputRef={(newPkgName) =>
                               (this.newPkgName = newPkgName)
+                            }
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Package Description</TableCell>
+                      <TableCell>
+                        <div style={styles.pkgname}>
+                          <TextField
+                            id="outlined-textarea2"
+                            label="Package Description"
+                            variant="outlined"
+                            inputRef={(newPkgDesc) =>
+                              (this.newPkgDesc = newPkgDesc)
                             }
                           />
                         </div>
@@ -268,12 +292,14 @@ class PackagePage extends React.Component {
                             labelId="demo-simple-select-outlined-label"
                             id="demo-simple-select-outlined"
                             onChange={(e) => {
-                              this.setState({ selectedCategory: e.target.value });
+                              this.setState({
+                                selectedCategory: e.target.value,
+                              });
                             }}
                             label="Category Package"
                             value={this.state.selectedCategory}
                           >
-                            <MenuItem>Select</MenuItem>
+                            <MenuItem value="cate">Category</MenuItem>
                             {this.state.catlvlthree.map((item, index) => {
                               return (
                                 <MenuItem key={index} value={item.category}>
@@ -315,13 +341,16 @@ class PackagePage extends React.Component {
                           <Typography>List Package Details</Typography>
                           <div style={{ marginLeft: 15 }}>
                             <ul>
-                              {this.state.newListPkgDetails.map((item, index) => {
-                                return (
-                                  <li key={index}>
-                                    Category Name : {item.newPkgCat}, Quantity : {item.newPkgQty}
-                                  </li>
-                                );
-                              })}
+                              {this.state.newListPkgDetails.map(
+                                (item, index) => {
+                                  return (
+                                    <li key={index}>
+                                      Category Name : {item.category}, Quantity
+                                      : {item.max_qty}
+                                    </li>
+                                  );
+                                }
+                              )}
                             </ul>
                           </div>
                         </div>
@@ -353,7 +382,10 @@ class PackagePage extends React.Component {
                 </Table>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleCloseAddPkgButton} color="secondary">
+                <Button
+                  onClick={this.handleCloseAddPkgButton}
+                  color="secondary"
+                >
                   Cancel
                 </Button>
                 <Button onClick={this.handleSaveNewPackage} color="primary">

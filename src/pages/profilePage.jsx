@@ -59,7 +59,6 @@ class ProfilePage extends Component {
 
     await this.props.upload(data);
     await this.setState({ image: null });
-    await this.props.KeepLogin();
   };
 
   handleClick = () => {
