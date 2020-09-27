@@ -10,7 +10,7 @@ import Wallpaper from '../assets/images/Wallpaper.jpg'
 
 class HomePage extends Component {
     render() {
-        console.log('props location : ', this.props.location)
+        // console.log('props location : ', this.props.location)
 
         return (
             <div style={styles.root}>
