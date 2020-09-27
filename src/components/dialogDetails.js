@@ -31,8 +31,8 @@ export default function DialogDetails({detail}) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <ul>
-            {detail.map(item => {
-              return <li>Category: {item.category}, Max. Quantity={item.max_qty}</li>
+            {detail.map((item, index) => {
+              return <li key={index}>Category: {item.category}, Max. Quantity={item.max_qty}</li>
             })}
             </ul>
           </DialogContentText>

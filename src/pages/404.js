@@ -8,7 +8,7 @@ class NotFound extends React.Component {
     return (
       <div style={styles.root}>
         <Link to="/" style={styles.link}>
-          <Button style={styles.button} color="#acd6c1">BACK TO HOME</Button>
+          <Button style={styles.button}>BACK TO HOME</Button>
         </Link>
       </div>
     );
@@ -29,7 +29,8 @@ const styles = {
   button: {
     backgroundColor: "#cbe2d6",
     borderRadius: 20,
-    marginTop: '28vh'
+    marginTop: '28vh',
+    color: 'black'
   },
   link : {
     // marginTop : '2%',
