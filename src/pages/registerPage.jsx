@@ -268,11 +268,11 @@ class RegisterPage extends React.Component {
           <Button
             onClick={this.handleRegister}
             variant="contained"
-            color="black"
             style={{
                         backgroundColor: "#cbe2d6",
                         borderRadius: 20,
                         marginRight: 20,
+                        color: 'black'
                       }}
           >
             Register

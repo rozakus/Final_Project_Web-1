@@ -9,7 +9,7 @@ class Profile extends React.Component {
   }
 
   handleClick = (event) => {
-    console.log(event);
+    // console.log(event);
     this.setState({ anchorEl: event.currentTarget });
   };
 

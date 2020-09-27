@@ -24,7 +24,7 @@ import {
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 // import
-import { URL } from "../actions";
+import { URL, URL_IMG } from "../actions";
 
 // class component
 class ProductPackageDetails extends React.Component {
@@ -99,9 +99,9 @@ class ProductPackageDetails extends React.Component {
     const index = tempCart.findIndex(
       (item) => item.category_id === product.category_id
     );
-    console.log(index);
+    // console.log(index);
     if (index === -1) {
-      console.log("beda category lagi");
+      // console.log("beda category lagi");
       let tempCart = [...this.state.cart];
       tempCart.push({
         category_id: product.category_id,
@@ -117,16 +117,16 @@ class ProductPackageDetails extends React.Component {
       });
       this.setState({ cart: tempCart });
     } else {
-      console.log("sama category");
+      // console.log("sama category");
       const id =
         this.state.cart[index].product.findIndex(
           (item) => item.product_id == product.product_id
         ) + 1;
-      console.log(id);
+      // console.log(id);
       let tempCart = [...this.state.cart];
       if (this.state.cart[index].qty >= maxQty) {
         this.setState({ openErr: true, maxQtyErr: maxQty, cateErr: cate });
-        console.log("dialog true");
+        // console.log("dialog true");
         return;
       }
       if (!id && this.state.cart[index].qty < maxQty) {
@@ -227,8 +227,8 @@ class ProductPackageDetails extends React.Component {
   };
 
   render() {
-    const { data, cart, openErr, maxQtyErr, cateErr, loginErr, toCart } = this.state;
-    console.log(cart);
+    const { data, openErr, maxQtyErr, cateErr, loginErr, toCart } = this.state;
+    // console.log(cart);
     if (loginErr) return <Redirect to='/login'/>
     if (toCart) return <Redirect to='/cart'/>
 
@@ -266,7 +266,7 @@ class ProductPackageDetails extends React.Component {
           </div>
           <div style={styles.content}>
             <div style={styles.leftContent}>
-              <CardMedia image={data[0] ? data[0].img : null} component="img" />
+              <CardMedia image={data[0] ? URL_IMG + data[0].img : null} component="img" />
             </div>
             <div style={styles.rightContent}>
               <h1>Composition Package:</h1>

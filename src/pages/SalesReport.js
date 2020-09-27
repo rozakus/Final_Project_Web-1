@@ -22,13 +22,13 @@ class SalesReport extends React.Component {
   async componentDidMount() {
     await Axios.get(`http://localhost:2000/salesreport`)
       .then((res) => {
-        console.log(` products data : `, res.data);
+        // console.log(` products data : `, res.data);
         this.setState({ salesReport: res.data });
       })
       .catch((err) => console.log(err));
     await Axios.get(`http://localhost:2000/salesreppkg`)
       .then((res) => {
-        console.log(` products data : `, res.data);
+        // console.log(` products data : `, res.data);
         this.setState({ package: res.data });
       })
       .catch((err) => console.log(err));
