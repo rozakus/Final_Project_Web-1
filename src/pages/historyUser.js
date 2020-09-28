@@ -27,12 +27,13 @@ class HistoryUser extends React.Component {
     }
 
     async componentDidMount() {
-        await Axios.get(URL + '/purchasedhistory/' + localStorage.getItem('id'))
-            .then(res => {
-                console.log(`transaction history user : `, res.data)
-                this.setState({ data: res.data })
-            })
-            .catch(err => console.log(`Error transaction history user : `, err))
+        try {
+            const res = await Axios.get(URL + '/purchasedhistory/' + localStorage.getItem('id'))
+            await console.log(`transaction history user : `, res.data)
+            await this.setState({ data: res.data })
+        } catch (err) {
+            console.log(`Error transaction history user : `, err)
+        }
     }
 
     renderTableHead = () => {
@@ -55,9 +56,9 @@ class HistoryUser extends React.Component {
                 <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{item.order_number}</TableCell>
-                    <TableCell>{item.payment_date}</TableCell>
+                    <TableCell>{`${item.payment_date.slice(0,-8).split('T')}`}</TableCell>
                     <TableCell align='center'>{item.via_bank}</TableCell>
-                    <TableCell align='right'>{item.amount}</TableCell>
+                    <TableCell align='right'>{`IDR ${item.amount.toLocaleString()}.00`}</TableCell>
                     <TableCell>{item.status_order}</TableCell>
                     <TableCell>{item.status_payment}</TableCell>
                 </TableRow>
