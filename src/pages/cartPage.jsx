@@ -119,6 +119,8 @@ class CartPage extends React.Component {
     }
 
     handleEditPlus = async (item) => {
+        if (this.state.edited_product_qty === 100) return null
+        
         await this.setState({ edited_product_qty: this.state.edited_product_qty + 1 })
         await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
         await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
