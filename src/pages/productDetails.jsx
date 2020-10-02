@@ -61,9 +61,15 @@ class ProductDetails extends React.Component {
     }
 
     handlePlus = async () => {
-        if (this.state.selectedQuantity === this.state.selectedProduct.product_stock) return null
+        if (this.state.selectedQuantity >= this.state.selectedProduct.product_stock) return null
 
         await this.setState({ selectedQuantity: this.state.selectedQuantity + 1 })
+        await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
+        await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
+    }
+
+    handleChangeQuantity = async (e) => {
+        await this.setState({ selectedQuantity: Number(e.target.value) })
         await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
         await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
     }
@@ -71,6 +77,7 @@ class ProductDetails extends React.Component {
     handleAddToCart = async () => {
         if (localStorage.getItem('id') === null) return this.setState({ alertLogin: true })
         if (!this.state.selectedQuantity || !this.state.total_modal || !this.state.total_sell) return console.log('please order')
+        if (this.state.selectedQuantity > this.state.selectedProduct.product_stock) return console.log('please order below stock')
 
         const body = {
             user_id: parseInt(localStorage.getItem('id')),
@@ -139,8 +146,7 @@ class ProductDetails extends React.Component {
                                 style={{ margin: '0 20px', width: 50, padding: 10 }}
                                 type='tel'
                                 error={selectedQuantity > 100 ? true : false}
-                                // helperText={selectedQuantity > 100 ? `please order below current stock ${this.state.selectedProduct.product_stock}` : false}
-                                onChange={(e) => this.setState({ selectedQuantity: Number(e.target.value) })}
+                                onChange={(e) => this.handleChangeQuantity(e)}
                                 InputProps={{
                                     inputProps: {
                                         value: selectedQuantity,
