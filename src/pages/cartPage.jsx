@@ -19,6 +19,7 @@ import {
     MenuItem,
     Select,
     InputLabel,
+    TextField
 } from '@material-ui/core'
 
 // import action
@@ -119,9 +120,16 @@ class CartPage extends React.Component {
     }
 
     handleEditPlus = async (item) => {
-        if (this.state.edited_product_qty === 100) return null
-        
+        if (this.state.edited_product_qty >= 100) return null
+
         await this.setState({ edited_product_qty: this.state.edited_product_qty + 1 })
+        await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
+        await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
+    }
+
+    handleEditChange = async (item, e) => {
+        // console.log(e.target.value, item)
+        await this.setState({ edited_product_qty: Number(e.target.value) })
         await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
         await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
     }
@@ -252,7 +260,21 @@ class CartPage extends React.Component {
                         <Button
                             onClick={() => this.handleEditMinus(item)}
                             size='small'>-</Button>
-                        {this.state.edited_product_qty}
+                        {/* {this.state.edited_product_qty} */}
+                        <TextField
+                            style={{ margin: '0 20px', width: 50, padding: 10 }}
+                            type='tel'
+                            error={this.state.edited_product_qt > 100 ? true : false}
+                            defaultValue={item.qty}
+                            onChange={(e) => this.handleEditChange(item, e)}
+                            InputProps={{
+                                inputProps: {
+                                    value: this.state.edited_product_qty,
+                                    min: 0,
+                                    max: 100,
+                                }
+                            }}
+                        />
                         <Button
                             onClick={() => this.handleEditPlus(item)}
                             size='small'>+</Button>
