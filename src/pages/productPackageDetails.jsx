@@ -68,14 +68,20 @@ class ProductPackageDetails extends React.Component {
       return
     }
 
+    let totQtyCart = 0
     cart.forEach(element => {
-      data.forEach(item => {
-        if (element.qty !== item.max_qty) {
-          this.setState({ errQtyToCart: true })
-          return
-        }
-      })
+      totQtyCart += element.qty
     })
+
+    let totQtyPkg = 0
+    data.forEach(element => {
+      totQtyPkg += element.max_qty
+    })
+
+    if(totQtyCart !== totQtyPkg) {
+      this.setState({ errQtyToCart: true })
+      return
+    }
 
     let user_id = this.props.userId;
     let package_id = data[0].id_product_package;
@@ -112,14 +118,14 @@ class ProductPackageDetails extends React.Component {
   pushToPackage = async (product, maxQty, cate) => {
     let tempCart = [...this.state.cart];
     const index = tempCart.findIndex(
-      (item) => item.category_id === product.category_id
+      (item) => item.category_id === parseInt(product.category_id)
     );
     // console.log(index);
     if (index === -1) {
-      // console.log("beda category lagi");
+      // console.log("beda category");
       let tempCart = [...this.state.cart];
       tempCart.push({
-        category_id: product.category_id,
+        category_id: parseInt(product.category_id),
         qty: 1,
         product: [
           {
@@ -224,7 +230,7 @@ class ProductPackageDetails extends React.Component {
           key={index}
         >
           <div style={{}}>
-            <h2>Category {item.category}({item.max_qty} Pcs)</h2>
+            <h2>Category {item.category} ({item.max_qty} Pcs)</h2>
           </div>
           <div
             style={{
@@ -243,8 +249,8 @@ class ProductPackageDetails extends React.Component {
 
   render() {
     const { data, cart, openErr, maxQtyErr, cateErr, loginErr, toCart, errQtyToCart, errCartEmpty } = this.state;
-    console.log(cart);
-    console.log(data);
+    // console.log(cart);
+    // console.log(data);
     if (loginErr) return <Redirect to='/login'/>
     if (toCart) return <Redirect to='/cart'/>
 
@@ -332,7 +338,7 @@ class ProductPackageDetails extends React.Component {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description2">
-                Your product composition doesn't meet the requirement.
+                Your product composition doesn't meet the requirement of this package.
               </DialogContentText>
             </DialogContent>
           </Dialog>
