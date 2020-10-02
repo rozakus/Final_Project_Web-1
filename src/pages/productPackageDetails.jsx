@@ -37,7 +37,9 @@ class ProductPackageDetails extends React.Component {
       maxQtyErr: null,
       cateErr: "",
       loginErr: false,
-      toCart: false
+      toCart: false,
+      errQtyToCart: false,
+      errCartEmpty: false
     };
   }
 
@@ -59,6 +61,26 @@ class ProductPackageDetails extends React.Component {
     if (!this.props.userId) {
       this.setState({ loginErr: true });
       return;
+    }
+    
+    if (cart.length === 0) {
+      this.setState({ errCartEmpty: true })
+      return
+    }
+
+    let totQtyCart = 0
+    cart.forEach(element => {
+      totQtyCart += element.qty
+    })
+
+    let totQtyPkg = 0
+    data.forEach(element => {
+      totQtyPkg += element.max_qty
+    })
+
+    if(totQtyCart !== totQtyPkg) {
+      this.setState({ errQtyToCart: true })
+      return
     }
 
     let user_id = this.props.userId;
@@ -91,20 +113,19 @@ class ProductPackageDetails extends React.Component {
         this.setState({toCart: true})
       })
       .catch((err) => console.log(err));
-    
   };
 
   pushToPackage = async (product, maxQty, cate) => {
     let tempCart = [...this.state.cart];
     const index = tempCart.findIndex(
-      (item) => item.category_id === product.category_id
+      (item) => item.category_id === parseInt(product.category_id)
     );
     // console.log(index);
     if (index === -1) {
-      // console.log("beda category lagi");
+      // console.log("beda category");
       let tempCart = [...this.state.cart];
       tempCart.push({
-        category_id: product.category_id,
+        category_id: parseInt(product.category_id),
         qty: 1,
         product: [
           {
@@ -120,7 +141,7 @@ class ProductPackageDetails extends React.Component {
       // console.log("sama category");
       const id =
         this.state.cart[index].product.findIndex(
-          (item) => item.product_id == product.product_id
+          (item) => item.product_id === product.product_id
         ) + 1;
       // console.log(id);
       let tempCart = [...this.state.cart];
@@ -155,7 +176,7 @@ class ProductPackageDetails extends React.Component {
     return this.state.cart.map((item, index) => {
       return item.product.map((product, id) => {
         return (
-          <li key={product.product_id}>
+          <li key={id}>
             {product.product_name} = {product.prodQty} Pcs
           </li>
         );
@@ -209,7 +230,7 @@ class ProductPackageDetails extends React.Component {
           key={index}
         >
           <div style={{}}>
-            <h2>Category {item.category}</h2>
+            <h2>Category {item.category} ({item.max_qty} Pcs)</h2>
           </div>
           <div
             style={{
@@ -227,8 +248,9 @@ class ProductPackageDetails extends React.Component {
   };
 
   render() {
-    const { data, openErr, maxQtyErr, cateErr, loginErr, toCart } = this.state;
+    const { data, cart, openErr, maxQtyErr, cateErr, loginErr, toCart, errQtyToCart, errCartEmpty } = this.state;
     // console.log(cart);
+    // console.log(data);
     if (loginErr) return <Redirect to='/login'/>
     if (toCart) return <Redirect to='/cart'/>
 
@@ -300,6 +322,40 @@ class ProductPackageDetails extends React.Component {
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 Maximum quantity for category {cateErr} is {maxQtyErr}
+              </DialogContentText>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <div>
+          <Dialog
+            open={errQtyToCart}
+            onClose={() => this.setState({errQtyToCart : false})}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title2">
+              {"Sorry Customer"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description2">
+                Your product composition doesn't meet the requirement of this package.
+              </DialogContentText>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <div>
+          <Dialog
+            open={errCartEmpty}
+            onClose={() => this.setState({errCartEmpty : false})}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title3">
+              {"Sorry Customer"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description3">
+                Your cart is still empty. Take some product to add to cart
               </DialogContentText>
             </DialogContent>
           </Dialog>

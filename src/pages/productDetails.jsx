@@ -9,6 +9,7 @@ import { Link, Redirect } from "react-router-dom"
 import {
     Paper,
     Button,
+    TextField,
     Typography,
     CardMedia,
     Fab,
@@ -20,9 +21,8 @@ import {
     DialogActions,
     DialogContentText,
     DialogContent,
-    // DialogTitle
 } from '@material-ui/core'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 
 // import
 import Wallpaper from '../assets/images/Wallpaper.jpg'
@@ -54,22 +54,30 @@ class ProductDetails extends React.Component {
 
     handleMinus = async () => {
         if (this.state.selectedQuantity === 0) return null
+
         await this.setState({ selectedQuantity: this.state.selectedQuantity - 1 })
         await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
         await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
     }
 
     handlePlus = async () => {
-        if (this.state.selectedQuantity === this.state.selectedProduct.product_stock) return null
+        if (this.state.selectedQuantity >= this.state.selectedProduct.product_stock) return null
+
         await this.setState({ selectedQuantity: this.state.selectedQuantity + 1 })
         await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
         await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
     }
 
+    handleChangeQuantity = async (e) => {
+        await this.setState({ selectedQuantity: Number(e.target.value) })
+        await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
+        await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
+    }
+
     handleAddToCart = async () => {
-        // if (this.state.selectedQuantity === 0 || this.state.selectedTotal === 0) return null
         if (localStorage.getItem('id') === null) return this.setState({ alertLogin: true })
         if (!this.state.selectedQuantity || !this.state.total_modal || !this.state.total_sell) return console.log('please order')
+        if (this.state.selectedQuantity > this.state.selectedProduct.product_stock) return console.log('please order below stock')
 
         const body = {
             user_id: parseInt(localStorage.getItem('id')),
@@ -81,7 +89,7 @@ class ProductDetails extends React.Component {
 
         console.log({ body })
 
-        Axios.post(URL + '/addtocartpcs', body)
+        await Axios.post(URL + '/addtocartpcs', body)
         await this.setState({ selectedQuantity: 0 })
         await this.setState({ total_sell: 0 })
         await this.setState({ total_modal: 0 })
@@ -129,9 +137,25 @@ class ProductDetails extends React.Component {
                                 </TableBody>
                             </Table>
                         </div>
+                        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'red' }}>
+                            {selectedQuantity > 100 ? <Typography>please order below current stock {this.state.selectedProduct.product_stock}</Typography> : null}
+                        </div>
                         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Button variant='contained' style={{ backgroundColor: '#cbe2d6', borderRadius: 20 }} onClick={this.handleMinus}>-</Button>
-                            <Button>{selectedQuantity}</Button>
+                            <TextField
+                                style={{ margin: '0 20px', width: 50, padding: 10 }}
+                                type='tel'
+                                error={selectedQuantity > 100 ? true : false}
+                                onChange={(e) => this.handleChangeQuantity(e)}
+                                InputProps={{
+                                    inputProps: {
+                                        value: selectedQuantity,
+                                        min: 0,
+                                        max: this.state.selectedProduct.product_stock,
+                                    }
+                                }}
+                            />
+                            {/* <Typography style={{margin: '0 20px', width: 20, display: 'flex', justifyContent: 'flex-end'}}>{selectedQuantity}</Typography> */}
                             <Button variant='contained' style={{ backgroundColor: '#cbe2d6', borderRadius: 20, marginRight: 20 }} onClick={this.handlePlus}>+</Button>
                             <Button
                                 onClick={this.handleAddToCart}
@@ -146,9 +170,7 @@ class ProductDetails extends React.Component {
                     open={alertLogin}
                     onClose={this.handleClose}>
                     <DialogContent>
-                        <DialogContentText>
-                            Your're not login yet. please login to order.
-                        </DialogContentText>
+                        <DialogContentText>Your're not login yet. please login to order.</DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Link to='/login'>
@@ -177,7 +199,7 @@ const styles = {
     },
     rootContainer: {
         width: '60%',
-        height: '60%',
+        height: '70%',
         padding: 10,
         borderRadius: 20,
         display: 'flex',

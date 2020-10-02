@@ -45,7 +45,7 @@ class App extends Component {
                         <Route path='/productPage' component={ProductPage}/>
                         <Route path='/packagePage' component={PackagePage}/>
                         <Route path='/historyTrans' component={HistoryTransaction}/>
-                        {/* <Route path="*" component={NotFound} /> */}
+                        <Route path="*" component={NotFound} />
                     </Switch>
                     <Footer />
                 </div>

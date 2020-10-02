@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import Axios from 'axios'
 
 // import UI
@@ -19,6 +19,7 @@ import {
     MenuItem,
     Select,
     InputLabel,
+    TextField
 } from '@material-ui/core'
 
 // import action
@@ -93,11 +94,15 @@ class CartPage extends React.Component {
 
         // console.log({ order_number }, { product_id })
         // axios delete gabisa ngirim body langsung, harus disetting, kalau params bisa
-        Axios.delete(URL + '/deletepcs/' + order_number + '/' + product_id)
-        await this.resetState()
-        await this.props.getCartUser(localStorage.getItem('id'))
-        await this.calculateAmountProduct()
-        await this.calculateAmount()
+        try {
+            await Axios.delete(URL + '/deletepcs/' + order_number + '/' + product_id)
+            await this.resetState()
+            await this.props.getCartUser(localStorage.getItem('id'))
+            await this.calculateAmountProduct()
+            await this.calculateAmount()
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     handleEditPcs = async (product_id) => {
@@ -115,7 +120,16 @@ class CartPage extends React.Component {
     }
 
     handleEditPlus = async (item) => {
+        if (this.state.edited_product_qty >= 100) return null
+
         await this.setState({ edited_product_qty: this.state.edited_product_qty + 1 })
+        await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
+        await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
+    }
+
+    handleEditChange = async (item, e) => {
+        // console.log(e.target.value, item)
+        await this.setState({ edited_product_qty: Number(e.target.value) })
         await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
         await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
     }
@@ -133,11 +147,15 @@ class CartPage extends React.Component {
         }
         // console.log('body : ', body)
 
-        await Axios.patch(URL + '/editqtypcs', body)
-        await this.resetState()
-        await this.props.getCartUser(localStorage.getItem('id'))
-        await this.calculateAmountProduct()
-        await this.calculateAmount()
+        try {
+            await Axios.patch(URL + '/editqtypcs', body)
+            await this.resetState()
+            await this.props.getCartUser(localStorage.getItem('id'))
+            await this.calculateAmountProduct()
+            await this.calculateAmount()
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     handleEditCancel = async () => {
@@ -152,11 +170,14 @@ class CartPage extends React.Component {
         const package_id = item.package_id
         const package_no = item.package_no
         // console.log({ order_number }, { package_id }, { package_no })
-
-        Axios.delete(URL + '/deletepkg/' + order_number + '/' + package_id + '/' + package_no)
-        await this.props.getCartUser(localStorage.getItem('id'))
-        await this.calculateAmountPackage()
-        await this.calculateAmount()
+        try {
+            await Axios.delete(URL + '/deletepkg/' + order_number + '/' + package_id + '/' + package_no)
+            await this.props.getCartUser(localStorage.getItem('id'))
+            await this.calculateAmountPackage()
+            await this.calculateAmount()
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     handleCheckout = async () => {
@@ -195,15 +216,17 @@ class CartPage extends React.Component {
         const payment_type = this.state.selected_payment_type_id
         const amount = this.state.amount
 
-        console.log("image : ", this.state.imagePayment);
+        // console.log("image : ", this.state.imagePayment);
 
         // create formdata
         const data = new FormData();
         data.append("IMG", this.state.imagePayment)
         // data.append('filename', 'gambar profile')
-        console.log("form data : ", data.get("IMG"))
+        // console.log("form data : ", data.get("IMG"))
 
-        this.props.payment(data, users_id, order_number, payment_type, amount);
+        if (!users_id || !order_number || !payment_type || !amount || !this.state.imagePayment) return null
+
+        await this.props.payment(data, users_id, order_number, payment_type, amount);
         await this.setState({ imagePayment: null })
         await this.setState({ redirectToHistoryTransaction: true })
     }
@@ -229,7 +252,7 @@ class CartPage extends React.Component {
                 <TableRow key={index}>
                     <TableCell align="center">{index + 1}</TableCell>
                     <TableCell align="left" style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={item.image} style={{ width: 50 }} alt='products-img'/>
+                        <img src={item.image} style={{ width: 50 }} alt='products-img' />
                         {item.product_name}
                     </TableCell>
                     <TableCell align="center">{`IDR ${item.price_sell.toLocaleString()}.00`}</TableCell>
@@ -237,7 +260,21 @@ class CartPage extends React.Component {
                         <Button
                             onClick={() => this.handleEditMinus(item)}
                             size='small'>-</Button>
-                        {this.state.edited_product_qty}
+                        {/* {this.state.edited_product_qty} */}
+                        <TextField
+                            style={{ margin: '0 20px', width: 50, padding: 10 }}
+                            type='tel'
+                            error={this.state.edited_product_qt > 100 ? true : false}
+                            defaultValue={item.qty}
+                            onChange={(e) => this.handleEditChange(item, e)}
+                            InputProps={{
+                                inputProps: {
+                                    value: this.state.edited_product_qty,
+                                    min: 0,
+                                    max: 100,
+                                }
+                            }}
+                        />
                         <Button
                             onClick={() => this.handleEditPlus(item)}
                             size='small'>+</Button>
@@ -259,7 +296,7 @@ class CartPage extends React.Component {
                 <TableRow key={index}>
                     <TableCell align="center">{index + 1}</TableCell>
                     <TableCell align="left" style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={item.image} style={{ width: 50 }} alt='products-img'/>
+                        <img src={item.image} style={{ width: 50 }} alt='products-img' />
                         {item.product_name}
                     </TableCell>
                     <TableCell align="center">{`IDR ${item.price_sell.toLocaleString()}.00`}</TableCell>
@@ -329,9 +366,10 @@ class CartPage extends React.Component {
                             <TableCell>Address</TableCell>
                             <TableCell>
                                 {this.props.address}
-                                <Button variant='contained' color='primary' style={{ marginLeft: 10 }}>
-                                    Send different Address
-                                </Button>
+                                <Button
+                                    variant='outlined' color='primary'
+                                    style={{ margin: 5 }}
+                                >Change Address</Button>
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -376,6 +414,11 @@ class CartPage extends React.Component {
                                     variant='contained' color='primary'
                                     style={{ margin: 5 }}
                                 >Pay Now</Button>
+                                <Button
+                                    onClick={() => this.setState({ modalOpen: false })}
+                                    variant='outlined' color='primary'
+                                    style={{ margin: 5 }}
+                                >Back to Cart</Button>
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -390,46 +433,46 @@ class CartPage extends React.Component {
         // console.log('resultPkg : ', this.props.resultPkg)
         // console.log('address : ', this.props.address)
 
-        if (this.state.redirectToHistoryTransaction) return <Redirect to='/historyUser'/>
+        if (this.state.redirectToHistoryTransaction) return <Redirect to='/historyUser' />
 
-            return (
-                <div style={styles.root}>
-                    <Paper style={styles.rootContainer} elevation={10}>
-                        <div style={styles.header}>
-                            <Typography>{`Total IDR ${this.state.amount.toLocaleString()}.00`}</Typography>
-                            <Button
-                                onClick={this.handleCheckout}
-                                variant='contained' color='primary'
-                                style={{ marginLeft: 10 }}>Checkout</Button>
-                        </div>
-                        {
-                            this.props.resultPcs[0] ?
-                                <Table style={{ marginBottom: 20 }}>
-                                    <TableHead style={{ backgroundColor: '#cbe2d6' }}>{this.renderTableHeadPcs()}</TableHead>
-                                    <TableBody>{this.renderTableBodyPcs()}</TableBody>
-                                </Table>
-                                : null
-                        }
-                        {
-                            this.props.resultPkg[0] ?
-                                <Table>
-                                    <TableHead style={{ backgroundColor: '#cbe2d6' }}>{this.renderTableHeadPkg()}</TableHead>
-                                    <TableBody>{this.renderTableBodyPkg()}</TableBody>
-                                </Table>
-                                : null
-                        }
-                        <div style={styles.modalContainer}>
-                            <Modal
-                                open={this.state.modalOpen}
-                                onClose={this.handleModalClose}
-                                style={styles.modal}
-                            >
-                                {this.renderModalCheckOutPayment()}
-                            </Modal>
-                        </div>
-                    </Paper>
-                </div>
-            )
+        return (
+            <div style={styles.root}>
+                <Paper style={styles.rootContainer} elevation={10}>
+                    <div style={styles.header}>
+                        <Typography>{`Total IDR ${this.state.amount.toLocaleString()}.00`}</Typography>
+                        <Button
+                            onClick={this.handleCheckout}
+                            variant='contained' color='primary'
+                            style={{ marginLeft: 10 }}>Checkout</Button>
+                    </div>
+                    {
+                        this.props.resultPcs[0] ?
+                            <Table style={{ marginBottom: 20 }}>
+                                <TableHead style={{ backgroundColor: '#cbe2d6' }}>{this.renderTableHeadPcs()}</TableHead>
+                                <TableBody>{this.renderTableBodyPcs()}</TableBody>
+                            </Table>
+                            : null
+                    }
+                    {
+                        this.props.resultPkg[0] ?
+                            <Table>
+                                <TableHead style={{ backgroundColor: '#cbe2d6' }}>{this.renderTableHeadPkg()}</TableHead>
+                                <TableBody>{this.renderTableBodyPkg()}</TableBody>
+                            </Table>
+                            : null
+                    }
+                    <div style={styles.modalContainer}>
+                        <Modal
+                            open={this.state.modalOpen}
+                            onClose={this.handleModalClose}
+                            style={styles.modal}
+                        >
+                            {this.renderModalCheckOutPayment()}
+                        </Modal>
+                    </div>
+                </Paper>
+            </div>
+        )
     }
 }
 
