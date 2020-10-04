@@ -72,6 +72,12 @@ class ProductDetails extends React.Component {
         await this.setState({ selectedQuantity: Number(e.target.value) })
         await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
         await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
+
+        if (this.state.selectedQuantity >= 100) {
+            await this.setState({ selectedQuantity: 100 })
+            await this.setState({ total_sell: this.state.selectedQuantity * this.state.selectedProduct.price_sell })
+            await this.setState({ total_modal: this.state.selectedQuantity * this.state.selectedProduct.price_modal })
+        }
     }
 
     handleAddToCart = async () => {
