@@ -8,14 +8,19 @@ import {
   TableRow,
   Paper,
   CardMedia,
+  TableFooter,
+  TablePagination
 } from "@material-ui/core";
-import Wallpaper from '../assets/images/Wallpaper.jpg'
-
+import Wallpaper from "../assets/images/Wallpaper.jpg";
 
 class ProductPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = { 
+      data: [],
+      rowsPerPage: 5,
+      page: 0
+     };
   }
 
   componentDidMount() {
@@ -30,7 +35,6 @@ class ProductPage extends React.Component {
   renderTableHead = () => {
     return (
       <TableRow>
-        <TableCell>No</TableCell>
         <TableCell>Image</TableCell>
         <TableCell>ID-Product</TableCell>
         <TableCell>Product Name</TableCell>
@@ -43,10 +47,10 @@ class ProductPage extends React.Component {
   };
 
   renderTableBody = () => {
-    return this.state.data.map((item, index) => {
+    const {data, page, rowsPerPage} = this.state
+    return data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => {
       return (
         <TableRow key={index}>
-          <TableCell>{index + 1}</TableCell>
           <TableCell>
             <CardMedia
               image={item.image}
@@ -65,15 +69,35 @@ class ProductPage extends React.Component {
     });
   };
 
+  handleChangePage = (event, newPage) => {
+    this.setState({page: newPage});
+  };
+
+  handleChangeRowsPerPage = (event) => {
+    this.setState({rowsPerPage: parseInt(event.target.value, 10), page: 0});
+  };
+
   render() {
+    console.log(this.state.rowsPerPage)
     return (
       <div style={styles.root}>
-        <Paper elevation={3}>
+        <Paper elevation={3} style={{ padding: 15 }}>
           <h1>Products Info</h1>
           <Table>
             <TableHead>{this.renderTableHead()}</TableHead>
             <TableBody>{this.renderTableBody()}</TableBody>
           </Table>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component='div'
+                  colSpan={8}
+                  count={this.state.data.length}
+                  rowsPerPage={this.state.rowsPerPage}
+                  page={this.state.page}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  // ActionsComponent={TablePaginationActions}
+                />
         </Paper>
       </div>
     );
@@ -88,13 +112,13 @@ const styles = {
     backgroundImage: `url(${Wallpaper})`,
     display: "flex",
     flexDirection: "column",
-    paddingLeft: '15vw',
-    paddingTop: '5vh',
-    paddingRight: '5vw'
+    paddingLeft: "15vw",
+    paddingTop: "5vh",
+    paddingRight: "5vw",
   },
   contentImage: {
-    maxWidth: 100,
-    maxHeight: 100,
+    maxWidth: 80,
+    maxHeight: 80,
     padding: "5%",
     backgroundColor: "white",
     borderRadius: 20,
