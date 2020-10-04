@@ -132,6 +132,12 @@ class CartPage extends React.Component {
         await this.setState({ edited_product_qty: Number(e.target.value) })
         await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
         await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
+
+        if (this.state.edited_product_qty >= 100) {
+            await this.setState({ edited_product_qty: 100 })
+            await this.setState({ edited_total_sell: item.price_sell * this.state.edited_product_qty })
+            await this.setState({ edited_total_modal: item.price_modal * this.state.edited_product_qty })
+        }
     }
 
     handleEditConfirm = async (item) => {
