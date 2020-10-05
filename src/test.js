@@ -59,6 +59,3 @@
 // }
 
 // export default App
-
-const a = 10000
-console.log(a.toLocaleString())
