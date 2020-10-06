@@ -8,7 +8,6 @@ import {
   TableRow,
   Paper,
   CardMedia,
-  TableFooter,
   TablePagination
 } from "@material-ui/core";
 import Wallpaper from "../assets/images/Wallpaper.jpg";
